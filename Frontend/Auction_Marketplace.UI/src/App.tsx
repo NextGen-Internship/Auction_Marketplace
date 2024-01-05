@@ -1,8 +1,12 @@
+import LoginPage from "./components/LoginPage";
+
+
 function App() {
+  
   return (
-    <>
-      <h1>Auction_Marketplace</h1>
-    </>
+   <div>
+    <LoginPage/>
+   </div>
   );
 }
 
