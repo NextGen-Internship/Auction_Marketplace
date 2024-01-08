@@ -1,0 +1,38 @@
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-right: 20px;
+    background-color: white;
+    padding: 22px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+}
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-item {
+    color: black; 
+    text-decoration: none;
+    margin: 36px; 
+    font-size: 16px; 
+    transition: color 0.3s ease; 
+  }
+  
+  .nav-item:hover {
+    color: palevioletred; 
+  }
+  
+  .nav-item.active {
+    font-weight: bold; 
+  }
+
+  .logo{
+    width: 120px;
+  } 

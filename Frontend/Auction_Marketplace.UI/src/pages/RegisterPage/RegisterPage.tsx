@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; 
-import './LoginPageSignInWithGoogle.css';
+import { Link } from 'react-router-dom';
+import '../../pages/LoginPage/LoginPage.css'; 
+import '../../pages/LoginPage/LoginPageSignInWithGoogle.css';
 
-const LoginPage: React.FC = () => {
-  const [emailOrUsername, setEmailOrUsername] = useState('');
+
+const RegisterPage: React.FC = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
+  const [, setFirstNameError] = useState<string | null>(null);
+  const [, setLastNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  const validateEmailOrUsername = (input: string) => {
+  const validateEmail = (input: string) => {
     //  must start with one or more characters that are not whitespace or '@'
     // There must be an '@' symbol after the initial characters.
     //  After the '@' symbol, there should be one or more characters that are not whitespace or '@'.
     // Following the second set of characters, there must be a dot ('.') symbol.
     // Finally, after the dot, there should be one or more characters that are not whitespace or '@' until the end of the string.
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const usernameRegex = /^[a-zA-Z0-9_.]{8,}$/;
-
-    return emailRegex.test(input) || usernameRegex.test(input);
+    return emailRegex.test(input);
   };
 
   const validatePassword = (input: string) => {
@@ -26,10 +30,22 @@ const LoginPage: React.FC = () => {
     return passwordRegex.test(input);
   };
 
-  const handleEmailOrUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    setEmailOrUsername(inputValue);
-    setEmailOrUsernameError(validateEmailOrUsername(inputValue) ? null : 'Invalid email or username format');
+    setFirstName(inputValue);
+    setFirstNameError(inputValue);
+  };
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setLastName(inputValue);
+    setLastNameError(inputValue);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setEmail(inputValue);
+    setEmailError(validateEmail(inputValue) ? null : 'Invalid email or username format');
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,12 +55,14 @@ const LoginPage: React.FC = () => {
   };
 
   const handleLogin = () => {
-    if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
+    if (validateEmail(email) && validatePassword(password)) {
       //TODO  authentication logic here
-      console.log('Email/Username:', emailOrUsername);
+      console.log('First name:', firstName);
+      console.log('Last name:', lastName);
+      console.log('Email/Username:', email);
       console.log('Password:', password);
     } else {
-      setEmailOrUsernameError('Invalid email or username format')
+      setEmailError('Invalid email or username format')
       if (!validatePassword(password)) {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
@@ -54,19 +72,42 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <h2>Login in to Blankfactor Auction Marketplace</h2>
+      <h2>Register in to Blankfactor Auction Marketplace</h2>
       <form>
-        <label htmlFor="emailOrUsername"></label>
+
+        <label htmlFor="firstName"></label>
         <input
-          type="emailOrUsername"
-          id="emailOrUsername"
-          name="emailOrUsername"
-          placeholder='Email or Username'
-          value={emailOrUsername}
-          onChange={handleEmailOrUsernameChange}
+          type="firstName"
+          id="firstName"
+          name="firstName"
+          placeholder='First Name'
+          value={firstName}
+          onChange={handleFirstNameChange}
           required
         />
-        {emailOrUsernameError && <span className="error-message">{emailOrUsernameError}</span>}
+
+        <label htmlFor="lastName"></label>
+        <input
+          type="lastName"
+          id="lastName"
+          name="lastName"
+          placeholder='Last Name'
+          value={lastName}
+          onChange={handleLastNameChange}
+          required
+        />
+
+        <label htmlFor="email"></label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder='Email'
+          value={email}
+          onChange={handleEmailChange}
+          required
+        />
+        {emailError && <span className="error-message">{emailError}</span>}
 
         <label htmlFor="password"></label>
         <input
@@ -80,12 +121,8 @@ const LoginPage: React.FC = () => {
         />
         {passwordError && <span className="error-message">{passwordError}</span>}
 
-        <label htmlFor='forgotPassword' className='forgot-password'>
-          Forgot Password
-        </label>
-
         <button type="submit" className="login-btn" onClick={handleLogin}>
-          Sign In
+          Create Account
         </button>
 
         <button type="submit" className="gsi-material-button">
@@ -100,22 +137,23 @@ const LoginPage: React.FC = () => {
                 <path fill="none" d="M0 0h48v48H0z"></path>
               </svg>
             </div>
-            <span className="gsi-material-button-contents">Sign in with Google</span>
-            <span style={{ display: 'none' }}>Sign in with Google</span>
+            <span className="gsi-material-button-contents">Create Account with Google</span>
+            <span style={{ display: 'none' }}>Create Account with Google</span>
           </div>
         </button>
 
-        <label className='register-label'>
-          You don't have profile, yet?
+        <label className='register-login-label'>
+            You have a profile? Sign in here.
         </label>
 
-        <button type="submit" className="login-btn">
-          Register
-        </button>
-        
+        <Link to="/login">
+          <button type="submit" className="login-btn">
+            Login
+          </button>
+        </Link>
       </form>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
