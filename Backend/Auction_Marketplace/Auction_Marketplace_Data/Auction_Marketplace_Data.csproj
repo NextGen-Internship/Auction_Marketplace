@@ -18,8 +18,10 @@
 
   <ItemGroup>
     <None Remove="Entities\Abstract\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>
