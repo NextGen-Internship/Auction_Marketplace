@@ -1,0 +1,34 @@
+﻿<Properties StartupConfiguration="{67B36140-79C0-4C70-8BF1-C3AA90E77E2A}|https">
+  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Data/Enums/PaymentMethod.cs">
+    <Files>
+      <File FileName="Auction_Marketplace.Data/Enums/EmptyEnumeration.cs" Line="12" Column="1" IsPinned="True" />
+      <File FileName="Auction_Marketplace.Data/Enums/PaymentFor.cs" Line="11" Column="1" IsPinned="True" />
+      <File FileName="Auction_Marketplace.Api/Program.cs" Line="25" Column="11" />
+      <File FileName="Auction_Marketplace.Data/AuctionMarketplaceDBContext.cs" Line="11" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Entities/Bids.cs" Line="7" Column="3" />
+      <File FileName="Auction_Marketplace.Data/Entities/Auctions.cs" Line="15" Column="46" />
+      <File FileName="Auction_Marketplace.Data/Entities/Items.cs" Line="9" Column="9" />
+      <File FileName="Auction_Marketplace.Data/Entities/Payments.cs" Line="22" Column="6" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Auction_Marketplace">
+            <Node name="Auction_Marketplace.Data">
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+              <Node name="Entities" expanded="True" />
+              <Node name="Enums" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
