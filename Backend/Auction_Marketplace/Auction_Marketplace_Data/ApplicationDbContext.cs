@@ -13,9 +13,8 @@ using System.Threading.Tasks;
 
 namespace Auction_Marketplace_Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User,Role, int, UserClaim, UserRole,UserLogin, RoleClaim, UserToken>
     {
-        //public DbSet<BaseEntity> BaseEntities { get; set; }
         public DbSet<Auction> Auctions { get; set; }
         public DbSet<Bid> Bids { get; set; }
         public DbSet<Cause> Causes { get; set; }
@@ -32,6 +31,8 @@ namespace Auction_Marketplace_Data
         {
             base.OnConfiguring(optionsBuilder);
         }
+
+        //override savechanchesasink
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
