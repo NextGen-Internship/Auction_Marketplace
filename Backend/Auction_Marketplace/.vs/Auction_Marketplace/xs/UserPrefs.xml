@@ -7,7 +7,7 @@
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Auction_Marketplace" expanded="True">
-            <Node name="Auction_Marketplace.Api" selected="True" />
+            <Node name="Auction_Marketplace_Data" selected="True" />
           </Node>
         </State>
       </Pad>

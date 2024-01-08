@@ -16,4 +16,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Entities\Abstract\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Abstract\" />
+  </ItemGroup>
 </Project>
