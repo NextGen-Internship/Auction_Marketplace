@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Auction_Marketplace.Data.Entities
 {
-	public class Bids
+	public class Bid
 	{
 		[Key]
 		public int BidId { get; set; }

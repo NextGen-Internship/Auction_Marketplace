@@ -4,21 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Auction_Marketplace.Data.Entities
 {
-	public class Causes
+	public class Item
 	{
+
         [Key]
-        public int CauseId { get; set; }
-        [ForeignKey("Users")]
-        public int UserId { get; set; }
+        public int ItemId { get; set; }
+        [ForeignKey("Auctions")]
+        public int AuctionId { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
-        public decimal AmountNeeded { get; set; }
+        public decimal StartPrice { get; set; }
         [Required]
-        public decimal AmountCurrent { get; set; }
+        public decimal FinalPrice { get; set; }
+        public string ImageUrl { get; set; }
         [Required]
-        public bool IsCompleted { get; set; }
+        public bool IsDeleted { get; set; }
+
     }
 }
 

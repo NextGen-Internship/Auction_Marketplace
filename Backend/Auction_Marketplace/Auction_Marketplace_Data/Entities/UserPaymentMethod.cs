@@ -5,7 +5,7 @@ using Auction_Marketplace.Data.Enums;
 
 namespace Auction_Marketplace.Data.Entities
 {
-	public class UserPaymentMethods
+	public class UserPaymentMethod
 	{
         [Key]
         public int UserPaymentMethodId { get; set; }
