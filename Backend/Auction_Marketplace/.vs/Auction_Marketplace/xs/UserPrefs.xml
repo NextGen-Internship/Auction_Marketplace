@@ -1,4 +1,4 @@
-﻿<Properties StartupConfiguration="{67B36140-79C0-4C70-8BF1-C3AA90E77E2A}|https">
+﻿<Properties>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
@@ -8,7 +8,7 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Auction_Marketplace" selected="True" />
+          <Node name="Auction_Marketplace" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
