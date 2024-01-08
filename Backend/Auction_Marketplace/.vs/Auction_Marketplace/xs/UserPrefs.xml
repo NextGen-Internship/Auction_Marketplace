@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{67B36140-79C0-4C70-8BF1-C3AA90E77E2A}|https">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Api/Controllers/AuthenticationController.cs">
+    <Files>
+      <File FileName="Auction_Marketplace.Api/Program.cs" Line="46" Column="7" />
+      <File FileName="Auction_Marketplace.Api/appsettings.json" Line="16" Column="31" />
+      <File FileName="Auction_Marketplace.Api/Controllers/AuthenticationController.cs" Line="33" Column="28" />
+      <File FileName="Auction_Marketplace.Api/Models/Authentication/Login/LoginUser.cs" Line="9" Column="10" />
+      <File FileName="Auction_Marketplace.Api/Models/Authentication/Register/RegisterUser.cs" />
+      <File FileName="Auction_Marketplace_Data/Entities/User.cs" />
+      <File FileName="Auction_Marketplace.Api/Auction_Marketplace.Api.csproj" />
+      <File FileName="Auction_Marketplace_Data/Auction_Marketplace_Data.csproj" />
+      <File FileName="Auction_Marketplace_Services/Auction_Marketplace_Services.csproj" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Auction_Marketplace" expanded="True">
+            <Node name="Auction_Marketplace.Api">
+              <Node name="Controllers" expanded="True">
+                <Node name="AuthenticationController.cs" selected="True" />
+              </Node>
+              <Node name="Models" expanded="True">
+                <Node name="Authentication" expanded="True">
+                  <Node name="Login" expanded="True" />
+                  <Node name="Register" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

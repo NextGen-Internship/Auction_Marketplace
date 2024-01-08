@@ -2,9 +2,12 @@
 using Auction_Marketplace.Api.Models.Authentication.Register;
 using Auction_Marketplace.Api.Models.Authentication.Login;
 using Auction_Marketplace_Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -106,7 +109,64 @@ namespace Auction_Marketplace.Api.Controllers
 
         }
 
-        
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginUser loginUser)
+        {
+            var user = await _userManager.FindByNameAsync(loginUser.Username);
 
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginUser.Password))
+            {
+                var jwtToken = GenerateJwtToken(user);
+
+                return Ok(jwtToken);
+            }
+
+            return Unauthorized();
+        }
+
+        //Method which generates JWT Token
+        private string GenerateJwtToken(User user)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig: Secret").Value);
+
+            var claims = new List<Claim>()
+            {
+                    new Claim("Id", user.Id),
+                    new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
+            };
+
+            GenerateUserRoles(user, claims);
+
+            
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+
+            };
+
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+
+            return jwtToken;
+        }
+
+        //Method which gets user roles and makes claims with them
+        private async void GenerateUserRoles(User user, List<Claim> claims)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+        }
     }
 }
