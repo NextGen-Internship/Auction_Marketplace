@@ -1,6 +1,6 @@
-﻿using Auction_Marketplace_Data.Configuration;
-using Auction_Marketplace_Data.Entities;
-using Auction_Marketplace_Data.Entities.Abstract;
+﻿using Auction_Marketplace.Data.Configuration;
+using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,7 +11,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auction_Marketplace_Data
+namespace Auction_Marketplace.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
@@ -51,15 +51,16 @@ namespace Auction_Marketplace_Data
             var entities = ChangeTracker.Entries()
                 .Where(x => x.Entity is IBaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-            foreach (var entity in entities)
+            foreach (var entityEntry in entities)
             {
+                var entity = entityEntry.Entity as IBaseEntity;
                 var now = DateTime.UtcNow; // current datetime
 
-                if (entity.State == EntityState.Added)
+                if (entityEntry.State == EntityState.Added)
                 {
-                    ((IBaseEntity)entity.Entity).CreatedAt = now;
+                    entity.CreatedAt = now;
                 }
-                ((IBaseEntity)entity.Entity).UpdatedAt = now;
+                entity.UpdatedAt = now;
             }
         }
 
@@ -70,20 +71,7 @@ namespace Auction_Marketplace_Data
             builder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
             //builder.ApplyConfiguration(new BaseEntityConfig());
-            builder.ApplyConfiguration(new AuctionConfig());
-            builder.ApplyConfiguration(new BidConfig());
-            builder.ApplyConfiguration(new CauseConfig());
-            builder.ApplyConfiguration(new ItemConfig());
-            builder.ApplyConfiguration(new PaymentConfig());
-            builder.ApplyConfiguration(new ReviewConfig());
-            builder.ApplyConfiguration(new UserPaymentMethodConfig());
-            builder.ApplyConfiguration(new UserConfig());
-            builder.ApplyConfiguration(new RoleConfig());
-            builder.ApplyConfiguration(new RoleClaimConfig());
-            builder.ApplyConfiguration(new UserClaimConfig());
-            builder.ApplyConfiguration(new UserLoginConfig());
-            builder.ApplyConfiguration(new UserRoleConfig());
-            builder.ApplyConfiguration(new UserTokenConfig());
+            builder.ApplyConfigurationsFromAssembly(typeof(Auction).Assembly);
         }
 
     }

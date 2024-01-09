@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Auction_Marketplace_Data.Entities.Abstract
+namespace Auction_Marketplace.Data.Entities.Abstract
 {
 	public interface IBaseEntity
 	{

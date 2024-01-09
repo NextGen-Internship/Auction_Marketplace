@@ -1,5 +1,5 @@
-using Auction_Marketplace_Data;
-using Auction_Marketplace_Data.Entities;
+using Auction_Marketplace.Data;
+using Auction_Marketplace.Data.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +12,11 @@ var connectionString = builder.Configuration.GetConnectionString("ConnectionStri
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
 
 
 builder.Services.AddAuthentication(options =>

@@ -1,6 +1,6 @@
 ﻿using Auction_Marketplace.Api.Models;
 using Auction_Marketplace.Api.Models.Authentication.Register;
-using Auction_Marketplace_Data.Entities;
+using Auction_Marketplace.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

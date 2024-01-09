@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Auction_Marketplace_Data.Entities.Abstract;
-namespace Auction_Marketplace_Data.Entities
+using Auction_Marketplace.Data.Entities.Abstract;
+namespace Auction_Marketplace.Data.Entities
 {
 	public class Auction : IBaseEntity
 	{

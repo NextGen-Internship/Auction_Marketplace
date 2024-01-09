@@ -1,4 +1,4 @@
-﻿using Auction_Marketplace_Data.Entities.Abstract;
+﻿using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auction_Marketplace_Data.Entities
+namespace Auction_Marketplace.Data.Entities
 {
     public class User : IdentityUser<int>, IBaseEntity
     {

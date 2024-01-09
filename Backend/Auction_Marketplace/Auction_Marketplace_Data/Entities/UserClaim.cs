@@ -1,8 +1,8 @@
 ﻿using System;
-using Auction_Marketplace_Data.Entities.Abstract;
+using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity;
 
-namespace Auction_Marketplace_Data.Entities
+namespace Auction_Marketplace.Data.Entities
 {
 	public class UserClaim : IdentityUserClaim<int>, IBaseEntity
 	{

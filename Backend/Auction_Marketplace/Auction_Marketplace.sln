@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction_Marketplace_Data", "Auction_Marketplace_Data\Auction_Marketplace_Data.csproj", "{73DBE56B-BF59-4560-B7AE-2EA2408990C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction_Marketplace.Data", "Auction_Marketplace_Data\Auction_Marketplace.Data.csproj", "{73DBE56B-BF59-4560-B7AE-2EA2408990C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction_Marketplace_Services", "Auction_Marketplace_Services\Auction_Marketplace_Services.csproj", "{99D3DAE5-A942-42EB-A4F1-3261571EAF22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction_Marketplace.Services", "Auction_Marketplace_Services\Auction_Marketplace.Services.csproj", "{99D3DAE5-A942-42EB-A4F1-3261571EAF22}"
 	ProjectSection(ProjectDependencies) = postProject
 		{73DBE56B-BF59-4560-B7AE-2EA2408990C6} = {73DBE56B-BF59-4560-B7AE-2EA2408990C6}
 	EndProjectSection
