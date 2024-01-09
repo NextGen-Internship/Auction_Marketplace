@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Auction_Marketplace_Data.Configuration
 {
-	public class UserConfig : IEntityTypeConfiguration<User>
-    {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.ToTable("Users");
-        }
-    }
+	public class RoleConfig : IEntityTypeConfiguration<Role>
+	{
+        public void Configure(EntityTypeBuilder<Role> builder)
+		{
+			builder.ToTable("Roles");
+		}
+	}
 }
 

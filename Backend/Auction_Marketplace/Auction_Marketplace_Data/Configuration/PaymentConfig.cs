@@ -9,7 +9,7 @@ namespace Auction_Marketplace_Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
-
+            builder.ToTable("Payments");
         }
     }
 }

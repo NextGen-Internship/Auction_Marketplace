@@ -1,53 +1,38 @@
 ﻿<Properties StartupConfiguration="{CB56DB49-6BCE-4237-9CA8-0C126C4FE7B6}|https">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Api/appsettings.json">
     <Files>
-      <File FileName="Auction_Marketplace.Api/Auction_Marketplace.Api.csproj" Line="27" Column="1" />
-      <File FileName="Auction_Marketplace_Data/Entities/Abstract/EntityInterface.cs" Line="9" Column="2" />
-      <File FileName="Auction_Marketplace_Data/Entities/Auctions.cs" Line="6" Column="31" />
-      <File FileName="Auction_Marketplace_Data/Entities/Causes.cs" Line="6" Column="31" />
-      <File FileName="Auction_Marketplace_Data/ApplicationDbContext.cs" Line="16" Column="64" />
-      <File FileName="Auction_Marketplace.Api/Controllers/AuthenticationController.cs" Line="13" Column="6" />
-      <File FileName="Auction_Marketplace_Data/Entities/Items.cs" Line="6" Column="31" />
-      <File FileName="Auction_Marketplace.Api/Program.cs" Line="3" Column="53" />
-      <File FileName="Auction_Marketplace_Data/Entities/UserPaymentMethod.cs" Line="10" Column="3" />
-      <File FileName="Auction_Marketplace_Data/Entities/Review.cs" Line="7" Column="31" />
-      <File FileName="Auction_Marketplace_Data/Entities/Payment.cs" Line="7" Column="31" />
-      <File FileName="Auction_Marketplace_Data/Entities/Bid.cs" Line="21" Column="19" />
-      <File FileName="Auction_Marketplace_Data/Entities/User.cs" Line="11" Column="37" />
-      <File FileName="Auction_Marketplace_Data/Configuration/UserPaymenthMethodConfig.cs" Line="8" Column="26" />
-      <File FileName="Auction_Marketplace_Data/Configuration/AboutConfig.cs" Line="2" Column="32" />
-      <File FileName="Auction_Marketplace_Data/Configuration/AuctionConfig.cs" Line="17" Column="1" />
-      <File FileName="Auction_Marketplace_Data/Configuration/BidConfig.cs" Line="12" Column="1" />
-      <File FileName="Auction_Marketplace_Data/Configuration/CauseConfig.cs" Line="9" Column="6" />
-      <File FileName="Auction_Marketplace_Data/Configuration/ItemConfig.cs" Line="2" Column="27" />
-      <File FileName="Auction_Marketplace_Data/Configuration/PaymentConfig.cs" Line="2" Column="27" />
-      <File FileName="Auction_Marketplace_Data/Configuration/ReviewConfig.cs" Line="2" Column="27" />
-      <File FileName="Auction_Marketplace_Data/Configuration/UserConfig.cs" Line="13" Column="10" />
-      <File FileName="Auction_Marketplace.Api/appsettings.json" Line="13" Column="1" />
+      <File FileName="Auction_Marketplace_Data/Entities/Abstract/IBaseEntity.cs" Line="12" Column="6" />
+      <File FileName="Auction_Marketplace_Data/ApplicationDbContext.cs" Line="47" Column="10" />
+      <File FileName="Auction_Marketplace_Data/Entities/Auction.cs" Line="29" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/Bid.cs" Line="25" Column="1" />
+      <File FileName="Auction_Marketplace_Data/Entities/Cause.cs" Line="36" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/Item.cs" Line="40" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/Payment.cs" Line="45" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/Review.cs" Line="33" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/Role.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/RoleClaim.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/User.cs" Line="27" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/UserClaim.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/UserLogin.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/UserPaymentMethod.cs" Line="27" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/UserRole.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace_Data/Entities/UserToken.cs" Line="11" Column="49" />
+      <File FileName="Auction_Marketplace.Api/Program.cs" Line="15" Column="1" />
+      <File FileName="Auction_Marketplace.Api/appsettings.json" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Auction_Marketplace">
-            <Node name="Auction_Marketplace.Api">
-              <Node name="appsettings.json" selected="True" />
-            </Node>
-            <Node name="Auction_Marketplace_Data">
-              <Node name="Configuration" expanded="True" />
-              <Node name="Entities" expanded="True">
-                <Node name="Abstract" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
+          <Node name="Auction_Marketplace" expanded="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>

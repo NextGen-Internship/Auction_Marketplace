@@ -9,7 +9,7 @@ namespace Auction_Marketplace_Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Item> builder)
         {
-
+            builder.ToTable("Items");
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Auction_Marketplace_Data.Entities.Abstract;
 
 namespace Auction_Marketplace_Data.Entities
 {
-	public class Bid
+	public class Bid : IBaseEntity
 	{
 		[Key]
 		public int BidId { get; set; }
@@ -21,6 +22,10 @@ namespace Auction_Marketplace_Data.Entities
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
+
+        // Implementing IBaseEntity interface
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
 

@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Auction_Marketplace.Data.Enums;
+using Auction_Marketplace_Data.Entities.Abstract;
 
 namespace Auction_Marketplace_Data.Entities
 {
-	public class Review
+	public class Review : IBaseEntity
 	{
         [Key]
         public int ReviewId { get; set; }
@@ -26,6 +27,10 @@ namespace Auction_Marketplace_Data.Entities
         [Required]
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }
+
+        // Implementing IBaseEntity interface
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
 

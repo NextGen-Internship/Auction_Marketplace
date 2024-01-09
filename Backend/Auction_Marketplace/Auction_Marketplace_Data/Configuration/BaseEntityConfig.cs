@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Auction_Marketplace_Data.Configuration
 {
-	public class BaseEntityConfig : IEntityTypeConfiguration<BaseEntity>
+	public class BaseEntityConfig : IEntityTypeConfiguration<IBaseEntity>
 	{
-		public void Configure(EntityTypeBuilder<BaseEntity> builder)
+		public void Configure(EntityTypeBuilder<IBaseEntity> builder)
 		{
 
 		}
