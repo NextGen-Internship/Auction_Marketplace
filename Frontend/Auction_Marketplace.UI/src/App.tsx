@@ -7,17 +7,17 @@ import HomePage from './pages/HomePage/HomePage.tsx';
 
 function App() {
   return (
-    <Router>
       <div>  
-        <Navbar />
-        <Routes>
-          <Route path="/login" Component={LoginPage}></Route>
-          <Route path="/register" Component={RegisterPage}></Route> 
-          <Route path="/" Component={HomePage}></Route>
-        </Routes>  
-        <Footer /> 
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/login" Component={LoginPage}></Route>
+            <Route path="/register" Component={RegisterPage}></Route> 
+            <Route path="/" Component={HomePage}></Route>
+          </Routes>  
+          <Footer /> 
+        </Router>
       </div>
-   </Router>
   );
 }
 
