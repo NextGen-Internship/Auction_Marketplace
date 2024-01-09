@@ -9,14 +9,22 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="nav-container">
         <div className="logo-container">
+          <Link to="/">
             <img src={logo} alt="Logo" className="logo" />
+          </Link>
         </div>
-        <div className='nav-links'>
+        <div className="nav-links">
             <Link to="/" className="nav-item">
                 Home
             </Link>
-            <Link to="/services" className="nav-item">
-                Services
+            <Link to="/marketplace" className="nav-item">
+                Marketplace
+            </Link>
+            <Link to="/aboutUs" className="nav-item">
+                About us
+            </Link>
+            <Link to="/policy" className="nav-item">
+                Policy
             </Link>
             <Link to="/login" className="nav-item">
                 Login
