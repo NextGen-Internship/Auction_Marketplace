@@ -28,11 +28,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Configuration\" />
       <None Remove="Extensions\" />
+      <None Remove="Configuration\" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Configuration\" />
       <Folder Include="Extensions\" />
+      <Folder Include="Configuration\" />
     </ItemGroup>
 </Project>

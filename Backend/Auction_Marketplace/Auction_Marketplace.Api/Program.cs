@@ -1,11 +1,6 @@
 using System.Text;
-using Auction_Marketplace.Api.Configuration;
 using Auction_Marketplace_Data;
 using Auction_Marketplace_Data.Entities;
-using Auction_Marketplace_Services.Implementation.Authentication;
-using Auction_Marketplace_Services.Implementation.Email;
-using Auction_Marketplace_Services.Interface.Authentication;
-using Auction_Marketplace_Services.Interface.Email;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +17,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
-
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
 
 builder.Services.AddAuthentication(options =>
