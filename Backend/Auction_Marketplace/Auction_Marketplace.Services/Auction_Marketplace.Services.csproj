@@ -37,5 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auction_Marketplace_Data\Auction_Marketplace_Data.csproj" />
+    <ProjectReference Include="..\Auction_Marketplace.Data\Auction_Marketplace.Data.csproj" />
   </ItemGroup>
 </Project>

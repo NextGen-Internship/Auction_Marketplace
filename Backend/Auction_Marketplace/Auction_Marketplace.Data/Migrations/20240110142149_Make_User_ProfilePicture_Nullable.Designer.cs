@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionMarketplace.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240110112141_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240110142149_Make_User_ProfilePicture_Nullable")]
+    partial class MakeUserProfilePictureNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -410,7 +410,6 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 

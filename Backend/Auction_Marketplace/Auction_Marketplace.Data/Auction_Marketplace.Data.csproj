@@ -30,7 +30,4 @@
     <Folder Include="Models\" />
     <Folder Include="Models\Authentication\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj" />
-  </ItemGroup>
 </Project>

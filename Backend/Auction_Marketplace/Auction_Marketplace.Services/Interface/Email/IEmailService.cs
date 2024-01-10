@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Auction_Marketplace_Services.Interface.Email
+namespace Auction_Marketplace.Services.Interface.Email
 {
 	public interface IEmailService
 	{

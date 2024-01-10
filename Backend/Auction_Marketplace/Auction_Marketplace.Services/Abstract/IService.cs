@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Auction_Marketplace_Services.Abstract
+namespace Auction_Marketplace.Services.Abstract
 {
 	public class IService
 	{

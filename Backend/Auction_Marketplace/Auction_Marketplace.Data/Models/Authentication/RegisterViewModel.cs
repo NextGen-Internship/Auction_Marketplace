@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Auction_Marketplace_Data.Models.Authentication
+namespace Auction_Marketplace.Data.Models.Authentication
 {
 	public class RegisterViewModel
 	{

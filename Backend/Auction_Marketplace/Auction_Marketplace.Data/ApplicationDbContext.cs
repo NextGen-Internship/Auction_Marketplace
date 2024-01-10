@@ -1,18 +1,7 @@
-﻿using Auction_Marketplace.Data.Configuration;
-using Auction_Marketplace.Data.Entities;
+﻿using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Auction_Marketplace.Data
 {

@@ -1,14 +1,15 @@
 ﻿using System;
-using Auction_Marketplace_Data.Entities;
+using Auction_Marketplace.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Auction_Marketplace_Services.Interface.Authentication;
+using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Services.Interface.Authentication;
 
-namespace Auction_Marketplace_Services.Implementation.Authentication
+namespace Auction_Marketplace.Services.Implementation.Authentication
 {
 	public class TokenService : ITokenService
 	{
@@ -27,11 +28,10 @@ namespace Auction_Marketplace_Services.Implementation.Authentication
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig: Secret").Value);
+            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:Secret").Value);
 
             var claims = new List<Claim>()
             {
-                    new Claim("Id", user.Id),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

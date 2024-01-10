@@ -1,8 +1,8 @@
 ﻿using System;
-using Auction_Marketplace_Services.Implementation.Authentication;
-using Auction_Marketplace_Services.Implementation.Email;
-using Auction_Marketplace_Services.Interface.Authentication;
-using Auction_Marketplace_Services.Interface.Email;
+using Auction_Marketplace.Services.Implementation.Authentication;
+using Auction_Marketplace.Services.Implementation.Email;
+using Auction_Marketplace.Services.Interface.Authentication;
+using Auction_Marketplace.Services.Interface.Email;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,11 +1,11 @@
-﻿using Auction_Marketplace_Data.Entities;
-using Microsoft.AspNetCore.Identity;
-using Auction_Marketplace_Services.Interface.Authentication;
-using Auction_Marketplace_Data.Models.Authentication;
-using Auction_Marketplace_Data.Models;
-using Auction_Marketplace_Services.Interface.Email;
+﻿using Microsoft.AspNetCore.Identity;
+using Auction_Marketplace.Data.Models.Authentication;
+using Auction_Marketplace.Data.Models;
+using Auction_Marketplace.Services.Interface.Authentication;
+using Auction_Marketplace.Services.Interface.Email;
+using Auction_Marketplace.Data.Entities;
 
-namespace Auction_Marketplace_Services.Implementation.Authentication
+namespace Auction_Marketplace.Services.Implementation.Authentication
 {
     public class AuthenticationUserService : IAuthenticationUserService
     {
@@ -44,7 +44,8 @@ namespace Auction_Marketplace_Services.Implementation.Authentication
                  LastName = registerUser.LastName == null ? "" : registerUser.LastName,
                  Email = registerUser.Email,
                  SecurityStamp = Guid.NewGuid().ToString(),
-                 UserName = registerUser.Username
+                 UserName = registerUser.Username,
+                 ProfilePicture = "rfrefvre"
              };
         
         
@@ -59,18 +60,18 @@ namespace Auction_Marketplace_Services.Implementation.Authentication
                           Message = "User Failed to Create!"
                       };
               }
-        
+
+              //await _userManager.AddToRoleAsync(user, "User");
+
               //ToDo: Create the JWT
-              var token = _tokenService.GenerateJwtToken(user);
+              //var token = _tokenService.GenerateJwtToken(user);
 
               await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Welcome");
-
-              await _userManager.AddToRoleAsync(user, "User");
         
               return new Response<string>()
                   {
                       Succeed = true,
-                      Data = token
+                      //Data = token
                   };
               
         }

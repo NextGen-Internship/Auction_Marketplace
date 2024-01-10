@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using Auction_Marketplace_Data.Entities;
+using Auction_Marketplace.Data.Entities;
 
-namespace Auction_Marketplace_Services.Interface.Authentication
+namespace Auction_Marketplace.Services.Interface.Authentication
 {
 	public interface ITokenService
 	{

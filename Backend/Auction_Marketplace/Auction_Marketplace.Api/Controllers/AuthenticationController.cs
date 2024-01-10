@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Services.Interface.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -40,6 +41,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpGet]
         [Route("Logout")]
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await _autService.Logout();

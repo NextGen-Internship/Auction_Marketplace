@@ -1,7 +1,7 @@
-﻿using Auction_Marketplace_Data.Models;
-using Auction_Marketplace_Data.Models.Authentication;
+﻿using Auction_Marketplace.Data.Models;
+using Auction_Marketplace.Data.Models.Authentication;
 
-namespace Auction_Marketplace_Services.Interface.Authentication
+namespace Auction_Marketplace.Services.Interface.Authentication
 {
     public interface IAuthenticationUserService
 	{
