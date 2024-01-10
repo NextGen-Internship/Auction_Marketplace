@@ -26,12 +26,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Auction_Marketplace_Services\Auction_Marketplace.Services.csproj">
+      <ProjectReference Include="..\Auction_Marketplace.Data\Auction_Marketplace.Data.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
-      <ProjectReference Include="..\Auction_Marketplace_Data\Auction_Marketplace.Data.csproj">
+      <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
     </ItemGroup>
-
 </Project>

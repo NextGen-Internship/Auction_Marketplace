@@ -14,18 +14,23 @@ namespace Auction_Marketplace.Data.Entities
 
         [ForeignKey("User")]
         public int UserId { get; set; }
+        public User User { get; set; }
 
-        [ForeignKey("User")]
+        [ForeignKey("EndUser")]
         public int EndUserId { get; set; }
+        public User EndUser { get; set; }
 
         [ForeignKey("Cause")]
         public int? CauseId { get; set; }
+        public Cause Cause { get; set; }
 
         [ForeignKey("Auction")]
         public int? AuctionId { get; set; }
+        public Auction Auction { get; set; }
 
         [ForeignKey("UserPaymentMethod")]
         public int UserPaymentMethodId { get; set; }
+        public UserPaymentMethod UserPaymentMethod { get; set; }
 
         [Required]
         public PaymentFor Type { get; set; }

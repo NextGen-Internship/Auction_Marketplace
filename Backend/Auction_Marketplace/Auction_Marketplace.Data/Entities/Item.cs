@@ -13,6 +13,7 @@ namespace Auction_Marketplace.Data.Entities
 
         [ForeignKey("Auction")]
         public int AuctionId { get; set; }
+        public Auction Auction { get; set; }
 
         [Required]
         [StringLength(255)]

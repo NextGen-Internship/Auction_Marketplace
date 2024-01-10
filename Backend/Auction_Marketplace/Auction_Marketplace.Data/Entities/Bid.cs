@@ -12,12 +12,15 @@ namespace Auction_Marketplace.Data.Entities
 
         [ForeignKey("User")]
         public int UserId { get; set; }
+        public User User { get; set; }
 
         [ForeignKey("Auction")]
         public int AuctionId { get; set; }
+        public Auction Auction { get; set; }
 
         [ForeignKey("Item")]
         public int ItemId { get; set; }
+        public Item Item { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 2)")]

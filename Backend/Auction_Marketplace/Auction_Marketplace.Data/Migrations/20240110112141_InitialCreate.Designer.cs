@@ -4,6 +4,7 @@ using Auction_Marketplace.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionMarketplace.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110112141_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,6 +57,8 @@ namespace AuctionMarketplace.Data.Migrations
 
                     b.HasKey("AuctionId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Auctions", (string)null);
                 });
 
@@ -84,6 +89,12 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("BidId");
+
+                    b.HasIndex("AuctionId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bids", (string)null);
                 });
@@ -123,6 +134,8 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CauseId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Causes", (string)null);
                 });
@@ -169,6 +182,8 @@ namespace AuctionMarketplace.Data.Migrations
 
                     b.HasKey("ItemId");
 
+                    b.HasIndex("AuctionId");
+
                     b.ToTable("Items", (string)null);
                 });
 
@@ -184,9 +199,11 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int?>("AuctionId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("CauseId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -214,6 +231,16 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("PaymentId");
+
+                    b.HasIndex("AuctionId");
+
+                    b.HasIndex("CauseId");
+
+                    b.HasIndex("EndUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserPaymentMethodId");
 
                     b.ToTable("Payments", (string)null);
                 });
@@ -250,6 +277,10 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("CauseId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews", (string)null);
                 });
@@ -491,6 +522,8 @@ namespace AuctionMarketplace.Data.Migrations
 
                     b.HasKey("UserPaymentMethodId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserPaymentMethods", (string)null);
                 });
 
@@ -540,6 +573,128 @@ namespace AuctionMarketplace.Data.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Auction", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Bid", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.Auction", "Auction")
+                        .WithMany()
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Cause", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Item", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.Auction", "Auction")
+                        .WithMany()
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Payment", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.Auction", "Auction")
+                        .WithMany()
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.Cause", "Cause")
+                        .WithMany()
+                        .HasForeignKey("CauseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "EndUser")
+                        .WithMany()
+                        .HasForeignKey("EndUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.UserPaymentMethod", "UserPaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("UserPaymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Cause");
+
+                    b.Navigation("EndUser");
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserPaymentMethod");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Review", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.Cause", "Cause")
+                        .WithMany()
+                        .HasForeignKey("CauseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cause");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Auction_Marketplace.Data.Entities.RoleClaim", b =>
                 {
                     b.HasOne("Auction_Marketplace.Data.Entities.Role", null)
@@ -565,6 +720,17 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.UserPaymentMethod", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Auction_Marketplace.Data.Entities.UserRole", b =>

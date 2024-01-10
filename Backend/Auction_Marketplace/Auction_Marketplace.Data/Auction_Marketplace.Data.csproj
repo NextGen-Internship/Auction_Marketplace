@@ -14,6 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,5 +24,8 @@
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
     <Folder Include="Configuration\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj" />
   </ItemGroup>
 </Project>

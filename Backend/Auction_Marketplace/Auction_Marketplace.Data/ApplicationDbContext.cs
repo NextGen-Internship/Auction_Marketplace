@@ -4,12 +4,15 @@ using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Auction_Marketplace.Data
 {
@@ -68,10 +71,52 @@ namespace Auction_Marketplace.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
+           // builder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
             //builder.ApplyConfiguration(new BaseEntityConfig());
             builder.ApplyConfigurationsFromAssembly(typeof(Auction).Assembly);
+
+            builder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+                .HasOne(r => r.Cause)
+                .WithMany()
+                .HasForeignKey(r => r.CauseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+                .HasOne(r => r.UserPaymentMethod)
+                .WithMany()
+                .HasForeignKey(r => r.UserPaymentMethodId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Payment>()
+               .HasOne(r => r.EndUser)
+               .WithMany()
+               .HasForeignKey(r => r.EndUserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Bid>()
+              .HasOne(r => r.Item)
+              .WithMany()
+              .HasForeignKey(r => r.ItemId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Bid>()
+              .HasOne(r => r.User)
+              .WithMany()
+              .HasForeignKey(r => r.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
 
     }

@@ -7,26 +7,21 @@ using Auction_Marketplace.Data.Entities.Abstract;
 
 namespace Auction_Marketplace.Data.Entities
 {
-	public class Review : IBaseEntity
+    public class UserPaymentMethod : IBaseEntity
 	{
         [Key]
-        public int ReviewId { get; set; }
-
-        [ForeignKey("Cause")]
-        public int CauseId { get; set; }
+        public int UserPaymentMethodId { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
-
-        [StringLength(1000)]
-        public string Comment { get; set; }
+        public User User { get; set; }
 
         [Required]
-        public RatingStar Rating { get; set; }
+        public PaymentMethod Method { get; set; }
 
         [Required]
         [DefaultValue(false)]
-        public bool IsDeleted { get; set; }
+        public bool IsDefault { get; set; }
 
         // Implementing IBaseEntity interface
         public DateTime CreatedAt { get; set; }
