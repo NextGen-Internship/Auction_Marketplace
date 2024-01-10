@@ -1,10 +1,14 @@
 using System.Text;
+using Auction_Marketplace.Api.Configuration;
 using Auction_Marketplace_Data;
 using Auction_Marketplace_Data.Entities;
+using Auction_Marketplace_Services.Implementation.Authentication;
+using Auction_Marketplace_Services.Implementation.Email;
+using Auction_Marketplace_Services.Interface.Authentication;
+using Auction_Marketplace_Services.Interface.Email;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +24,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 
 
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,8 +36,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(jwt =>
 {
-
-    var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]!);
+    var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]!);
     jwt.SaveToken = true;
 
     jwt.TokenValidationParameters = new TokenValidationParameters()
@@ -50,6 +56,9 @@ builder.Services.AddAuthorization();
 
 
 builder.Services.AddControllers();
+
+builder.Services.AddApplicationServices();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
