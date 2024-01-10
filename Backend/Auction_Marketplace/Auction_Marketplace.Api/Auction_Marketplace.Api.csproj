@@ -22,17 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Auction_Marketplace_Services\Auction_Marketplace_Services.csproj">
+      <ProjectReference Include="..\Auction_Marketplace.Data\Auction_Marketplace.Data.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Extensions\" />
-      <None Remove="Configuration\" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Extensions\" />
-      <Folder Include="Configuration\" />
+      <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
     </ItemGroup>
 </Project>
