@@ -26,6 +26,7 @@ namespace Auction_Marketplace.Data.Entities
         // Implementing IBaseEntity interface
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedOn { get; set; }
     }
 }
 

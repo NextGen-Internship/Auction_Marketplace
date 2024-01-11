@@ -22,19 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\Authentication\Login\" />
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Auction_Marketplace.Data\Auction_Marketplace.Data.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
       <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <None Remove="Controllers\" />
     </ItemGroup>
 </Project>

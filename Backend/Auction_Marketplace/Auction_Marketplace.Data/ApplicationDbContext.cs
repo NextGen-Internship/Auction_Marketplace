@@ -3,16 +3,6 @@ using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Auction_Marketplace.Data
 {
@@ -35,12 +25,6 @@ namespace Auction_Marketplace.Data
         {
             base.OnConfiguring(optionsBuilder);
         }
-
-        /*public override int SaveChanges()
-        {
-            AddTimestamps();
-            return base.SaveChanges();
-        }*/
 
         //override savechangesasync
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
