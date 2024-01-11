@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -14,18 +14,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SendGrid" Version="9.18.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Entities\Abstract\" />
     <None Remove="Configuration\" />
+    <None Remove="Models\" />
+    <None Remove="Models\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
     <Folder Include="Configuration\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj" />
+    <Folder Include="Models\" />
+    <Folder Include="Models\Authentication\" />
   </ItemGroup>
 </Project>

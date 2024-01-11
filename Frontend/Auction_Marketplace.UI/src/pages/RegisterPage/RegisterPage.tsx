@@ -82,14 +82,13 @@ const RegisterPage: React.FC = () => {
     setPasswordError(validatePassword(inputValue) ? null : 'Invalid password format');
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateEmail(email) && validatePassword(password)) {
       //TODO  authentication logic here
       console.log('First name:', firstName);
       console.log('Last name:', lastName);
       console.log('Email/Username:', email);
       console.log('Password:', password);
-      console.log('Profile pic:', profilePicture);
 
     } else {
       setEmailError('Invalid email or username format')
@@ -97,7 +96,6 @@ const RegisterPage: React.FC = () => {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
     }
-  }; 
 
 
   return (
@@ -165,7 +163,7 @@ const RegisterPage: React.FC = () => {
         />
         {passwordError && <span className="error-message">{passwordError}</span>}
 
-        <button type="submit" className="login-btn" onClick={handleLogin}>
+        <button type="button" className="login-btn" onClick={handleLogin}>
           Create Account
         </button>
 
