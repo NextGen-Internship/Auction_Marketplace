@@ -10,6 +10,10 @@ body {
     justify-content: center;
   }
 
+.h2 {
+    margin: 0;
+  }
+
 .login-container {
     max-width: 300px;
     margin: 0 auto;
@@ -70,12 +74,13 @@ body {
     text-decoration: underline;
   }
   
-  .register-login-label {
+  .login-login-label {
     display: block;
     text-align: center;
     margin: 8px;
     color:#0056b3;
     font-size: 14px;
+    text-decoration: none;
   }
 
   .register-btn {
