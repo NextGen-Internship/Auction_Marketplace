@@ -4,6 +4,7 @@ using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Services.Interface.Authentication;
 using Auction_Marketplace.Services.Interface.Email;
 using Auction_Marketplace.Data.Entities;
+using static System.Net.WebRequestMethods;
 
 namespace Auction_Marketplace.Services.Implementation.Authentication
 {
@@ -44,8 +45,8 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
                  LastName = registerUser.LastName == null ? "" : registerUser.LastName,
                  Email = registerUser.Email,
                  SecurityStamp = Guid.NewGuid().ToString(),
-                 UserName = registerUser.Username,
-                 ProfilePicture = "rfrefvre"
+                 UserName = registerUser.Email,
+                 ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
              };
 
             // Seed roles
@@ -55,7 +56,7 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
             var token = _tokenService.GenerateJwtToken(user);
 
             //ToDo: Generate new api key and dont post in on GitHub
-            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Welcome");
+            //await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Message");
 
 
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
