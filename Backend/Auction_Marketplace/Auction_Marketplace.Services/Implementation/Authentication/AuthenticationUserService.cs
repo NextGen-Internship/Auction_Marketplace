@@ -41,12 +41,13 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
         
              var user = new User()
              {
-                 FirstName = registerUser.FirstName == null ? "" : registerUser.FirstName,
-                 LastName = registerUser.LastName == null ? "" : registerUser.LastName,
-                 Email = registerUser.Email,
+                 FirstName =  registerUser.FirstName,
+                 LastName = registerUser.LastName,
+                 Email = registerUser.Email,      
                  SecurityStamp = Guid.NewGuid().ToString(),
                  UserName = registerUser.Email,
-                 ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
+                 ProfilePicture = registerUser.ProfilePicture == "" ? "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
+                                                                      : registerUser.ProfilePicture
              };
 
             // Seed roles
@@ -83,7 +84,7 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
         
         public async Task<Response<string>> Login(LoginViewModel loginUser)
         {
-              var user = await _userManager.FindByNameAsync(loginUser.Username);
+              var user = await _userManager.FindByNameAsync(loginUser.Email);
        
               if (user != null && await _userManager.CheckPasswordAsync(user, loginUser.Password))
               {

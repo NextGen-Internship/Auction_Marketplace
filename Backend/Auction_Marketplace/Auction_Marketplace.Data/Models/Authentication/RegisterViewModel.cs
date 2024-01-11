@@ -5,10 +5,10 @@ namespace Auction_Marketplace.Data.Models.Authentication
 {
 	public class RegisterViewModel
 	{
-        [Required(ErrorMessage = "Username is required")]
+        [Required(ErrorMessage = "FirstName is required")]
         public string? FirstName { get; set; } = null!;
 
-        [Required(ErrorMessage = "Username is required")]
+        [Required(ErrorMessage = "LastName is required")]
         public string? LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "Username is required")]
@@ -20,6 +20,8 @@ namespace Auction_Marketplace.Data.Models.Authentication
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = null!;
+
+        public string ProfilePicture { get; set; } = null!;
     }
 }
 
