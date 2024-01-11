@@ -1,5 +1,4 @@
-﻿using Auction_Marketplace.Data.Configuration;
-using Auction_Marketplace.Data.Entities;
+﻿using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Entities.Abstract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,11 @@ namespace Auction_Marketplace.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserPaymentMethod> UserPaymentMethods { get; set; }
+
+        public ApplicationDbContext()
+        {
+
+        }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
