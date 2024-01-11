@@ -52,11 +52,11 @@ const LoginPage: React.FC = () => {
       }
     }
   };
-  
+
 
   return (
     <div className="login-container">
-      <h2>Login in to Blankfactor Auction Marketplace</h2>
+      <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>
         <input
@@ -90,7 +90,7 @@ const LoginPage: React.FC = () => {
           Sign In
         </button>
 
-        <button type="submit" className="gsi-material-button">
+        <button type="button" className="gsi-material-button">
           <div className="gsi-material-button-state"></div>
           <div className="gsi-material-button-content-wrapper">
             <div className="gsi-material-button-icon">
@@ -102,19 +102,16 @@ const LoginPage: React.FC = () => {
                 <path fill="none" d="M0 0h48v48H0z"></path>
               </svg>
             </div>
-            <span className="gsi-material-button-contents">Sign in with Google</span>
+            <span className="gsi-material-button-contents">Sign in with Google</span> 
           </div>
         </button>
 
-        <label className='register-login-label'>
-            Don't have an account? Register here.
-        </label>
-
-        <Link to="/register">
-            <button type="submit" className="register-btn">
-                Register
-            </button>
-        </Link>
+        <Link to="/register">      
+          <label className='login-login-label'>
+              Don't have an account? Register here.
+          </label>
+          </Link>
+          
       </form>
     </div>
   );
