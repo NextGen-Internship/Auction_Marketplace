@@ -47,9 +47,18 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
                  UserName = registerUser.Username,
                  ProfilePicture = "rfrefvre"
              };
-        
-        
-              var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
+
+            // Seed roles
+            //await _userManager.AddToRoleAsync(user, "User");
+
+            //Creates the JWT
+            var token = _tokenService.GenerateJwtToken(user);
+
+            //ToDo: Generate new api key and dont post in on GitHub
+            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Welcome");
+
+
+            var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
         
         
               if (!isCreated.Succeeded)
@@ -61,17 +70,12 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
                       };
               }
 
-              //await _userManager.AddToRoleAsync(user, "User");
-
-              //ToDo: Create the JWT
-              //var token = _tokenService.GenerateJwtToken(user);
-
-              await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Welcome");
+              
         
               return new Response<string>()
                   {
                       Succeed = true,
-                      //Data = token
+                      Data = token
                   };
               
         }

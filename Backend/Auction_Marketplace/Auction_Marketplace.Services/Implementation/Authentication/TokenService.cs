@@ -38,7 +38,7 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
             };
 
-            GenerateUserRoles(user, claims);
+           // GenerateUserRoles(user, claims);
 
 
             var tokenDescriptor = new SecurityTokenDescriptor()
