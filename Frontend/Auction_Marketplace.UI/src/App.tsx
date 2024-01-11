@@ -4,10 +4,23 @@ import Navbar from "./components/Navbar/Navbar.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import HomePage from './pages/HomePage/HomePage.tsx';
+import { GoogleLogin } from '@react-oauth/google';
+
 
 function App() {
   return (
-      <div>  
+      <div>
+        <GoogleLogin
+                onSuccess={credentialResponse => {
+                  console.log(credentialResponse);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />;
+      <div>
+
+        </div>  
         <Router>
           <Navbar />
           <Routes>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './LoginPage.css'; 
 import './LoginPageSignInWithGoogle.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 const LoginPage: React.FC = () => {
@@ -105,6 +107,23 @@ const LoginPage: React.FC = () => {
             <span className="gsi-material-button-contents">Sign in with Google</span>
           </div>
         </button>
+
+
+        <div>
+          <GoogleOAuthProvider clientId="797165208238-se4k35hpameabe5dt7q8dmbbb2fgq4p4.apps.googleusercontent.com" children={undefined}>
+          </GoogleOAuthProvider>;
+        </div>
+        
+        <div>
+        <GoogleLogin
+                onSuccess={credentialResponse => {
+                  console.log(credentialResponse);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />;
+        </div>
 
         <label className='register-login-label'>
             Don't have an account? Register here.
