@@ -1,18 +1,27 @@
 ﻿<Properties StartupConfiguration="{67B36140-79C0-4C70-8BF1-C3AA90E77E2A}|https">
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Api/Program.cs">
+    <Files>
+      <File FileName="Auction_Marketplace.Api/Program.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Api/appsettings.json" />
+      <File FileName="Auction_Marketplace.Api/appsettings.Development.json" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Auction_Marketplace" selected="True" />
+          <Node name="Auction_Marketplace">
+            <Node name="Auction_Marketplace.Api" expanded="True">
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>
