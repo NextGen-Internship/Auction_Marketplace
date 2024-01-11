@@ -30,12 +30,6 @@ namespace Auction_Marketplace.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        /*public override int SaveChanges()
-        {
-            AddTimestamps();
-            return base.SaveChanges();
-        }*/
-
         //override savechangesasync
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

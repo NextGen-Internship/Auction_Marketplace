@@ -8,7 +8,7 @@ namespace Auction_Marketplace.Data.Entities.Abstract
         //modified at
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
+        public DateTime? DeletedOn { get; set; }
     }
 	
 }
