@@ -14,7 +14,7 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Auction_Marketplace">
+          <Node name="Auction_Marketplace" expanded="True">
             <Node name="Auction_Marketplace.Api" expanded="True">
               <Node name="Program.cs" selected="True" />
             </Node>
