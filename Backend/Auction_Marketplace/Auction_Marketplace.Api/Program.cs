@@ -1,6 +1,7 @@
 using System.Text;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Services.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,15 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// Added policy for the React app
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder => builder.WithOrigins("http://localhost:3000") //ToDo: Update with the actual URL of our React app
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
+
 
 builder.Services.AddControllers();
 
@@ -67,6 +77,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 app.UseAuthorization();

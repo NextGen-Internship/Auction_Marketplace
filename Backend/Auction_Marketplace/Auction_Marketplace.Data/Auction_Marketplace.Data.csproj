@@ -23,11 +23,29 @@
     <None Remove="Configuration\" />
     <None Remove="Models\" />
     <None Remove="Models\Authentication\" />
+    <None Remove="Repositories\" />
+    <None Remove="Repositories\EntityRepositories\" />
+    <None Remove="Repositories\EntityRepositories\AuctionRepo\" />
+    <None Remove="Repositories\EntityRepositories\ItemRepo\" />
+    <None Remove="Repositories\EntityRepositories\UserRepo\" />
+    <None Remove="Repositories\EntityRepositories\BidRepo\" />
+    <None Remove="Repositories\EntityRepositories\CauseRepo\" />
+    <None Remove="Repositories\EntityRepositories\PaymentRepo\" />
+    <None Remove="Repositories\EntityRepositories\ReviewRepo\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
     <Folder Include="Configuration\" />
     <Folder Include="Models\" />
     <Folder Include="Models\Authentication\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Repositories\EntityRepositories\" />
+    <Folder Include="Repositories\EntityRepositories\AuctionRepo\" />
+    <Folder Include="Repositories\EntityRepositories\ItemRepo\" />
+    <Folder Include="Repositories\EntityRepositories\UserRepo\" />
+    <Folder Include="Repositories\EntityRepositories\BidRepo\" />
+    <Folder Include="Repositories\EntityRepositories\CauseRepo\" />
+    <Folder Include="Repositories\EntityRepositories\PaymentRepo\" />
+    <Folder Include="Repositories\EntityRepositories\ReviewRepo\" />
   </ItemGroup>
 </Project>

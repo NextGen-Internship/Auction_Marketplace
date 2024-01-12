@@ -2,6 +2,7 @@
 using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Services.Interface.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Auction_Marketplace.Data.Models.GoogleLogin;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -20,23 +21,47 @@ namespace Auction_Marketplace.Api.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel registerUser)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
+                var response = await _autService.Register(registerUser);
+
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
-
-            var response = await _autService.Register(registerUser);
-
-            return response.Succeed == true ? Ok(response) : BadRequest(response);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+            
         }
 
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginViewModel loginUser)
         {
-            var response = await _autService.Login(loginUser);
+            try
+            {
+                var response = await _autService.Login(loginUser);
 
-            return response.Succeed == true ? Ok(response) : Unauthorized(response);
+                return response.Succeed == true ? Ok(response) : Unauthorized(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+            
+        }
+
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginViewModel googleLogin)
+        {
+            try
+            {
+                return await _authService.GoogleLoginAsync(googleLogin);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet]
@@ -44,9 +69,18 @@ namespace Auction_Marketplace.Api.Controllers
         [Authorize]
         public async Task<IActionResult> LogOut()
         {
-            await _autService.Logout();
 
-            return Ok();
+            try
+            {
+                await _autService.Logout();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+            
         }
 
     }

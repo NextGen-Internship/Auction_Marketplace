@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Models;
+using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Services.Interface.Authentication;
 using Auction_Marketplace.Services.Interface.Email;
 using Auction_Marketplace.Data.Entities;
-using static System.Net.WebRequestMethods;
+using Auction_Marketplace.Data.Repositories.EntityRepositories.UserRepo;
 
 namespace Auction_Marketplace.Services.Implementation.Authentication
 {
@@ -14,16 +14,19 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserRepository _userRepository;
 
         public AuthenticationUserService(UserManager<User> userManager,
                                         ITokenService tokenService,
                                         SignInManager<User> signInManager,
-                                        IEmailService emailService)
+                                        IEmailService emailService,
+                                        UserRepository userRepository)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _emailService = emailService;
+            _userRepository = userRepository;
         }
 
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
@@ -57,7 +60,7 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
             var token = _tokenService.GenerateJwtToken(user);
 
             //ToDo: Generate new api key and dont post in on GitHub
-            //await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "Message");
+            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "ZDR KP");
 
 
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
@@ -105,11 +108,78 @@ namespace Auction_Marketplace.Services.Implementation.Authentication
        
         }
 
+        public async Task<Response<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
+        {
+            var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
+            if (!validation.IsValid)
+            {
+                return new Response<string>()
+                {
+                    Succeed = false,
+                    Message = "Invalid User"
+                };
+            }
+
+            var user =  _userRepository.GetByEmail(googleLogin.Email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = "",
+                    LastName = "",
+                    Email = googleLogin.Email,
+                    UserName = googleLogin.Email,
+                    Password = "default google login password"
+                };
+                await _userRepository.CreateAsync(user);
+            }
+
+            var jwtToken = await _tokenService.GenerateJwtToken(user);
+
+            return new Response<string>()
+            {
+                Succeed = true,
+                Data = jwtToken
+            };
+        }
+
+  //   public async Task<GoogleTokenValidationResult> ValidateGoogleTokenAsync(string googleToken)
+  //   {
+  //       using (var httpClient = new HttpClient())
+  //       {
+  //           var validationEndpoint = "https://oauth2.googleapis.com/tokeninfo?id_token=" + googleToken;
+  //           var response = await httpClient.GetAsync(validationEndpoint);
+  //           if (response.IsSuccessStatusCode)
+  //           {
+  //               var responseContent = await response.Content.ReadAsStringAsync();
+  //               var tokenInfo = JsonConvert.DeserializeObject<GoogleTokenInfo>(responseContent);
+  //
+  //               var validationResult = new GoogleTokenValidationResult
+  //               {
+  //                   IsValid = true,
+  //                   Email = tokenInfo.Email
+  //               };
+  //
+  //               return validationResult;
+  //           }
+  //           else
+  //           {
+  //               var validationResult = new GoogleTokenValidationResult
+  //               {
+  //                   IsValid = false,
+  //                   ErrorMessage = "Token validation failed."
+  //               };
+  //
+  //               return validationResult;
+  //           }
+  //       }
+  //   }
+  //
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
         }
-
     }
 }
 
