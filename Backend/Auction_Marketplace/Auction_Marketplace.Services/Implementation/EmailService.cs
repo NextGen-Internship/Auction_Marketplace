@@ -1,10 +1,10 @@
 ﻿using System;
-using Auction_Marketplace.Services.Interface.Email;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace Auction_Marketplace.Services.Implementation.Email
+namespace Auction_Marketplace.Services.Implementation
 {
     public class EmailService : IEmailService
     {

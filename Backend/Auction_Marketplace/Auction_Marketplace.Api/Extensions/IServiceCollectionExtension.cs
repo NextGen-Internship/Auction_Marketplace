@@ -1,12 +1,10 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
-using Auction_Marketplace.Services.Implementation.Authentication;
-using Auction_Marketplace.Services.Implementation.Email;
-using Auction_Marketplace.Services.Interface.Authentication;
-using Auction_Marketplace.Services.Interface.Email;
+using Auction_Marketplace.Services.Abstract;
+using Auction_Marketplace.Services.Implementation;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,21 +23,25 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.SignIn.RequireConfirmedEmail = false;
-                options.Tokens.EmailConfirmationTokenProvider = "Default";
-            })
+            services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            services.AddSqlServer<ApplicationDbContext>(connectionString);
 
-            //services.AddSqlServer<ApplicationDbContext>(connectionString);
+            if (environment.IsDevelopment())
+            {
+                services.Configure<IdentityOptions>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.Tokens.EmailConfirmationTokenProvider = "Default";
+                });
+            }
 
 
             if (environment.IsProduction())
@@ -49,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.Configure<IdentityOptions>(options =>
                 {
-                    options.SignIn.RequireConfirmedEmail = false;
+                    options.SignIn.RequireConfirmedEmail = true;
                 });
             }
 
@@ -59,33 +61,29 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            //.AddScoped<SignInManager<User>>();
-
-            //services.AddScoped<IAuthenticationUserService, AuthenticationUserService>();
-
-            //services.AddScoped<ITokenService, TokenService>();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(jwt =>
+            {
+                var key = Encoding.ASCII.GetBytes(configuration["JwtConfig:Secret"]!);
+
+                jwt.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtConfig:Secret"])),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
-                });
+                    ValidIssuer = configuration["JwtConfig:Issuer"],
+                    ValidAudience = configuration["JwtConfig:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true
+                };
+            });
 
             return services;
         }
@@ -93,7 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
 
-        private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
+            private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
         {
             var serviceTypes = assembly.GetTypes()
                 .Where(x => !string.IsNullOrEmpty(x.Namespace) && x.IsClass && !x.IsAbstract && fromType.IsAssignableFrom(x))
@@ -113,9 +111,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
-            services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IAuthenticationUserService));
-            services.AddScopedServiceTypes(typeof(TokenService).Assembly, typeof(ITokenService));
-            services.AddScopedServiceTypes(typeof(EmailService).Assembly, typeof(IEmailService));
+            services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
 
             return services;
         }

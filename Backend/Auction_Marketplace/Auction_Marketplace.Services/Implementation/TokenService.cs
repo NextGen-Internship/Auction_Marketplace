@@ -7,9 +7,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Auction_Marketplace.Data.Entities;
-using Auction_Marketplace.Services.Interface.Authentication;
+using Auction_Marketplace.Services.Interface;
 
-namespace Auction_Marketplace.Services.Implementation.Authentication
+namespace Auction_Marketplace.Services.Implementation
 {
 	public class TokenService : ITokenService
 	{
