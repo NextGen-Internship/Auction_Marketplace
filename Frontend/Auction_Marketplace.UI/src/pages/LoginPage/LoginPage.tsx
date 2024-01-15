@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
+import ApiService from '../../Services/ApiService';
+import UserService from '../../Services/UserService';
 
+const apiService = new ApiService();
+const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -40,18 +44,39 @@ const LoginPage: React.FC = () => {
     setPasswordError(validatePassword(inputValue) ? null : 'Invalid password format');
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
-      //TODO  authentication logic here
-      console.log('Email/Username:', emailOrUsername);
-      console.log('Password:', password);
+      try {
+        const loginResponse = await apiService.post<any>('api/Authentication/Login', {
+          emailOrUsername,
+          password,
+        });
+
+        console.log('Login response:', loginResponse);
+
+        if (loginResponse.succeed) {
+          console.log('Authentication successful');
+          //TODO: redirect to dashboard
+        } else {
+          if(loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
+            console.error('User does not exist.');
+            //TODO: Handle case where user doesnt exist
+          } else {
+            console.error('Authentication failed:', loginResponse.errorMessage);
+            //TODO: Handle other auth failure scenarios
+          }
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
     } else {
-      setEmailOrUsernameError('Invalid email or username format')
+      setEmailOrUsernameError('Invalid email format')
       if (!validatePassword(password)) {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
     }
   };
+
 
   const handleSuccess = (credentialResponse: any) => {
     console.log('Login success:', credentialResponse);
@@ -107,11 +132,11 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
         <div>
-            <Link to="/register">
-              <label className='login-login-label'>
-                Don't have an account? Register here.
-              </label>
-            </Link>
+          <Link to="/register">
+            <label className='login-login-label'>
+              Don't have an account? Register here.
+            </label>
+          </Link>
         </div>
 
       </form>

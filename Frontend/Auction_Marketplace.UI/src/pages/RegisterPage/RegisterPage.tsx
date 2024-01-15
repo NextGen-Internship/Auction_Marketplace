@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../pages/LoginPage/LoginPage.css'; 
+import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
+import UserService from '../../Services/UserService';
+import ApiService from '../../Services/ApiService';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -13,9 +15,11 @@ const RegisterPage: React.FC = () => {
   const [, setLastNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [, setProfilePicture] = useState<File | null>(null);
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
+  const apiService = new ApiService();
+  const userService = new UserService(apiService);
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -25,19 +29,19 @@ const RegisterPage: React.FC = () => {
         setProfilePicture(file);
         const reader = new FileReader();
         reader.onloadend = () => {
-            setPreviewUrl(reader.result as string);
+          setPreviewUrl(reader.result as string);
         };
 
         reader.readAsDataURL(file);
-        
+
       } else {
-          setProfilePicture(null);
-          setPreviewUrl(null);
-          alert('Invalid file type. Please upload a JPEG or PNG image.');
-      }
-    } else {
         setProfilePicture(null);
         setPreviewUrl(null);
+        alert('Invalid file type. Please upload a JPEG or PNG image.');
+      }
+    } else {
+      setProfilePicture(null);
+      setPreviewUrl(null);
     }
   };
 
@@ -66,7 +70,7 @@ const RegisterPage: React.FC = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setEmail(inputValue);
-    setEmailError(validateEmail(inputValue) ? null : 'Invalid email or username format');
+    setEmailError(validateEmail(inputValue) ? null : 'Invalid email format');
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,14 +79,32 @@ const RegisterPage: React.FC = () => {
     setPasswordError(validatePassword(inputValue) ? null : 'Invalid password format');
   };
 
-  const handleLogin = async () => {
-    if (validateEmail(email) && validatePassword(password)) {
-      console.log('First name:', firstName);
-      console.log('Last name:', lastName);
-      console.log('Email/Username:', email);
-      console.log('Password:', password);
+  const handleRegister = async () => {
+    if (validateEmail(email) && validatePassword(password) && firstName && lastName && profilePicture) {
+
+      try {
+        const registerResponse = await apiService.post<any>('api/Authentication/Register', {
+          firstName,
+          lastName,
+          username: email,
+          email,
+          password,
+          profilePicture: "pic",
+        });
+
+        console.log('Registration response:', registerResponse);
+
+        if (registerResponse.succeed) {
+          console.log('Registartion successful.');
+        }
+        else {
+          console.error('Registration failed.', registerResponse.errorMessage);
+        }
+      } catch (error) {
+        console.error('Error during registration:', error)
+      }
     } else {
-      setEmailError('Invalid email or username format')
+      setEmailError('Invalid email format')
       if (!validatePassword(password)) {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
@@ -92,7 +114,7 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="login-container">
       <h2 className='register-header-container'>
-        Register 
+        Register
       </h2>
       <form>
         <div className='circular-frame'>
@@ -110,7 +132,7 @@ const RegisterPage: React.FC = () => {
 
         <label htmlFor="firstName"></label>
         <input
-          type="text"  
+          type="text"
           id="firstName"
           name="firstName"
           placeholder='First Name'
@@ -121,7 +143,7 @@ const RegisterPage: React.FC = () => {
 
         <label htmlFor="lastName"></label>
         <input
-          type="text" 
+          type="text"
           id="lastName"
           name="lastName"
           placeholder='Last Name'
@@ -154,13 +176,13 @@ const RegisterPage: React.FC = () => {
         />
         {passwordError && <span className="error-message">{passwordError}</span>}
 
-        <button type="button" className="login-btn" onClick={handleLogin}>
+        <button type="button" className="login-btn" onClick={handleRegister}>
           Create Account
         </button>
 
         <Link to="/login">
           <label className='register-login-label'>
-              You have a profile? Sign in here.
+            You have a profile? Sign in here.
           </label>
         </Link>
 
