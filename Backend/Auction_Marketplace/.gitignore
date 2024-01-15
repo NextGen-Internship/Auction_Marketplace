@@ -67,6 +67,7 @@ pnp-debug.log*
 
 # Visual Studio Code
 .vscode/
+.vs/
 
 # Windows image file caches
 Thumbs.db
@@ -123,3 +124,4 @@ $RECYCLE.BIN/
 *.suo.lock.lock
 *.userprefs
 *.dotSettings.user
+**.vs/
