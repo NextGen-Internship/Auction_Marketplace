@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Models;
-using Auction_Marketplace.Services.Interface.Authentication;
-using Auction_Marketplace.Services.Interface.Email;
+using Auction_Marketplace.Services.Interface;
 using Auction_Marketplace.Data.Entities;
-using static System.Net.WebRequestMethods;
 
-namespace Auction_Marketplace.Services.Implementation.Authentication
+namespace Auction_Marketplace.Services.Implementation
 {
     public class AuthenticationUserService : IAuthenticationUserService
     {
