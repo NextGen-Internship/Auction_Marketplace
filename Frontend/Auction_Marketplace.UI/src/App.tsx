@@ -5,9 +5,10 @@ import Footer from "./components/Footer/Footer.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import HomePage from './pages/HomePage/HomePage.tsx';
 
+
 function App() {
   return (
-      <div>  
+    <div>
         <Router>
           <Navbar />
           <Routes>

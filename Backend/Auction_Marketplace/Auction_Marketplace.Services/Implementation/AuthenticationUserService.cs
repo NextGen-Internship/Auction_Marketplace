@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Auction_Marketplace.Data.Models;
+<<<<<<< HEAD
 using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Entities;
 using Newtonsoft.Json;
 using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Services.Interfaces;
+=======
+using Auction_Marketplace.Services.Interface;
+using Auction_Marketplace.Data.Entities;
+>>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
 
 namespace Auction_Marketplace.Services.Implementation
 {
