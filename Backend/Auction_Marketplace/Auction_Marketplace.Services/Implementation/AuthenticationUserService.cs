@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Auction_Marketplace.Data.Models;
-<<<<<<< HEAD
 using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Entities;
 using Newtonsoft.Json;
 using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Data.Repositories.Implementations;
-using Auction_Marketplace.Services.Interfaces;
-=======
 using Auction_Marketplace.Services.Interface;
-using Auction_Marketplace.Data.Entities;
->>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
+using Microsoft.Extensions.Configuration;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -21,18 +17,21 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IEmailService _emailService;
         private readonly SignInManager<User> _signInManager;
         private readonly UserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
         public AuthenticationUserService(UserManager<User> userManager,
                                         ITokenService tokenService,
                                         SignInManager<User> signInManager,
                                         IEmailService emailService,
-                                        UserRepository userRepository)
+                                        UserRepository userRepository,
+                                        IConfiguration configuration)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _emailService = emailService;
             _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
@@ -95,8 +94,10 @@ namespace Auction_Marketplace.Services.Implementation
         {
               var user = await _userManager.FindByNameAsync(loginUser.Email);
        
-              if (user != null && await _userManager.CheckPasswordAsync(user, loginUser.Password))
+              if (user != null)
               {
+                  await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
+
                   var jwtToken = _tokenService.GenerateJwtToken(user);
        
                   return new Response<string>()
@@ -135,7 +136,7 @@ namespace Auction_Marketplace.Services.Implementation
                     ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
                 };
 
-                var tokenResponse = await this.Register(newUser);
+                var tokenResponse = await Register(newUser);
 
                 return new Response<string> { Succeed = true, Data = tokenResponse.Data };
 
@@ -151,10 +152,10 @@ namespace Auction_Marketplace.Services.Implementation
         }
 
         public async Task<Response<string>> ValidateGoogleTokenAsync(string googleToken)
-      {
+        {
           using (var httpClient = new HttpClient())
           {
-              var validationEndpoint = "https://oauth2.googleapis.com/tokeninfo?id_token=" + googleToken;
+              var validationEndpoint = _configuration["ValidationEndpoint"] + googleToken;
               var response = await httpClient.GetAsync(validationEndpoint);
               if (response.IsSuccessStatusCode)
               {

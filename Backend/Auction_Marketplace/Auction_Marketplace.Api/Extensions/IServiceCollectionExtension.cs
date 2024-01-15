@@ -2,9 +2,10 @@
 using System.Text;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Repositories.Implementations;
+using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Abstract;
 using Auction_Marketplace.Services.Implementation;
-using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,10 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 services.Configure<IdentityOptions>(options =>
                 {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequiredLength = 4;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
+                    options.Password.RequireUppercase = true;
                     options.Password.RequireLowercase = false;
                     options.SignIn.RequireConfirmedEmail = false;
                     options.Tokens.EmailConfirmationTokenProvider = "Default";
@@ -51,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.Configure<IdentityOptions>(options =>
                 {
-                    options.SignIn.RequireConfirmedEmail = true;
+                    options.SignIn.RequireConfirmedEmail = false;
                 });
             }
 
@@ -112,6 +113,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
+
+            services.AddScoped(typeof(IRepository<User>), typeof(BaseRepository<User>));
 
             return services;
         }

@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-﻿using Auction_Marketplace.Services.Interfaces;
-=======
-﻿using System;
 using Auction_Marketplace.Services.Interface;
->>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;

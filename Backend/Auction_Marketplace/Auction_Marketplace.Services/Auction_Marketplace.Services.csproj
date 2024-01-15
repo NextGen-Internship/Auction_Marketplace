@@ -21,18 +21,10 @@
   <ItemGroup>
     <None Remove="Implementation\" />
     <None Remove="Abstract\" />
-<<<<<<< HEAD
-    <None Remove="Interfaces\" />
-=======
->>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\" />
     <Folder Include="Abstract\" />
-<<<<<<< HEAD
-    <Folder Include="Interfaces\" />
-=======
->>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auction_Marketplace_Data\Auction_Marketplace_Data.csproj" />

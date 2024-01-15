@@ -5,11 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Auction_Marketplace.Data.Entities;
-<<<<<<< HEAD
-using Auction_Marketplace.Services.Interfaces;
-=======
 using Auction_Marketplace.Services.Interface;
->>>>>>> 5074f1c85e21042d1dcc32e1afdce6da800b745a
 
 namespace Auction_Marketplace.Services.Implementation
 {

@@ -1,15 +1,3 @@
-using System;
-using System.Text;
-using Auction_Marketplace.Data;
-using Auction_Marketplace.Data.Entities;
-using Auction_Marketplace.Services.Abstract;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-
 var builder = WebApplication.CreateBuilder(args);
 
 
