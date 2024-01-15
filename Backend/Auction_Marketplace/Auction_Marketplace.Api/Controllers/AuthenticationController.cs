@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auction_Marketplace.Data.Models.Authentication;
-using Auction_Marketplace.Services.Interface.Authentication;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Auction_Marketplace.Api.Controllers

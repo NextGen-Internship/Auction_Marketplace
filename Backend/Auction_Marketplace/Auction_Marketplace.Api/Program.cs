@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
@@ -5,9 +6,10 @@ using Auction_Marketplace.Services.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -36,6 +38,12 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true
     };
 });
+
+
+builder.Services.RegisterDbContext(builder.Configuration, builder.Environment)
+                           .RegisterAuthentication(builder.Configuration)
+                           .ConfigureServices();
+
 builder.Services.AddAuthorization();
 // Added policy for the React app
 builder.Services.AddCors(options =>
@@ -46,7 +54,7 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod());
 });
 builder.Services.AddControllers();
-builder.Services.AddApplicationServices();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
