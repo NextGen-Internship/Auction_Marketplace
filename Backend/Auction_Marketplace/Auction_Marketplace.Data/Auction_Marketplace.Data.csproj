@@ -24,14 +24,9 @@
     <None Remove="Models\" />
     <None Remove="Models\Authentication\" />
     <None Remove="Repositories\" />
-    <None Remove="Repositories\EntityRepositories\" />
-    <None Remove="Repositories\EntityRepositories\AuctionRepo\" />
-    <None Remove="Repositories\EntityRepositories\ItemRepo\" />
-    <None Remove="Repositories\EntityRepositories\UserRepo\" />
-    <None Remove="Repositories\EntityRepositories\BidRepo\" />
-    <None Remove="Repositories\EntityRepositories\CauseRepo\" />
-    <None Remove="Repositories\EntityRepositories\PaymentRepo\" />
-    <None Remove="Repositories\EntityRepositories\ReviewRepo\" />
+    <None Remove="Models\Google\" />
+    <None Remove="Repositories\Interfaces\" />
+    <None Remove="Repositories\Implementation\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
@@ -39,13 +34,8 @@
     <Folder Include="Models\" />
     <Folder Include="Models\Authentication\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Repositories\EntityRepositories\" />
-    <Folder Include="Repositories\EntityRepositories\AuctionRepo\" />
-    <Folder Include="Repositories\EntityRepositories\ItemRepo\" />
-    <Folder Include="Repositories\EntityRepositories\UserRepo\" />
-    <Folder Include="Repositories\EntityRepositories\BidRepo\" />
-    <Folder Include="Repositories\EntityRepositories\CauseRepo\" />
-    <Folder Include="Repositories\EntityRepositories\PaymentRepo\" />
-    <Folder Include="Repositories\EntityRepositories\ReviewRepo\" />
+    <Folder Include="Models\Google\" />
+    <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Repositories\Implementation\" />
   </ItemGroup>
 </Project>

@@ -20,21 +20,13 @@
 
   <ItemGroup>
     <None Remove="Implementation\" />
-    <None Remove="Interface\" />
     <None Remove="Abstract\" />
-    <None Remove="Interface\Email\" />
-    <None Remove="Implementation\Email\" />
-    <None Remove="Implementation\Authentication\" />
-    <None Remove="Interface\Authentication\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\" />
-    <Folder Include="Interface\" />
     <Folder Include="Abstract\" />
-    <Folder Include="Interface\Email\" />
-    <Folder Include="Implementation\Email\" />
-    <Folder Include="Implementation\Authentication\" />
-    <Folder Include="Interface\Authentication\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auction_Marketplace_Data\Auction_Marketplace_Data.csproj" />

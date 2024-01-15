@@ -1,8 +1,8 @@
-﻿using System;
-using Auction_Marketplace.Services.Implementation.Authentication;
-using Auction_Marketplace.Services.Implementation.Email;
-using Auction_Marketplace.Services.Interface.Authentication;
-using Auction_Marketplace.Services.Interface.Email;
+﻿using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Repositories.Implementations;
+using Auction_Marketplace.Data.Repositories.Interfaces;
+using Auction_Marketplace.Services.Implementation;
+using Auction_Marketplace.Services.Interfaces;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -11,8 +11,9 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationUserService, AuthenticationUserService>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped(typeof(ITokenService), typeof(TokenService));
+            services.AddScoped(typeof(IEmailService), typeof(EmailService));
+            services.AddScoped(typeof(IRepository<User>), typeof(BaseRepository<User>));
 
             return services;
         }

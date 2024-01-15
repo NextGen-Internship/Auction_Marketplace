@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auction_Marketplace.Data.Models.Authentication;
-using Auction_Marketplace.Services.Interface.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Auction_Marketplace.Data.Models.GoogleLogin;
+using Auction_Marketplace.Data.Models.Google;
+using Auction_Marketplace.Services.Interfaces;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -56,7 +56,9 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                return await _authService.GoogleLoginAsync(googleLogin);
+                var response =  await _autService.GoogleLoginAsync(googleLogin);
+
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
             {
