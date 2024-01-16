@@ -4,7 +4,6 @@ using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Entities;
 using Newtonsoft.Json;
 using Auction_Marketplace.Data.Models.Google;
-using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
 
@@ -12,31 +11,32 @@ namespace Auction_Marketplace.Services.Implementation
 {
     public class AuthenticationUserService : IAuthenticationUserService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userSevice;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AuthenticationUserService(UserManager<User> userManager,
+        public AuthenticationUserService(IUserService userSevice,
                                         ITokenService tokenService,
-                                        SignInManager<User> signInManager,
                                         IEmailService emailService,
-                                        UserRepository userRepository,
-                                        IConfiguration configuration)
+                                        UserManager<User> userManager,
+                                        SignInManager<User> signInManager,
+                                        IConfiguration configuration
+                                        )
         {
-            _userManager = userManager;
-            _tokenService = tokenService;
-            _signInManager = signInManager;
+            _userSevice = userSevice;
             _emailService = emailService;
-            _userRepository = userRepository;
+            _tokenService = tokenService;
             _configuration = configuration;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
-        { 
-             var userExists = await _userManager.FindByEmailAsync(registerUser.Email);
+        {
+            var userExists = await _userSevice.GetByEmailAsync(registerUser.Email);
         
              if (userExists != null)
              {
@@ -49,7 +49,7 @@ namespace Auction_Marketplace.Services.Implementation
         
              var user = new User()
              {
-                 FirstName =  registerUser.FirstName,
+                 FirstName = registerUser.FirstName,
                  LastName = registerUser.LastName,
                  Email = registerUser.Email,      
                  SecurityStamp = Guid.NewGuid().ToString(),
@@ -124,7 +124,9 @@ namespace Auction_Marketplace.Services.Implementation
                 return new Response<string> { Succeed = false, Message = "Invalid User" };
             }
 
-            var existingUser = await _userRepository.GetByEmailAsync(googleLogin.Email);
+            var email = validation.Data;
+
+            var existingUser = await _userSevice.GetByEmailAsync(email);
 
             if (existingUser == null)
             {
@@ -132,8 +134,9 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     FirstName = "",
                     LastName = "",
-                    Email = googleLogin.Email,
-                    ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
+                    Email = email,
+                    ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg",
+                    Password = "Password123"
                 };
 
                 var tokenResponse = await Register(newUser);

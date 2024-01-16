@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Data.Repositories.Implementations
 {
-    //public abstract class BaseRepository : IRepository { }
-    public abstract class BaseRepository<T> : IRepository<T>
+    public abstract class BaseRepository : IRepository { }
+    public abstract class BaseRepository<T> : BaseRepository, IRepository<T>
         where T : class, IBaseEntity
     {
         protected readonly ApplicationDbContext _context;

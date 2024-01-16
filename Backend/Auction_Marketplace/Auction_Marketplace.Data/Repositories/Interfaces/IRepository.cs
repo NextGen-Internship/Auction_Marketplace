@@ -4,8 +4,8 @@ using Auction_Marketplace.Data.Entities.Abstract;
 
 namespace Auction_Marketplace.Data.Repositories.Interfaces
 {
-    //public interface IRepository { }
-    public interface IRepository<T>  where T : IBaseEntity
+    public interface IRepository { }
+    public interface IRepository<T> : IRepository where T : IBaseEntity
     {
         Task<int> CountRecordsAsync();
 

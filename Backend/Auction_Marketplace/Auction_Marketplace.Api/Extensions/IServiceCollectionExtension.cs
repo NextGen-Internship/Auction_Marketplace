@@ -6,6 +6,7 @@ using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Abstract;
 using Auction_Marketplace.Services.Implementation;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-	public static class IServiceCollectionExtention
+    public static class IServiceCollectionExtention
     { 
 
         public static IServiceCollection RegisterDbContext(this IServiceCollection services,
@@ -92,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
 
-            private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
+        private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
         {
             var serviceTypes = assembly.GetTypes()
                 .Where(x => !string.IsNullOrEmpty(x.Namespace) && x.IsClass && !x.IsAbstract && fromType.IsAssignableFrom(x))
@@ -110,15 +111,38 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static void AddRepositories(this IServiceCollection services, Assembly assembly)
+        {
+            var repositoryTypes = assembly.GetTypes().Where(x => !x.IsInterface &&
+                x.GetInterface(typeof(IRepository<>).Name) != null)
+                .Select(x => new
+                {
+                    Interface = x.GetInterface($"I{x.Name}"),
+                    Implementation = x
+                });
+
+            // filter out RepositoryBase<>
+            var nonBaseRepos = repositoryTypes.Where(t => t.Implementation != typeof(BaseRepository<>));
+
+            foreach (var repositoryType in nonBaseRepos)
+            {
+                
+                services.AddScoped(repositoryType.Interface, repositoryType.Implementation);
+            }
+
+        }
+
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
 
-            services.AddScoped(typeof(IRepository<User>), typeof(BaseRepository<User>));
+            services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
+
+            //services.AddScoped<IUserRepository, UserRepository>();
+
 
             return services;
         }
 
     }
 }
-

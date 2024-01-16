@@ -2,7 +2,7 @@
 
 namespace Auction_Marketplace.Data.Repositories.Interfaces
 {
-	public interface IAuctionRepository: IRepository<Auction>
+	public interface IAuctionRepository : IRepository<Auction>
 	{
 		
 	}

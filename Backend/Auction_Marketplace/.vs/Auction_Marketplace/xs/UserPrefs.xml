@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{CB56DB49-6BCE-4237-9CA8-0C126C4FE7B6}|https">
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Data/Models/Google/GoogleTokenInfo.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Auction_Marketplace.Api/Extensions/IServiceCollectionExtension.cs">
     <Files>
       <File FileName="../../../Downloads/AI_Finance-main/Back-End/AIF/Program.cs" />
       <File FileName="Auction_Marketplace.Api/Controllers/AuthenticationController.cs" />
@@ -17,40 +18,37 @@
       <File FileName="Auction_Marketplace.Data/Models/Google/GoogleTokenInfo.cs" Line="1" Column="1" />
       <File FileName="Auction_Marketplace.Data/Models/Google/GoogleLoginViewModel.cs" />
       <File FileName="Auction_Marketplace.Services/Abstract/IService.cs" />
-      <File FileName="Auction_Marketplace.Services/Interface/IEmailService.cs" />
+      <File FileName="Auction_Marketplace.Services/Interface/IEmailService.cs" Line="1" Column="1" />
       <File FileName="Auction_Marketplace.Api/appsettings.json" />
       <File FileName="Auction_Marketplace.Services/Auction_Marketplace.Services.csproj" />
-      <File FileName="Auction_Marketplace.Api/Extensions/IServiceCollectionExtension.cs" />
-      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/BaseRepository.cs" />
-      <File FileName="Auction_Marketplace.Services/Interface/IAuthenticationUserService.cs" />
-      <File FileName="Auction_Marketplace.Services/Implementation/AuthenticationUserService.cs" />
-      <File FileName="Auction_Marketplace.Services/Implementation/EmailService.cs" />
-      <File FileName="Auction_Marketplace.Services/Implementation/TokenService.cs" />
-      <File FileName="Auction_Marketplace.Services/Interface/ITokenService.cs" />
-      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/AuctionRepository.cs" />
+      <File FileName="Auction_Marketplace.Api/Extensions/IServiceCollectionExtension.cs" Line="32" Column="14" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/BaseRepository.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Services/Interface/IAuthenticationUserService.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Services/Implementation/AuthenticationUserService.cs" Line="7" Column="1" />
+      <File FileName="Auction_Marketplace.Services/Implementation/EmailService.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Services/Implementation/TokenService.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Services/Interface/ITokenService.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/AuctionRepository.cs" Line="1" Column="1" />
       <File FileName="Auction_Marketplace.Data/Repositories/Interfaces/IBidRepository.cs" />
       <File FileName="Auction_Marketplace.Data/Repositories/Interfaces/IReviewRepository.cs" />
-      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/BidRepository.cs" />
-      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/UserRepository.cs" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/BidRepository.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/UserRepository.cs" Line="1" Column="1" />
       <File FileName="Auction_Marketplace.Data/Repositories/Interfaces/IRepository.cs" />
+      <File FileName="Auction_Marketplace.Services/Implementation/UserService.cs" Line="1" Column="7" />
+      <File FileName="Auction_Marketplace.Services/Interface/IUserService.cs" Line="2" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Models/Authentication/RegisterViewModel.cs" Line="12" Column="22" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/CauseRepository.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/PaymentRepository.cs" Line="1" Column="1" />
+      <File FileName="Auction_Marketplace.Data/Repositories/Implementation/ReviewRepository.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Auction_Marketplace" expanded="True">
-            <Node name="Auction_Marketplace.Data" expanded="True">
-              <Node name="Models" expanded="True">
-                <Node name="Google" expanded="True">
-                  <Node name="GoogleTokenInfo.cs" selected="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
+          <Node name="Auction_Marketplace" expanded="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Auction__Marketplace.Api PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MultiItemStartupConfigurations />
 </Properties>
