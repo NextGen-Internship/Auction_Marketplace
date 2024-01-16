@@ -14,7 +14,7 @@ class ApiService {
         try {
             const response = await axios(config);
             return this.handleResponse(response);
-        } catch (error) {
+        } catch (error: any) {
             console.error('API request error:', error);
             throw new Error(error.response?.data.errorMessage || 'An error occurred');
         }

@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
 import ApiService from '../../Services/ApiService';
-import UserService from '../../Services/UserService';
+// import UserService from '../../Services/UserService';
 
 const apiService = new ApiService();
-const userService = new UserService(apiService);
+// const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const validateEmailOrUsername = (input: string) => {
     //  must start with one or more characters that are not whitespace or '@'
@@ -48,7 +49,7 @@ const LoginPage: React.FC = () => {
     if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
       try {
         const loginResponse = await apiService.post<any>('api/Authentication/Login', {
-          emailOrUsername,
+          email: emailOrUsername,
           password,
         });
 
@@ -56,9 +57,10 @@ const LoginPage: React.FC = () => {
 
         if (loginResponse.succeed) {
           console.log('Authentication successful');
-          //TODO: redirect to dashboard
+
+          navigate('/');
         } else {
-          if(loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
+          if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
             console.error('User does not exist.');
             //TODO: Handle case where user doesnt exist
           } else {
@@ -77,10 +79,38 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    console.log('Google Login success:', credentialResponse);
 
+    // TODO: Send the token to your server for verification
+    try {
+      const loginResponse = await apiService.post<any>('api/Authentication/Login', {
+        googleToken: credentialResponse.accessToken,
+      });
+
+      if (loginResponse.succeed) {
+        console.log('Authentication successful');
+        navigate('/');
+      } else {
+        if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
+          console.error('User does not exist.');
+          // TODO: Handle case where the user doesn't exist
+        } else {
+          console.error('Authentication failed:', loginResponse.errorMessage);
+          // TODO: Handle other auth failure scenarios
+        }
+      }
+    } catch (error) {
+      console.error('Error during Google Authentication:', error);
+    }
+  };
+
+  /* Standart handle for google login without sending to backend
   const handleSuccess = (credentialResponse: any) => {
     console.log('Login success:', credentialResponse);
   };
+  */
+
 
   const handleError = () => {
     console.log('Login failed.');
@@ -120,13 +150,13 @@ const LoginPage: React.FC = () => {
         </label>
 
         <div className='buttons-container'>
-          <button type="submit" className="login-btn" onClick={handleLogin}>
+          <button type="button" className="login-btn" onClick={handleLogin}>
             Sign In
           </button>
           <div>
             <GoogleLogin
               width={"230px"}
-              onSuccess={handleSuccess}
+              onSuccess={handleGoogleLogin}
               onError={handleError}
             />
           </div>

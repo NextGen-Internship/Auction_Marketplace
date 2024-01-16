@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
-import UserService from '../../Services/UserService';
+// import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
+import readFileAsBase64 from './readFileAsBase64';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -19,7 +20,7 @@ const RegisterPage: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
-  const userService = new UserService(apiService);
+  // const userService = new UserService(apiService);
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -28,12 +29,12 @@ const RegisterPage: React.FC = () => {
       if (allowedFileTypes.includes(file.type)) {
         setProfilePicture(file);
         const reader = new FileReader();
+
         reader.onloadend = () => {
           setPreviewUrl(reader.result as string);
         };
 
         reader.readAsDataURL(file);
-
       } else {
         setProfilePicture(null);
         setPreviewUrl(null);
@@ -80,29 +81,30 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    if (validateEmail(email) && validatePassword(password) && firstName && lastName && profilePicture) {
-
+    if (validateEmail(email) && validatePassword(password) && firstName && lastName) {
       try {
+        const base64ProfilePicture = profilePicture ? await readFileAsBase64(profilePicture) : null;
+
         const registerResponse = await apiService.post<any>('api/Authentication/Register', {
           firstName,
           lastName,
-          username: email,
           email,
           password,
-          profilePicture: "pic",
+          profilePicture: base64ProfilePicture,
         });
-
-        console.log('Registration response:', registerResponse);
 
         if (registerResponse.succeed) {
           console.log('Registartion successful.');
+        } else if (!registerResponse.succeed) {
+          alert('This email is already registered. Please use a different email.');
         }
-        else {
-          console.error('Registration failed.', registerResponse.errorMessage);
-        }
+
+        console.log('Registration response:', registerResponse);
+
       } catch (error) {
-        console.error('Error during registration:', error)
+        console.error('Error: ', error);
       }
+
     } else {
       setEmailError('Invalid email format')
       if (!validatePassword(password)) {
@@ -110,6 +112,7 @@ const RegisterPage: React.FC = () => {
       }
     }
   };
+
 
   return (
     <div className="login-container">
