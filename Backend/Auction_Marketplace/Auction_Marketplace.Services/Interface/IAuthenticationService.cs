@@ -5,7 +5,7 @@ using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Interface
 {
-    public interface IAuthenticationUserService : IService
+    public interface IAuthenticationService : IService
 	{
         Task<Response<string>> Register(RegisterViewModel registerUser);
 

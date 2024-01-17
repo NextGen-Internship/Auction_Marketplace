@@ -114,7 +114,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
-            services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
+            services.AddScopedServiceTypes(typeof(AuthenticationService).Assembly, typeof(IService));
 
             services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
 

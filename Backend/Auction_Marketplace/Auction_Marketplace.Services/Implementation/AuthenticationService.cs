@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Auction_Marketplace.Services.Implementation
 {
-    public class AuthenticationUserService : IAuthenticationUserService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserService _userSevice;
         private readonly ITokenService _tokenService;
@@ -18,7 +18,7 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AuthenticationUserService(IUserService userSevice,
+        public AuthenticationService(IUserService userSevice,
                                         ITokenService tokenService,
                                         IEmailService emailService,
                                         UserManager<User> userManager,
@@ -95,15 +95,19 @@ namespace Auction_Marketplace.Services.Implementation
        
               if (user != null)
               {
-                  await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
+                  var ruesult = await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
 
-                  var jwtToken = _tokenService.GenerateJwtToken(user);
+                if (ruesult.Succeeded)
+                {
+                    var jwtToken = _tokenService.GenerateJwtToken(user);
        
                   return new Response<string>()
                   {
                       Succeed = true,
                       Data = jwtToken
                   };
+
+                }
               }
        
               return new Response<string>()

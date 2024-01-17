@@ -10,9 +10,9 @@ namespace Auction_Marketplace.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationUserService _authService;
+        private readonly IAuthenticationService _authService;
 
-        public AuthenticationController(IAuthenticationUserService autService)
+        public AuthenticationController(IAuthenticationService autService)
         {
             _authService = autService;
         }
