@@ -114,16 +114,17 @@ namespace Auction_Marketplace.Services.Implementation
        
         }
 
-        public async Task<GoogleResponse<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
+        public async Task<Response<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
         {
 
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
+
             if (!validation.Succeed)
             {
-                return new GoogleResponse<string> { Succeed = false, Message = "Invalid User" };
+                return new Response<string> { Succeed = false, Message = "Invalid User" };
             }
 
-            var email = validation.Data;
+            var email = validation.Email;
 
             var existingUser = await _userSevice.GetByEmailAsync(email);
 
@@ -131,16 +132,16 @@ namespace Auction_Marketplace.Services.Implementation
             {
                 var newUser = new RegisterViewModel
                 {
-                    FirstName = "",
-                    LastName = "",
+                    FirstName = validation.FirstName,
+                    LastName = validation.LastName,
                     Email = email,
-                    ProfilePicture = "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg",
+                    ProfilePicture = validation.ProfilePicture,
                     Password = "Password123"
                 };
 
                 var tokenResponse = await Register(newUser);
 
-                return new GoogleResponse<string> { Succeed = true, Data = tokenResponse.Data };
+                return new Response<string> { Succeed = true, Data = tokenResponse.Data };
 
             }
 
@@ -149,39 +150,25 @@ namespace Auction_Marketplace.Services.Implementation
             // Generate JWT token
             var jwtToken = _tokenService.GenerateJwtToken(existingUser);
 
-            return new GoogleResponse<string> { Succeed = true, Data = jwtToken };
+            return new Response<string> { Succeed = true, Data = jwtToken };
         
         }
 
-        private async Task<GoogleResponse<string>> ValidateGoogleTokenAsync(string googleToken)
+        private async Task<GoogleTokenInfo?> ValidateGoogleTokenAsync(string googleToken)
         {
           using (var httpClient = new HttpClient())
           {
               var validationEndpoint = _configuration["ValidationEndpoint"] + googleToken;
               var response = await httpClient.GetAsync(validationEndpoint);
-              if (response.IsSuccessStatusCode)
+
+              if (!response.IsSuccessStatusCode)
               {
-                  var responseContent = await response.Content.ReadAsStringAsync();
-                  var tokenInfo = JsonConvert.DeserializeObject<GoogleTokenInfo>(responseContent);
-   
-                  var validationResult = new GoogleResponse<string>
-                  {
-                      Succeed = true,
-                      Data = tokenInfo.Email
-                  };
-   
-                  return validationResult;
+                    return null;
+                   
               }
-              else
-              {
-                  var validationResult = new GoogleResponse<string>
-                  {
-                      Succeed = false,
-                      Message = "Token validation failed."
-                  };
-   
-                  return validationResult;
-              }
+
+              var responseContent = await response.Content.ReadAsStringAsync();
+              return JsonConvert.DeserializeObject<GoogleTokenInfo>(responseContent);
           }
       }
 
