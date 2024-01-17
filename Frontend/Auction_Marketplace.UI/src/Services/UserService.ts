@@ -7,7 +7,12 @@ class UserService {
     this.apiService = apiService;
   }
 
-  async registerUser(firstName: string, lastName: string, email: string, password: string, profilePicture?: File): Promise<any> {
+  async registerUser(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    profilePicture?: File): Promise<any> {
     const formData = new FormData();
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
@@ -28,8 +33,6 @@ class UserService {
     };
     return this.apiService.post<any>('Authentication/Login', data);
   }
-
-  // Add other user-related methods as needed
 }
 
 export default UserService;

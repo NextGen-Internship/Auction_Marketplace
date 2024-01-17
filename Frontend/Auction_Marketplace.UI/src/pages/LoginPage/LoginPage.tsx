@@ -3,10 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
 import ApiService from '../../Services/ApiService';
-// import UserService from '../../Services/UserService';
+import Navbar from '../../Components/Navbar/NavbarLogin';
 
 const apiService = new ApiService();
-// const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -16,20 +15,14 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const validateEmailOrUsername = (input: string) => {
-    //  must start with one or more characters that are not whitespace or '@'
-    // There must be an '@' symbol after the initial characters.
-    //  After the '@' symbol, there should be one or more characters that are not whitespace or '@'.
-    // Following the second set of characters, there must be a dot ('.') symbol.
-    // Finally, after the dot, there should be one or more characters that are not whitespace or '@' until the end of the string.
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_.]{8,}$/;
-
     return emailRegex.test(input) || usernameRegex.test(input);
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
-    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
+    // Password should be at least 6 characters and include at least one uppercase letter and one digit
+    const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
     return passwordRegex.test(input);
   };
 
@@ -57,15 +50,13 @@ const LoginPage: React.FC = () => {
 
         if (loginResponse.succeed) {
           console.log('Authentication successful');
-
-          navigate('/');
+          navigate('/home');
         } else {
           if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
             console.error('User does not exist.');
             //TODO: Handle case where user doesnt exist
           } else {
             console.error('Authentication failed:', loginResponse.errorMessage);
-            //TODO: Handle other auth failure scenarios
           }
         }
       } catch (error) {
@@ -81,10 +72,8 @@ const LoginPage: React.FC = () => {
 
   const handleGoogleLogin = async (credentialResponse: any) => {
     console.log('Google Login success:', credentialResponse);
-
-    // TODO: Send the token to your server for verification
     try {
-      const loginResponse = await apiService.post<any>('api/Authentication/Login', {
+      const loginResponse = await apiService.post<any>('api/Authentication/google-login', {
         googleToken: credentialResponse.accessToken,
       });
 
@@ -94,14 +83,25 @@ const LoginPage: React.FC = () => {
       } else {
         if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
           console.error('User does not exist.');
-          // TODO: Handle case where the user doesn't exist
+
+          const createUserResponse = await apiService.post<any>('api/Authentication/Login', {
+            email: credentialResponse.profile.email,
+
+          });
+          if (createUserResponse.succeed) {
+            console.log('User created successfully. Logging in...');
+            navigate('/home');
+
+          } else {
+            console.error('User creation failed:', createUserResponse.errorMessage);
+          }
         } else {
           console.error('Authentication failed:', loginResponse.errorMessage);
-          // TODO: Handle other auth failure scenarios
         }
       }
     } catch (error) {
       console.error('Error during Google Authentication:', error);
+      alert('Error during Google Authentication');
     }
   };
 
@@ -111,14 +111,13 @@ const LoginPage: React.FC = () => {
   };
   */
 
-
   const handleError = () => {
     console.log('Login failed.');
   };
 
-
   return (
     <div className="login-container">
+      <Navbar />
       <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>

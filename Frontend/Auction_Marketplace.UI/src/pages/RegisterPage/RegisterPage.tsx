@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
-// import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
-import readFileAsBase64 from './readFileAsBase64';
+import readFileAsBase64 from './ReadFileAsBase64';
+import Navbar from '../../Components/Navbar/NavbarLogin';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -20,7 +20,6 @@ const RegisterPage: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
-  // const userService = new UserService(apiService);
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -47,12 +46,18 @@ const RegisterPage: React.FC = () => {
   };
 
   const validateEmail = (input: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(input);
+    if (email != null) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(input);
+    }
+    else {
+      alert('Enter valid email.');
+    }
   };
 
   const validatePassword = (input: string) => {
-    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
+    // Password should be at least 6 characters and include at least one uppercase letter and one digit
+    const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
     return passwordRegex.test(input);
   };
 
@@ -96,7 +101,7 @@ const RegisterPage: React.FC = () => {
         if (registerResponse.succeed) {
           console.log('Registartion successful.');
         } else if (!registerResponse.succeed) {
-          alert('This email is already registered. Please use a different email.');
+          alert('Register failed.');
         }
 
         console.log('Registration response:', registerResponse);
@@ -113,9 +118,9 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-
   return (
     <div className="login-container">
+      <Navbar />
       <h2 className='register-header-container'>
         Register
       </h2>
@@ -183,7 +188,7 @@ const RegisterPage: React.FC = () => {
           Create Account
         </button>
 
-        <Link to="/login">
+        <Link to="/">
           <label className='register-login-label'>
             You have a profile? Sign in here.
           </label>
