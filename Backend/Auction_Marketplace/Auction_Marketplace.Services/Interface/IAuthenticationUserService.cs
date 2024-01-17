@@ -11,9 +11,7 @@ namespace Auction_Marketplace.Services.Interface
 
         Task<Response<string>> Login(LoginViewModel loginUser);
 
-        Task<Response<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin);
-
-        Task<Response<string>> ValidateGoogleTokenAsync(string googleToken);
+        Task<GoogleResponse<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin);
 
         Task Logout();
     }

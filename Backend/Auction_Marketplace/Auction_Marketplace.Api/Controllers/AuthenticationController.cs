@@ -2,7 +2,6 @@
 using Auction_Marketplace.Data.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Auction_Marketplace.Data.Models.Google;
-using Auction_Marketplace.Services.Implementation;
 using Auction_Marketplace.Services.Interface;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -11,11 +10,11 @@ namespace Auction_Marketplace.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationUserService _autService;
+        private readonly IAuthenticationUserService _authService;
 
         public AuthenticationController(IAuthenticationUserService autService)
         {
-            _autService = autService;
+            _authService = autService;
         }
 
         [HttpPost]
@@ -24,7 +23,7 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var response = await _autService.Register(registerUser);
+                var response = await _authService.Register(registerUser);
 
                 return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
@@ -41,9 +40,9 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var response = await _autService.Login(loginUser);
+                var response = await _authService.Login(loginUser);
 
-                return response.Succeed == true ? Ok(response) : Unauthorized(response);
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
             {
@@ -57,7 +56,7 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var response =  await _autService.GoogleLoginAsync(googleLogin);
+                var response =  await _authService.GoogleLoginAsync(googleLogin);
 
                 return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
@@ -75,7 +74,7 @@ namespace Auction_Marketplace.Api.Controllers
 
             try
             {
-                await _autService.Logout();
+                await _authService.Logout();
 
                 return Ok();
             }

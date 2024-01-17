@@ -7,13 +7,14 @@ builder.Services.RegisterDbContext(builder.Configuration, builder.Environment)
 
 builder.Services.AddAuthorization();
 
-// Added policy for the React app
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        builder => builder.WithOrigins("http://localhost:3000") //ToDo: Update with the actual URL of our React app
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        });
 });
 
 
@@ -35,7 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowReactApp");
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

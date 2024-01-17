@@ -35,10 +35,10 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 services.Configure<IdentityOptions>(options =>
                 {
-                    options.Password.RequireDigit = true;
+                    options.Password.RequireDigit = false;
                     options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = true;
+                    options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                     options.SignIn.RequireConfirmedEmail = false;
                     options.Tokens.EmailConfirmationTokenProvider = "Default";
@@ -111,35 +111,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static void AddRepositories(this IServiceCollection services, Assembly assembly)
-        {
-            var repositoryTypes = assembly.GetTypes().Where(x => !x.IsInterface &&
-                x.GetInterface(typeof(IRepository<>).Name) != null)
-                .Select(x => new
-                {
-                    Interface = x.GetInterface($"I{x.Name}"),
-                    Implementation = x
-                });
-
-            // filter out RepositoryBase<>
-            var nonBaseRepos = repositoryTypes.Where(t => t.Implementation != typeof(BaseRepository<>));
-
-            foreach (var repositoryType in nonBaseRepos)
-            {
-                
-                services.AddScoped(repositoryType.Interface, repositoryType.Implementation);
-            }
-
-        }
 
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
 
             services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
-
-            //services.AddScoped<IUserRepository, UserRepository>();
-
 
             return services;
         }

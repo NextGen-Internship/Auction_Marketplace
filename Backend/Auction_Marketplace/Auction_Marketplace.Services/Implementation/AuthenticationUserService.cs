@@ -64,8 +64,7 @@ namespace Auction_Marketplace.Services.Implementation
             //Creates the JWT
             var token = _tokenService.GenerateJwtToken(user);
 
-            //ToDo: Generate new api key and dont post in on GitHub
-            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, "ZDR KP");
+            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, $"Dear {registerUser.Username},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
 
 
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
@@ -115,13 +114,13 @@ namespace Auction_Marketplace.Services.Implementation
        
         }
 
-        public async Task<Response<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
+        public async Task<GoogleResponse<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
         {
 
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
             if (!validation.Succeed)
             {
-                return new Response<string> { Succeed = false, Message = "Invalid User" };
+                return new GoogleResponse<string> { Succeed = false, Message = "Invalid User" };
             }
 
             var email = validation.Data;
@@ -141,7 +140,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 var tokenResponse = await Register(newUser);
 
-                return new Response<string> { Succeed = true, Data = tokenResponse.Data };
+                return new GoogleResponse<string> { Succeed = true, Data = tokenResponse.Data };
 
             }
 
@@ -150,11 +149,11 @@ namespace Auction_Marketplace.Services.Implementation
             // Generate JWT token
             var jwtToken = _tokenService.GenerateJwtToken(existingUser);
 
-            return new Response<string> { Succeed = true, Data = jwtToken };
+            return new GoogleResponse<string> { Succeed = true, Data = jwtToken };
         
         }
 
-        public async Task<Response<string>> ValidateGoogleTokenAsync(string googleToken)
+        private async Task<GoogleResponse<string>> ValidateGoogleTokenAsync(string googleToken)
         {
           using (var httpClient = new HttpClient())
           {
@@ -165,7 +164,7 @@ namespace Auction_Marketplace.Services.Implementation
                   var responseContent = await response.Content.ReadAsStringAsync();
                   var tokenInfo = JsonConvert.DeserializeObject<GoogleTokenInfo>(responseContent);
    
-                  var validationResult = new Response<string>
+                  var validationResult = new GoogleResponse<string>
                   {
                       Succeed = true,
                       Data = tokenInfo.Email
@@ -175,7 +174,7 @@ namespace Auction_Marketplace.Services.Implementation
               }
               else
               {
-                  var validationResult = new Response<string>
+                  var validationResult = new GoogleResponse<string>
                   {
                       Succeed = false,
                       Message = "Token validation failed."
@@ -190,6 +189,7 @@ namespace Auction_Marketplace.Services.Implementation
         {
             await _signInManager.SignOutAsync();
         }
+
     }
 }
 
