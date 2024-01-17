@@ -13,6 +13,7 @@ const LoginPage: React.FC = () => {
   const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const navigate = useNavigate();
+  localStorage.clear();
 
   const validateEmailOrUsername = (input: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,8 +22,8 @@ const LoginPage: React.FC = () => {
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 6 characters and include at least one uppercase letter and one digit
-    const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
+    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
+    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
     return passwordRegex.test(input);
   };
 
@@ -50,6 +51,7 @@ const LoginPage: React.FC = () => {
 
         if (loginResponse.succeed) {
           console.log('Authentication successful');
+          localStorage.setItem('token', loginResponse.data);
           navigate('/home');
         } else {
           if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
@@ -79,19 +81,18 @@ const LoginPage: React.FC = () => {
 
       if (loginResponse.succeed) {
         console.log('Authentication successful');
-        navigate('/');
+        localStorage.setItem('token', loginResponse.data);
+        navigate('/home');
       } else {
         if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
           console.error('User does not exist.');
 
           const createUserResponse = await apiService.post<any>('api/Authentication/Login', {
             email: credentialResponse.profile.email,
-
           });
           if (createUserResponse.succeed) {
             console.log('User created successfully. Logging in...');
             navigate('/home');
-
           } else {
             console.error('User creation failed:', createUserResponse.errorMessage);
           }

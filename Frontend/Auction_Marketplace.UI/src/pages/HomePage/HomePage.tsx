@@ -3,6 +3,18 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/NavbarUser';
 
 const HomePage: React.FC = () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    localStorage.clear();
+    return (
+      <div>
+        <p>Please log in to access this page.</p>
+        <Link to="/login">Login</Link>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navbar />

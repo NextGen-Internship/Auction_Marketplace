@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     localStorage.clear(); 
-    navigate('/');
+    navigate('/login');
   }
   
   return (

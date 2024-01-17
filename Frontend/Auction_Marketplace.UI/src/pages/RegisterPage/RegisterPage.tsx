@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
@@ -20,6 +20,8 @@ const RegisterPage: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
+  const navigate = useNavigate();
+  localStorage.clear();
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -56,8 +58,8 @@ const RegisterPage: React.FC = () => {
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 6 characters and include at least one uppercase letter and one digit
-    const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{6,}$/;
+    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
+    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
     return passwordRegex.test(input);
   };
 
@@ -86,10 +88,11 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    if (validateEmail(email) && validatePassword(password) && firstName && lastName) {
+    if (firstName && lastName && validateEmail(email) && validatePassword(password)) {
       try {
         const base64ProfilePicture = profilePicture ? await readFileAsBase64(profilePicture) : null;
 
+        //do not set pic
         const registerResponse = await apiService.post<any>('api/Authentication/Register', {
           firstName,
           lastName,
@@ -100,16 +103,16 @@ const RegisterPage: React.FC = () => {
 
         if (registerResponse.succeed) {
           console.log('Registartion successful.');
+          localStorage.setItem('token', registerResponse.data);
+          navigate('/home');
         } else if (!registerResponse.succeed) {
           alert('Register failed.');
+          navigate('/home');
         }
-
         console.log('Registration response:', registerResponse);
-
       } catch (error) {
         console.error('Error: ', error);
       }
-
     } else {
       setEmailError('Invalid email format')
       if (!validatePassword(password)) {
