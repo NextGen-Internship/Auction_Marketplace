@@ -10,8 +10,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     localStorage.clear(); 
     navigate('/login');
-  }
-  
+  };
   return (
     <nav className="navbar">
       <div className="nav-container">

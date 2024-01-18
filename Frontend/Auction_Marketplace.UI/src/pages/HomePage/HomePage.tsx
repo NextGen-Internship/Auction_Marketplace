@@ -6,7 +6,6 @@ import '../../Components/TokenExp/TokenExpContainer.css';
 
 const HomePage: React.FC = () => {
   const token = getToken();
-
   if (!token) {
     return (
       <div className='token-exp-container'>
