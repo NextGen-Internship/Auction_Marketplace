@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
-import ApiService from '../../Services/ApiService';
 import Navbar from '../../Components/Navbar/NavbarLogin';
+import UserService from '../../Services/UserService';
+import ApiService from '../../Services/ApiService';
 
-const apiService = new ApiService();
+const apiService =  new ApiService;
+const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -41,10 +43,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
       try {
-        const loginResponse = await apiService.post<any>('api/Authentication/Login', {
-          email: emailOrUsername,
-          password,
-        });
+        const loginResponse = await userService.loginUser(emailOrUsername, password);
         console.log('Login response:', loginResponse);
         if (loginResponse.succeed) {
           console.log('Authentication successful');
@@ -71,10 +70,7 @@ const LoginPage: React.FC = () => {
   const handleGoogleLogin = async (credentialResponse: any) => {
     console.log('Google Login success:', credentialResponse);
     try {
-      const loginResponse = await apiService.post<any>('api/Authentication/google-login', {
-        googleToken: credentialResponse.credential,
-      });
-
+      const loginResponse = await userService.loginUserWithGoogle(credentialResponse.credential);
       if (loginResponse.succeed) {
         console.log('Authentication successful');
         localStorage.setItem('token', loginResponse.data);
@@ -83,9 +79,7 @@ const LoginPage: React.FC = () => {
         if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
           console.error('User does not exist.');
 
-          const createUserResponse = await apiService.post<any>('api/Authentication/Login', {
-            email: credentialResponse.profile.email,
-          });
+          const createUserResponse = await userService.loginUserWithGoogle(credentialResponse.profile.email);
           if (createUserResponse.succeed) {
             console.log('User created successfully. Logging in...');
             navigate('/home');
