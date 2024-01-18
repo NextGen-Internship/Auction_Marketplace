@@ -22,8 +22,7 @@ const LoginPage: React.FC = () => {
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
-    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
+    const passwordRegex = /^.{6,}$/;
     return passwordRegex.test(input);
   };
 
@@ -46,9 +45,7 @@ const LoginPage: React.FC = () => {
           email: emailOrUsername,
           password,
         });
-
         console.log('Login response:', loginResponse);
-
         if (loginResponse.succeed) {
           console.log('Authentication successful');
           localStorage.setItem('token', loginResponse.data);
@@ -56,7 +53,6 @@ const LoginPage: React.FC = () => {
         } else {
           if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
             console.error('User does not exist.');
-            //TODO: Handle case where user doesnt exist
           } else {
             console.error('Authentication failed:', loginResponse.errorMessage);
           }

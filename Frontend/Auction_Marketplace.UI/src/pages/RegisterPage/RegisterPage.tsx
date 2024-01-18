@@ -58,8 +58,7 @@ const RegisterPage: React.FC = () => {
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
-    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
+    const passwordRegex = /^.{6,}$/;
     return passwordRegex.test(input);
   };
 
