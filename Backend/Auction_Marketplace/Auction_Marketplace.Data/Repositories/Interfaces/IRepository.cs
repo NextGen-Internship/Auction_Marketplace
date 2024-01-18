@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Auction_Marketplace.Data.Entities.Abstract;
 
 namespace Auction_Marketplace.Data.Repositories.Interfaces

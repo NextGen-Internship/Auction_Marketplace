@@ -64,7 +64,7 @@ namespace Auction_Marketplace.Services.Implementation
             //Creates the JWT
             var token = _tokenService.GenerateJwtToken(user);
 
-            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, registerUser.Username, $"Dear {registerUser.Username},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
+            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.Username},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
 
 
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
@@ -120,13 +120,7 @@ namespace Auction_Marketplace.Services.Implementation
 
         public async Task<Response<string>> GoogleLoginAsync(GoogleLoginViewModel googleLogin)
         {
-
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
-
-            if (!validation.Succeed)
-            {
-                return new Response<string> { Succeed = false, Message = "Invalid User" };
-            }
 
             var email = validation.Email;
 
@@ -151,7 +145,6 @@ namespace Auction_Marketplace.Services.Implementation
 
             await _signInManager.SignInAsync(existingUser, false);
 
-            // Generate JWT token
             var jwtToken = _tokenService.GenerateJwtToken(existingUser);
 
             return new Response<string> { Succeed = true, Data = jwtToken };
@@ -168,7 +161,6 @@ namespace Auction_Marketplace.Services.Implementation
               if (!response.IsSuccessStatusCode)
               {
                     return null;
-                   
               }
 
               var responseContent = await response.Content.ReadAsStringAsync();

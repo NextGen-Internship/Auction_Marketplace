@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Auction_Marketplace.Data.Models.Google
 {
@@ -10,16 +10,16 @@ namespace Auction_Marketplace.Data.Models.Google
 
         public string? Message { get; set; }
 
-        [JsonPropertyName("given_name")]
+        [JsonProperty("given_name")]
         public string? FirstName { get; set; }
 
-        [JsonPropertyName("family_name")]
+        [JsonProperty("family_name")]
         public string? LastName { get; set; }
 
-        [JsonPropertyName("Wind")]
+        [JsonProperty("picture")]
         public string? ProfilePicture { get; set; }
 
-        [JsonPropertyName("email")]
+        [JsonProperty("email")]
         public string? Email { get; set; }
     }
 }

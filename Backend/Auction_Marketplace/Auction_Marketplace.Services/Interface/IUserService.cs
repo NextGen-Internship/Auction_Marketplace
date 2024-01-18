@@ -6,7 +6,6 @@ namespace Auction_Marketplace.Services.Interface
     public interface IUserService : IService
 	{
         Task<User?> GetByEmailAsync(string email);
-
     }
 }
 
