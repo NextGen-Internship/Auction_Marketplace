@@ -1,6 +1,4 @@
-﻿using System;
-using Auction_Marketplace.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +9,7 @@ using Auction_Marketplace.Services.Interface;
 
 namespace Auction_Marketplace.Services.Implementation
 {
-	public class TokenService : ITokenService
+    public class TokenService : ITokenService
 	{
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
@@ -32,7 +30,6 @@ namespace Auction_Marketplace.Services.Implementation
 
             var claims = new List<Claim>()
             {
-                    new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
@@ -55,7 +52,7 @@ namespace Auction_Marketplace.Services.Implementation
             return jwtToken;
         }
 
-        public async void GenerateUserRoles(User user, List<Claim> claims)
+        private async void GenerateUserRoles(User user, List<Claim> claims)
         {
             var roles = await _userManager.GetRolesAsync(user);
 

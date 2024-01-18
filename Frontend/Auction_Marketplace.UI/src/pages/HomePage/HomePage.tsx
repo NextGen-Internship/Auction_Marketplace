@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/NavbarUser';
-import { getToken } from '../../Utils/AuthUtil';
+import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 
 const HomePage: React.FC = () => {

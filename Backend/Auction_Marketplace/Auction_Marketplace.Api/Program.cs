@@ -1,14 +1,3 @@
-using System;
-using System.Text;
-using Auction_Marketplace.Data;
-using Auction_Marketplace.Data.Entities;
-using Auction_Marketplace.Services.Abstract;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -17,14 +6,17 @@ builder.Services.RegisterDbContext(builder.Configuration, builder.Environment)
                            .ConfigureServices();
 
 builder.Services.AddAuthorization();
-// Added policy for the React app
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        builder => builder.WithOrigins("http://localhost:5173") //ToDo: Update with the actual URL of our React app
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("*")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
 });
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,7 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseCors("AllowReactApp");
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

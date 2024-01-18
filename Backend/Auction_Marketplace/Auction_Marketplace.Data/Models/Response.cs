@@ -1,5 +1,4 @@
-﻿using System;
-namespace Auction_Marketplace.Data.Models
+﻿namespace Auction_Marketplace.Data.Models
 {
 	public class Response<T>
 	{

@@ -76,7 +76,7 @@ const LoginPage: React.FC = () => {
     console.log('Google Login success:', credentialResponse);
     try {
       const loginResponse = await apiService.post<any>('api/Authentication/google-login', {
-        googleToken: credentialResponse.accessToken,
+        googleToken: credentialResponse.credential,
       });
 
       if (loginResponse.succeed) {

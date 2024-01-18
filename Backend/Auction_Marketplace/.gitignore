@@ -5,6 +5,12 @@
 **/bin/
 **/obj/
 
+**/bin/
+**/obj/
+
+**.bin/
+**.obj/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -125,3 +131,5 @@ $RECYCLE.BIN/
 *.userprefs
 *.dotSettings.user
 **.vs/
+**/.vs/
+
