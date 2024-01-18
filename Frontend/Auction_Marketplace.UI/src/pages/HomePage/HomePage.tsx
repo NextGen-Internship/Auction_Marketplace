@@ -1,16 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/NavbarUser';
+import { getToken } from '../../Utils/AuthUtil';
+import '../../Components/TokenExp/TokenExpContainer.css';
 
 const HomePage: React.FC = () => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
 
   if (!token) {
-    localStorage.clear();
     return (
-      <div>
-        <p>Please log in to access this page.</p>
-        <Link to="/login">Login</Link>
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
       </div>
     );
   }

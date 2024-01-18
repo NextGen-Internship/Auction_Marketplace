@@ -3,6 +3,7 @@ import LoginPage from "./Pages/LoginPage/LoginPage.tsx";
 import Footer from "./Components/Footer/Footer.tsx";
 import RegisterPage from "./Pages/RegisterPage/RegisterPage.tsx";
 import HomePage from './Pages/HomePage/HomePage.tsx';
+import MarketplacePage from './Pages/MarketplacePage/MarketplacePage.tsx';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
           <Route path="/login" Component={LoginPage}></Route>
           <Route path="/register" Component={RegisterPage}></Route>
           <Route path="/" element={<LoginPage />} ></Route>
-          <Route path="/home" index={true} element={<HomePage />}></Route>
+          <Route path="/home" element={<HomePage />}></Route>
+          <Route path="/marketplace" element={<MarketplacePage />}></Route>
         </Routes>
         <Footer />
       </Router>

@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className="nav-links">
-          <Link to="/" className="nav-item">
+          <Link to="/home" className="nav-item">
             Home
           </Link>
           <Link to="/marketplace" className="nav-item">
@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
           <Link to="/policy" className="nav-item">
             Policy
           </Link>
-          <Link to="/" className="nav-item" onClick={handleLogout}>
+          <Link to="/login" className="nav-item" onClick={handleLogout}>
             Log out
           </Link>
         </div>

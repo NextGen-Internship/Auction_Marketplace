@@ -112,12 +112,6 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  /* Standart handle for google login without sending to backend
-  const handleSuccess = (credentialResponse: any) => {
-    console.log('Login success:', credentialResponse);
-  };
-  */
-
   const handleError = () => {
     console.log('Login failed.');
   };
