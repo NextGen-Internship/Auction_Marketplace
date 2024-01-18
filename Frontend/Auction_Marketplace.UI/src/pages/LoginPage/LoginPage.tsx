@@ -106,6 +106,12 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   /* Standart handle for google login without sending to backend
   const handleSuccess = (credentialResponse: any) => {
     console.log('Login success:', credentialResponse);
@@ -129,6 +135,7 @@ const LoginPage: React.FC = () => {
           placeholder='Email or Username'
           value={emailOrUsername}
           onChange={handleEmailOrUsernameChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {emailOrUsernameError && <span className="error-message">{emailOrUsernameError}</span>}
@@ -141,6 +148,7 @@ const LoginPage: React.FC = () => {
           placeholder='Password'
           value={password}
           onChange={handlePasswordChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {passwordError && <span className="error-message">{passwordError}</span>}

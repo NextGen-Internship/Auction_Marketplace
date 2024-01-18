@@ -92,13 +92,13 @@ const RegisterPage: React.FC = () => {
       try {
         const base64ProfilePicture = profilePicture ? await readFileAsBase64(profilePicture) : null;
 
-        //do not set pic
         const registerResponse = await apiService.post<any>('api/Authentication/Register', {
           firstName,
           lastName,
           email,
           password,
           profilePicture: base64ProfilePicture,
+                  //do not set pic
         });
 
         if (registerResponse.succeed) {
@@ -106,18 +106,25 @@ const RegisterPage: React.FC = () => {
           localStorage.setItem('token', registerResponse.data);
           navigate('/home');
         } else if (!registerResponse.succeed) {
-          alert('Register failed.');
-          navigate('/home');
+          alert('Register failed. Try again.');
+          navigate('/login');
         }
         console.log('Registration response:', registerResponse);
       } catch (error) {
         console.error('Error: ', error);
+        alert(error);
       }
     } else {
       setEmailError('Invalid email format')
       if (!validatePassword(password)) {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
+    }
+  };
+
+  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleRegister();
     }
   };
 
@@ -149,6 +156,7 @@ const RegisterPage: React.FC = () => {
           placeholder='First Name'
           value={firstName}
           onChange={handleFirstNameChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
 
@@ -160,6 +168,7 @@ const RegisterPage: React.FC = () => {
           placeholder='Last Name'
           value={lastName}
           onChange={handleLastNameChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
 
@@ -171,6 +180,7 @@ const RegisterPage: React.FC = () => {
           placeholder='Email'
           value={email}
           onChange={handleEmailChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {emailError && <span className="error-message">{emailError}</span>}
@@ -183,6 +193,7 @@ const RegisterPage: React.FC = () => {
           placeholder='Password'
           value={password}
           onChange={handlePasswordChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {passwordError && <span className="error-message">{passwordError}</span>}
