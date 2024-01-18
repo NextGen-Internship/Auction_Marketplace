@@ -3,9 +3,9 @@ using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Interface
 {
-	public interface ITokenService : IService
+    public interface IUserService : IService
 	{
-        string GenerateJwtToken(User user);
+        Task<User?> GetByEmailAsync(string email);
     }
 }
 

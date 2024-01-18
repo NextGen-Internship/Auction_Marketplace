@@ -2,9 +2,10 @@
 using System.Text;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Repositories.Implementations;
+using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Abstract;
 using Auction_Marketplace.Services.Implementation;
-using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-	public static class IServiceCollectionExtention
+    public static class IServiceCollectionExtention
     { 
 
         public static IServiceCollection RegisterDbContext(this IServiceCollection services,
@@ -34,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Configure<IdentityOptions>(options =>
                 {
                     options.Password.RequireDigit = false;
-                    options.Password.RequiredLength = 4;
+                    options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
@@ -51,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.Configure<IdentityOptions>(options =>
                 {
-                    options.SignIn.RequireConfirmedEmail = true;
+                    options.SignIn.RequireConfirmedEmail = false;
                 });
             }
 
@@ -91,7 +92,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
 
-            private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
+        private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
         {
             var serviceTypes = assembly.GetTypes()
                 .Where(x => !string.IsNullOrEmpty(x.Namespace) && x.IsClass && !x.IsAbstract && fromType.IsAssignableFrom(x))
@@ -109,13 +110,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
-            services.AddScopedServiceTypes(typeof(AuthenticationUserService).Assembly, typeof(IService));
+            services.AddScopedServiceTypes(typeof(AuthenticationService).Assembly, typeof(IService));
+
+            services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
 
             return services;
         }
 
     }
 }
-

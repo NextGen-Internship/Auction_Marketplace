@@ -1,15 +1,3 @@
-using System;
-using System.Text;
-using Auction_Marketplace.Data;
-using Auction_Marketplace.Data.Entities;
-using Auction_Marketplace.Services.Abstract;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -18,6 +6,16 @@ builder.Services.RegisterDbContext(builder.Configuration, builder.Environment)
                            .ConfigureServices();
 
 builder.Services.AddAuthorization();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        });
+});
 
 
 builder.Services.AddControllers();
@@ -37,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

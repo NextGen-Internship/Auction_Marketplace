@@ -20,6 +20,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
         <PackageReference Include="SendGrid" Version="9.18.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,5 +30,8 @@
       <ProjectReference Include="..\Auction_Marketplace.Services\Auction_Marketplace.Services.csproj">
         <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Remove="appsettings.Development.json" />
     </ItemGroup>
 </Project>

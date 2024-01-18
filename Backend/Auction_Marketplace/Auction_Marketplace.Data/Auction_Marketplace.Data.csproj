@@ -23,11 +23,19 @@
     <None Remove="Configuration\" />
     <None Remove="Models\" />
     <None Remove="Models\Authentication\" />
+    <None Remove="Repositories\" />
+    <None Remove="Models\Google\" />
+    <None Remove="Repositories\Interfaces\" />
+    <None Remove="Repositories\Implementation\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
     <Folder Include="Configuration\" />
     <Folder Include="Models\" />
     <Folder Include="Models\Authentication\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Models\Google\" />
+    <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Repositories\Implementation\" />
   </ItemGroup>
 </Project>
