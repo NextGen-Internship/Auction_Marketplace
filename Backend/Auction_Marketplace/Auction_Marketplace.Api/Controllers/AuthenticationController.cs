@@ -36,6 +36,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginUser)
         {
             try

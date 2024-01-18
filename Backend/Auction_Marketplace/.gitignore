@@ -2,8 +2,8 @@
 .idea/
 
 # Build and runtime files
-bin/
-obj/
+**/bin/
+**/obj/
 
 **/bin/
 **/obj/

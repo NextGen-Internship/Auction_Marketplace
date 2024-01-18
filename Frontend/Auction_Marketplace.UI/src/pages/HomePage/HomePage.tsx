@@ -1,10 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import Navbar from '../../Components/Navbar/NavbarUser';
+import { getToken } from '../../utils/AuthUtil.ts';
+import '../../Components/TokenExp/TokenExpContainer.css';
 
 const HomePage: React.FC = () => {
+  const token = getToken();
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    //To Do: fix home page  
-    <div className="header-menu">
+    <div>
+      <Navbar />
+      <div className="header-menu">
         <h1>Welcome to the Blankfactor Auction/Donation Marketplace</h1>
         <p>Buy or donate items for a good cause!</p>
 
@@ -20,17 +36,18 @@ const HomePage: React.FC = () => {
           </ul>
         </div>
 
-        <div className="donation-opportunities"/>
-          <h2>Donation Opportunities</h2>
-          <ul>
-            <li>
-              <Link to="/donation/1">Donation Opportunity 1</Link>
-            </li>
-            <li>
-              <Link to="/donation/2">Donation Opportunity 2</Link>
-            </li>
-          </ul>
-        </div>
+        <div className="donation-opportunities" />
+        <h2>Donation Opportunities</h2>
+        <ul>
+          <li>
+            <Link to="/donation/1">Donation Opportunity 1</Link>
+          </li>
+          <li>
+            <Link to="/donation/2">Donation Opportunity 2</Link>
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };
 

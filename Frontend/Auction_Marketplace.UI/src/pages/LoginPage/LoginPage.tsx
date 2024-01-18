@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
+import Navbar from '../../Components/Navbar/NavbarLogin';
+import UserService from '../../Services/UserService';
+import ApiService from '../../Services/ApiService';
 
+const apiService =  new ApiService;
+const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  localStorage.clear();
 
   const validateEmailOrUsername = (input: string) => {
-    //  must start with one or more characters that are not whitespace or '@'
-    // There must be an '@' symbol after the initial characters.
-    //  After the '@' symbol, there should be one or more characters that are not whitespace or '@'.
-    // Following the second set of characters, there must be a dot ('.') symbol.
-    // Finally, after the dot, there should be one or more characters that are not whitespace or '@' until the end of the string.
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_.]{8,}$/;
-
     return emailRegex.test(input) || usernameRegex.test(input);
   };
 
   const validatePassword = (input: string) => {
-    // Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters
-    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{10,}$/;
+    const passwordRegex = /^.{6,}$/;
     return passwordRegex.test(input);
   };
 
@@ -40,30 +40,75 @@ const LoginPage: React.FC = () => {
     setPasswordError(validatePassword(inputValue) ? null : 'Invalid password format');
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
-      //TODO  authentication logic here
-      console.log('Email/Username:', emailOrUsername);
-      console.log('Password:', password);
+      try {
+        const loginResponse = await userService.loginUser(emailOrUsername, password);
+        console.log('Login response:', loginResponse);
+        if (loginResponse.succeed) {
+          console.log('Authentication successful');
+          localStorage.setItem('token', loginResponse.data);
+          navigate('/home');
+        } else {
+          if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
+            console.error('User does not exist.');
+          } else {
+            console.error('Authentication failed:', loginResponse.errorMessage);
+          }
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
     } else {
-      setEmailOrUsernameError('Invalid email or username format')
+      setEmailOrUsernameError('Invalid email format')
       if (!validatePassword(password)) {
         setPasswordError('Invalid password format. Password should be at least 10 characters and include a combination of numbers, characters, uppercase, and lowercase letters.');
       }
     }
   };
 
-  const handleSuccess = (credentialResponse: any) => {
-    console.log('Login success:', credentialResponse);
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    console.log('Google Login success:', credentialResponse);
+    try {
+      const loginResponse = await userService.loginUserWithGoogle(credentialResponse.credential);
+      if (loginResponse.succeed) {
+        console.log('Authentication successful');
+        localStorage.setItem('token', loginResponse.data);
+        navigate('/home');
+      } else {
+        if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
+          console.error('User does not exist.');
+
+          const createUserResponse = await userService.loginUserWithGoogle(credentialResponse.profile.email);
+          if (createUserResponse.succeed) {
+            console.log('User created successfully. Logging in...');
+            navigate('/home');
+          } else {
+            console.error('User creation failed:', createUserResponse.errorMessage);
+          }
+        } else {
+          console.error('Authentication failed:', loginResponse.errorMessage);
+        }
+      }
+    } catch (error) {
+      console.error('Error during Google Authentication:', error);
+      alert('Error during Google Authentication');
+    }
+  };
+
+  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
   };
 
   const handleError = () => {
     console.log('Login failed.');
   };
 
-
   return (
     <div className="login-container">
+      <Navbar />
       <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>
@@ -74,6 +119,7 @@ const LoginPage: React.FC = () => {
           placeholder='Email or Username'
           value={emailOrUsername}
           onChange={handleEmailOrUsernameChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {emailOrUsernameError && <span className="error-message">{emailOrUsernameError}</span>}
@@ -86,6 +132,7 @@ const LoginPage: React.FC = () => {
           placeholder='Password'
           value={password}
           onChange={handlePasswordChange}
+          onKeyDown={handleKeyDownEnter}
           required
         />
         {passwordError && <span className="error-message">{passwordError}</span>}
@@ -95,23 +142,23 @@ const LoginPage: React.FC = () => {
         </label>
 
         <div className='buttons-container'>
-          <button type="submit" className="login-btn" onClick={handleLogin}>
+          <button type="button" className="login-btn" onClick={handleLogin}>
             Sign In
           </button>
           <div>
             <GoogleLogin
               width={"230px"}
-              onSuccess={handleSuccess}
+              onSuccess={handleGoogleLogin}
               onError={handleError}
             />
           </div>
         </div>
         <div>
-            <Link to="/register">
-              <label className='login-login-label'>
-                Don't have an account? Register here.
-              </label>
-            </Link>
+          <Link to="/register">
+            <label className='login-login-label'>
+              Don't have an account? Register here.
+            </label>
+          </Link>
         </div>
 
       </form>
