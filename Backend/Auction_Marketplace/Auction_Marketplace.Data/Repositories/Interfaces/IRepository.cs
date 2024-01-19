@@ -26,9 +26,9 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
 
         Task<int> SaveChangesAsync();
 
-        Task<int> DeleteAsync(int entityId);
+        //Task<int> DeleteAsync(int entityId);
 
-        Task<int> DeleteRangeAsync(IEnumerable<T> entities);
+        //Task<int> DeleteRangeAsync(IEnumerable<T> entities);
 
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
 

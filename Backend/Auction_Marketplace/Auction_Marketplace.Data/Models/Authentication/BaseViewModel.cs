@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Auction_Marketplace.Data.Models.Authentication
 {
-	public class RegisterViewModel
+	public class BaseViewModel
 	{
-        public string? FirstName { get; set; } 
+        public string? FirstName { get; set; }
 
-        public string? LastName { get; set; } 
+        public string? LastName { get; set; }
 
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]
@@ -16,7 +17,7 @@ namespace Auction_Marketplace.Data.Models.Authentication
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty;
 
-        public IFormFile ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
     }
 }
 

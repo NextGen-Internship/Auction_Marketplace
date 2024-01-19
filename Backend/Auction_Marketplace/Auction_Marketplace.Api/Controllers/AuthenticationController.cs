@@ -19,7 +19,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerUser)
+        public async Task<IActionResult> Register([FromForm] RegisterViewModel registerUser)
         {
             try
             {
