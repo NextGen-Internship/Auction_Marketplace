@@ -1,16 +1,20 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./Navbar.css";
-import logo from "../../assets/Marketplace.png"
+import logo from "../../assets/Marketplace.png";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  showAuthButtons?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     localStorage.clear(); 
     navigate('/login');
   };
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -32,9 +36,21 @@ const Navbar: React.FC = () => {
           <Link to="/policy" className="nav-item">
             Policy
           </Link>
-          <Link to="/login" className="nav-item" onClick={handleLogout}>
-            Log out
-          </Link>
+          {showAuthButtons && (
+            <>
+              <Link to="/login" className="nav-item">
+                Login
+              </Link>
+              <Link to="/register" className="nav-item">
+                Register
+              </Link>
+            </>
+          )}
+          {!showAuthButtons && (
+            <Link to="/login" className="nav-item" onClick={handleLogout}>
+              Log out
+            </Link>
+          )}
         </div>
       </div>
     </nav>
