@@ -5,7 +5,6 @@ import './ProfilePicture.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
 import readFileAsBase64 from './ReadFileAsBase64';
-import Navbar from '../../Components/Navbar/NavbarLogin';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -21,7 +20,6 @@ const RegisterPage: React.FC = () => {
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
   const navigate = useNavigate();
-  localStorage.clear();
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -98,6 +96,7 @@ const RegisterPage: React.FC = () => {
           password,
           profilePicture: base64ProfilePicture,
                   //do not set pic
+                  //profilepic change with IFormFile
         });
 
         if (registerResponse.succeed) {
@@ -129,7 +128,6 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <Navbar />
       <h2 className='register-header-container'>
         Register
       </h2>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
-import Navbar from '../../Components/Navbar/NavbarLogin';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
 
@@ -108,7 +107,6 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <Navbar />
       <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>
