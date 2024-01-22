@@ -37,56 +37,28 @@ namespace Auction_Marketplace.Services.Implementation
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
             var userExists = await _userSevice.GetByEmailAsync(registerUser.Email);
-        
-             if (userExists != null)
-             {
-                 return new Response<string>()
-                     {
-                         Succeed = false,
-                         Message = "User with this Email Adress already exists!"
-                     };
-             }
-        
-             var user = new User()
-             {
-                 FirstName = registerUser.FirstName,
-                 LastName = registerUser.LastName,
-                 Email = registerUser.Email,      
-                 SecurityStamp = Guid.NewGuid().ToString(),
-                 UserName = registerUser.Email,
-                 ProfilePicture = registerUser.ProfilePicture == "" ? "https://library.mu-varna.bg/wp-content/uploads/2017/04/default-user-img.jpg"
-                                                                      : registerUser.ProfilePicture
-             };
 
-            // ToDO:Seed roles
-            //await _userManager.AddToRoleAsync(user, "User");
+            if (userExists != null)
+            {
+                return new Response<string>()
+                {
+                    Succeed = false,
+                    Message = "User with this Email Adress already exists!"
+                };
+            }
 
-            //Creates the JWT
-            var token = _tokenService.GenerateJwtToken(user);
+            User user = new User();
+            if (registerUser.ProfilePicture != null)
+            {
+                //var fileName = String.Format(AWSConstants.UploadProfilePictureName, user.Email);
+                //var path = String.Format(AWSConstants.UploadProfilePicturePath, user.Email);
+                //user.ProfilePicture = await _s3Service.UploadFileAsync(registerUser.ProfilePicture, path, fileName);
+            }
 
-            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.Username},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
+            var token = await RegisterUser(registerUser, user);
 
+            return token != null ? new Response<string> { Succeed = true, Data = token } : new Response<string> { Succeed = false, Message = "Invalid Registration" };
 
-            var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
-        
-        
-              if (!isCreated.Succeeded)
-              {
-                  return new Response<string>()
-                      {
-                          Succeed = false,
-                          Message = "User Failed to Create!"
-                      };
-              }
-
-              
-        
-              return new Response<string>()
-                  {
-                      Succeed = true,
-                      Data = token
-                  };
-              
         }
         
         public async Task<Response<string>> Login(LoginViewModel loginUser)
@@ -128,18 +100,20 @@ namespace Auction_Marketplace.Services.Implementation
 
             if (existingUser == null)
             {
-                var newUser = new RegisterViewModel
+                var registerUser = new RegisterViewModel
                 {
                     FirstName = validation.FirstName,
                     LastName = validation.LastName,
                     Email = email,
-                    ProfilePicture = validation.ProfilePicture,
                     Password = "Password123"
                 };
 
-                var tokenResponse = await Register(newUser);
+                User user = new User();
+                user.ProfilePicture = validation.ProfilePicture;
 
-                return new Response<string> { Succeed = true, Data = tokenResponse.Data };
+                var token = await RegisterUser(registerUser, user);
+
+                return new Response<string> { Succeed = true, Data = token };
 
             }
 
@@ -149,6 +123,30 @@ namespace Auction_Marketplace.Services.Implementation
 
             return new Response<string> { Succeed = true, Data = jwtToken };
         
+        }
+
+        private async Task<string?> RegisterUser(RegisterViewModel registerUser, User user)
+        {
+            user.FirstName = registerUser.FirstName;
+            user.LastName = registerUser.LastName;
+            user.Email = registerUser.Email;
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            user.UserName = registerUser.Email;
+
+            // ToDO:Seed roles
+            //await _userManager.AddToRoleAsync(user, "User");
+            //Creates the JWT
+
+            var token = _tokenService.GenerateJwtToken(user);
+            await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.FirstName},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
+            var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
+
+            if (!isCreated.Succeeded)
+            {
+                return null;
+            }
+
+            return token;
         }
 
         private async Task<GoogleTokenInfo?> ValidateGoogleTokenAsync(string googleToken)
