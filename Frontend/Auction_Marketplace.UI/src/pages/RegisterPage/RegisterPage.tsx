@@ -4,8 +4,8 @@ import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
-import readFileAsBase64 from './ReadFileAsBase64';
 import Navbar from '../../Components/Navbar/NavbarLogin';
+import readFileAsBase64 from './ReadFileAsBase64';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
