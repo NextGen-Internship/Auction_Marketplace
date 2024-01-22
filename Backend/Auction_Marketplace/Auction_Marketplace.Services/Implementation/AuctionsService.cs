@@ -3,56 +3,55 @@ using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
+using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace Auction_Marketplace.Services.Implementation
 {
     public class AuctionsService : IAuctionsService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IAuctionRepository _auctionRepository;
 
-        public AuctionsService(ApplicationDbContext dbContext)
+        public AuctionsService(ApplicationDbContext dbContext, IAuctionRepository auctionRepository)
         {
             _dbContext = dbContext;
+            _auctionRepository = auctionRepository;
         }
 
-        public async Task<Response<string>> CreateAuction(AuctionViewModel newAuction)
+        public async Task<Response<string>> CreateAuction(AuctionViewModel auction)
         {
             try
             {
-                var userExists = await _dbContext.Users.AnyAsync(u => u.Id == newAuction.UserId);
+                var userExists = await _auctionRepository.Find(u => u.UserId == auction.UserId).FirstOrDefaultAsync();
 
-                if (!userExists)
+                if (userExists == null)
                 {
                     return new Response<string>
                     {
                         Succeed = false,
-                        Data = null,
-                        Message = $"User with UserId '{newAuction.UserId}' does not exist."
+                        Message = $"User with UserId '{auction.UserId}' does not exist."
                     };
                 }
 
-
-                if (newAuction == null)
+                if (auction == null)
                 {
                     return new Response<string>
                     {
                         Succeed = false,
-                        Data = null,
-                        Message = "Invalid auction data. UserId is missing or not valid."
+                        Message = "Invalid auction data. UserId is missing."
                     };
                 }
 
-                var auction = new Auction
+                var newAuction = new Auction
                 {
-                    UserId = newAuction.UserId,
-                    Name = newAuction.Name,
-                    Description = newAuction.Description,
+                    UserId = auction.UserId,
+                    Name = auction.Name,
+                    Description = auction.Description,
                 };
 
-                if (auction == null || string.IsNullOrEmpty(auction.Name) || auction.UserId <= 0)
+                if (newAuction == null || string.IsNullOrEmpty(newAuction.Name) || newAuction.UserId <= 0)
                 {
                     return new Response<string>
                     {
@@ -61,8 +60,7 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                _dbContext.Auctions.Add(auction);
-                _dbContext.SaveChanges();
+                await _auctionRepository.AddAuction(newAuction);
 
                 return new Response<string>
                 {
@@ -71,11 +69,6 @@ namespace Auction_Marketplace.Services.Implementation
             }
             catch (Exception ex)
             {
-                // Log the exception, including inner exception
-                Console.WriteLine($"Error creating auction: {ex.Message}");
-                Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
-
-                // Return an error response
                 return new Response<string>
                 {
                     Succeed = false,
@@ -84,19 +77,89 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public Task DeleteAuction(int auctionId)
+        public async Task<Auction> DeleteAuction(int auctionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
+
+                if(auction != null)
+                {
+                    await _auctionRepository.DeleteAuction(auctionId);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                throw;
+            }
         }
 
-        public Task<List<Auction>> GetAllAuctions()
+        public async Task<List<Auction>> GetAllAuctions()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<Auction> auctions = await _dbContext.Auctions.ToListAsync();
+
+                return auctions;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting all auctions: {ex.Message}");
+                throw;
+            }
         }
 
-        public Task<Auction> GetAuctionById(int auctionId)
+        public async Task<Auction> GetAuctionById(int auctionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
+                return auction;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting all auctions: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction)
+        {
+            try
+            {
+                var existingAuction = await _auctionRepository.FindAuctionById(auctionId);
+
+                if (existingAuction == null)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = $"Auction with ID {auctionId} not found."
+                    };
+                }
+
+                existingAuction.Name = updatedAuction.Name;
+                existingAuction.Description = updatedAuction.Description;
+                existingAuction.IsCompleted = updatedAuction.IsCompleted;
+
+                await _auctionRepository.UpdateAuction(existingAuction);
+
+                return new Response<string>
+                {
+                    Succeed = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = $"An error occurred while updating the auction. See logs for details: {ex.Message}"
+                };
+            }
         }
     }
 }

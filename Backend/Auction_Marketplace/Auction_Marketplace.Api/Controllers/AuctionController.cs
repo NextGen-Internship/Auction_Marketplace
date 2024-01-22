@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auction_Marketplace.Services.Interface;
-using Auction_Marketplace.Services.Implementation;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models.Auction;
 
@@ -23,7 +22,7 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var auctions = await _auctionsService.GetAllAuctions();
+                List<Auction> auctions = await _auctionsService.GetAllAuctions();
                 return Ok(auctions);
             }
             catch (Exception ex)
@@ -33,7 +32,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAuctionById(int id)
+        public async Task<IActionResult> GetAuctionById([FromRoute]int id)
         {
             var auction = await _auctionsService.GetAuctionById(id);
 
@@ -46,7 +45,6 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
         public async Task<IActionResult> CreateAuction(AuctionViewModel auction)
         {  
             try
@@ -59,14 +57,35 @@ namespace Auction_Marketplace.Api.Controllers
             {
                 return StatusCode(500, $"{ex.Message}");
             }
-            
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAuction([FromRoute]int id, AuctionViewModel updatedAuction)
+        {
+            try
+            {
+                var response = await _auctionsService.UpdateAuction(id, updatedAuction);
+
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAuction(int id)
+        public async Task<IActionResult> DeleteAuction([FromRoute]int id)
         {
-            await _auctionsService.DeleteAuction(id);
-            return NoContent();
+            try
+            {
+                var response = await _auctionsService.DeleteAuction(id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }
