@@ -1,11 +1,12 @@
 ﻿using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
+using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Interface
 {
 	public interface IAuctionsService : IService
-	{
+    {
         Task<Response<List<Auction>>> GetAllAuctions();
 
         Task<Response<Auction>> GetAuctionById(int auctionId);

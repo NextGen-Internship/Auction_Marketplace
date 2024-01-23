@@ -55,7 +55,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.CreateAuction(auction);
-                return response.Succeed == true ? Ok(response) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.UpdateAuction(id, updatedAuction);
-                return response.Succeed == true ? Ok(response.Message) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -83,7 +83,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.DeleteAuction(id);
-                return response.Succeed == true ? Ok(response) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
