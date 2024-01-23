@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Marketplace from './pages/MarketplacePage/MarketplacePage.tsx';
-import Navbar from './Components/Navbar/Navbar.tsx';
+import Navbar from './components/Navbar/Navbar.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';

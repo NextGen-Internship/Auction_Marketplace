@@ -4,7 +4,7 @@ import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/ApiResponseDTO';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 
 const apiService =  new ApiService;
 const userService = new UserService(apiService);

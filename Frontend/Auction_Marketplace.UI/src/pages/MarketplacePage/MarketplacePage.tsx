@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar';
 import { getToken } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
+import Navbar from '../../components/Navbar/Navbar';
 
 const Marketplace: React.FC = () => {
     const token = getToken();

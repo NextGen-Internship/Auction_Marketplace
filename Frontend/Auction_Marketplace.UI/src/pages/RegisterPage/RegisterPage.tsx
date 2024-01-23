@@ -4,7 +4,7 @@ import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/ApiResponseDTO'; 
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
 import UserService from '../../Services/UserService';
 import readFileAsBase64 from './ReadFileAsBase64';
 
