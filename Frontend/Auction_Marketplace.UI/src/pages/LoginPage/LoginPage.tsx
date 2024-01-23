@@ -5,7 +5,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/ApiResponseDTO';
-import Navbar from '../../Components/Navbar/NavbarUser';
 
 const apiService =  new ApiService;
 const userService = new UserService(apiService);
@@ -106,7 +105,6 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      < Navbar/>
       <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>

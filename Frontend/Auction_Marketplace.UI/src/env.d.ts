@@ -1,10 +1,10 @@
 
 interface ImportMetaEnv {
-    VITE_LOGOUT_ENDPOINT: any
-    VITE_GOOGLE_LOGIN_ENDPOINT: any
-    VITE_LOGIN_ENDPOINT: any
-    VITE_REGISTER_ENDPOINT: any
-    VITE_BASE_URL: any
+    readonly VITE_LOGOUT_ENDPOINT: string
+    readonly VITE_GOOGLE_LOGIN_ENDPOINT: string
+    readonly VITE_LOGIN_ENDPOINT: string
+    readonly VITE_REGISTER_ENDPOINT: string
+    readonly VITE_BASE_URL: string
     readonly VITE_GOOGLE_CLIENT_ID: string
 }
 

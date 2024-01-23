@@ -4,11 +4,9 @@ import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
-import Navbar from '../../Components/Navbar/NavbarLogin';
 import ApiResponseDTO from '../../Interfaces/ApiResponseDTO'; 
 import UserService from '../../Services/UserService';
 import readFileAsBase64 from './ReadFileAsBase64';
-
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -26,7 +24,6 @@ const RegisterPage: React.FC = () => {
   const userService = new UserService(apiService);
 
   const navigate = useNavigate();
-  localStorage.clear();
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -133,7 +130,6 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <Navbar />
       <h2 className='register-header-container'>
         Register
       </h2>
