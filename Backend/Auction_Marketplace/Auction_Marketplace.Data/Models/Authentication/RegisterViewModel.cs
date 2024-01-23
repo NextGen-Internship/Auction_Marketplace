@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Auction_Marketplace.Data.Models.Authentication
 {
@@ -15,9 +16,7 @@ namespace Auction_Marketplace.Data.Models.Authentication
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty;
 
-        public string? Username { get; set; }
-
-        public string? ProfilePicture { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
     }
 }
 
