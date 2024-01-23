@@ -1,8 +1,7 @@
-﻿using System;
-using Auction_Marketplace.Data;
+﻿using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
-using Auction_Marketplace.Data.Models.Cause;
+using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +49,8 @@ namespace Auction_Marketplace.Services.Implementation
                     Description = cause.Description,
                     AmountNeeded  = cause.AmountNeeded,
                     AmountCurrent = cause.AmountCurrent,
-                    IsCompleted = cause.IsCompleted
+                    IsCompleted = cause.IsCompleted,
+                    Donations = (ICollection<Payment>)cause.Donations
                 };
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name) || newCause.UserId <= 0)
