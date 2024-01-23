@@ -24,13 +24,13 @@ namespace Auction_Marketplace.Services.Implementation
         {
             try
             {
-                var userExsist = _causeRepository.Find(u => u.UserId == cause.UserId).FirstOrDefault();
-                if (userExsist == null)
+                var userExists = await _causeRepository.Find(u => u.UserId == cause.UserId).FirstOrDefaultAsync();
+                if (userExists == null)
                 {
                     return new Response<Cause>
                     {
                         Succeed = false,
-                        Message = $"Cause with UserId '{cause.UserId}' does not exist."
+                        Message = $"User with UserId '{cause.UserId}' does not exist."
                     };
                 }
 
@@ -72,11 +72,8 @@ namespace Auction_Marketplace.Services.Implementation
             }
             catch (Exception ex)
             {
-                return new Response<Cause>
-                {
-                    Succeed = false,
-                    Message = "An error occurred while creating the cause. See logs for details."
-                };
+                Console.WriteLine($"{ex.Message}");
+                throw;
             }
         }
 
@@ -139,7 +136,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<string>> UpdateCause(int causeId, CauseViewModel updatedCause)
+        public async Task<Response<Cause>> UpdateCause(int causeId, CauseViewModel updatedCause)
         {
             try
             {
@@ -147,7 +144,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (existingCause == null)
                 {
-                    return new Response<string>
+                    return new Response<Cause>
                     {
                         Succeed = false,
                         Message = $"Auction with ID {causeId} not found."
@@ -162,14 +159,17 @@ namespace Auction_Marketplace.Services.Implementation
 
                 await _causeRepository.UpdateCause(existingCause);
 
-                return new Response<string>
+                Cause cause = await _causeRepository.FindCauseById(existingCause.CauseId);
+
+                return new Response<Cause>
                 {
-                    Succeed = true
+                    Succeed = true,
+                    Data = cause
                 };
             }
             catch (Exception ex)
             {
-                return new Response<string>
+                return new Response<Cause>
                 {
                     Succeed = false,
                     Message = $"An error occurred while updating the cause. See logs for details: {ex.Message}"
