@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
-import Navbar from '../../Components/Navbar/NavbarLogin';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
+import ApiResponseDTO from '../../Interfaces/ApiResponseDTO';
+import Navbar from '../../Components/Navbar/NavbarUser';
 
 const apiService =  new ApiService;
 const userService = new UserService(apiService);
 
 const LoginPage: React.FC = () => {
-  const [emailOrUsername, setEmailOrUsername] = useState('');
+  const [email, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -41,20 +42,21 @@ const LoginPage: React.FC = () => {
   };
 
   const handleLogin = async () => {
-    if (validateEmailOrUsername(emailOrUsername) && validatePassword(password)) {
+    if (validateEmailOrUsername(email) && validatePassword(password)) {
       try {
-        const loginResponse = await userService.loginUser(emailOrUsername, password);
+        const loginResponse : ApiResponseDTO = await userService.loginUser({
+           email,
+           password
+          });
         console.log('Login response:', loginResponse);
-        if (loginResponse.succeed) {
+        if (loginResponse.success) {
           console.log('Authentication successful');
           localStorage.setItem('token', loginResponse.data);
           navigate('/home');
         } else {
-          if (loginResponse.start == 404 && loginResponse.title === 'UserNotFound') {
-            console.error('User does not exist.');
-          } else {
-            console.error('Authentication failed:', loginResponse.errorMessage);
-          }
+          
+            console.error('Authentication failed:', loginResponse.message);
+          
         }
       } catch (error) {
         console.error('Error during login:', error);
@@ -71,24 +73,20 @@ const LoginPage: React.FC = () => {
     console.log('Google Login success:', credentialResponse);
     try {
       const loginResponse = await userService.loginUserWithGoogle(credentialResponse.credential);
-      if (loginResponse.succeed) {
+      if (loginResponse.success) {
         console.log('Authentication successful');
         localStorage.setItem('token', loginResponse.data);
         navigate('/home');
       } else {
-        if (loginResponse.status === 404 && loginResponse.title === 'UserNotFound') {
-          console.error('User does not exist.');
-
+     
           const createUserResponse = await userService.loginUserWithGoogle(credentialResponse.profile.email);
-          if (createUserResponse.succeed) {
+          if (createUserResponse.success) {
             console.log('User created successfully. Logging in...');
             navigate('/home');
           } else {
-            console.error('User creation failed:', createUserResponse.errorMessage);
+            console.error('User creation failed:', createUserResponse.message);
           }
-        } else {
-          console.error('Authentication failed:', loginResponse.errorMessage);
-        }
+       
       }
     } catch (error) {
       console.error('Error during Google Authentication:', error);
@@ -108,7 +106,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <Navbar />
+      < Navbar/>
       <h2>Login in </h2>
       <form>
         <label htmlFor="emailOrUsername"></label>
@@ -117,7 +115,7 @@ const LoginPage: React.FC = () => {
           id="emailOrUsername"
           name="emailOrUsername"
           placeholder='Email or Username'
-          value={emailOrUsername}
+          value={email}
           onChange={handleEmailOrUsernameChange}
           onKeyDown={handleKeyDownEnter}
           required

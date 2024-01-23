@@ -1,3 +1,7 @@
+import ApiResponseDTO from '../Interfaces/ApiResponseDTO';
+import GoogleLoginDTO from '../Interfaces/GoogleLoginDTO';
+import LoginDTO from '../Interfaces/LoginDTO';
+import RegisterDTO from '../Interfaces/RegisterDTO';
 import ApiService from './ApiService';
 
 class UserService {
@@ -11,42 +15,29 @@ class UserService {
     this.apiService = apiService;
   }
 
-  async registerUser(
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    profilePicture?: File
-  ): Promise<any> {
+  async registerUser(data: RegisterDTO) : Promise<ApiResponseDTO> {
     const formData = new FormData();
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('email', email);
-    formData.append('password', password);
-    if (profilePicture) {
-      formData.append('profilePicture', profilePicture);
+    formData.append('firstName', data.firstName);
+    formData.append('lastName', data.lastName);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    if (data.profilePicture) {
+      formData.append('profilePicture', data.profilePicture);
     }
 
-    return this.apiService.post<any>(this.REGISTER_ENDPOINT, formData);
+    return this.apiService.post<ApiResponseDTO>(this.REGISTER_ENDPOINT, formData);
   }
 
-  async loginUser(email: string, password: string): Promise<any> {
-    const data = {
-      email,
-      password,
-    };
-    return this.apiService.post<any>(this.LOGIN_ENDPOINT, data);
+  async loginUser(data: LoginDTO): Promise<ApiResponseDTO> {
+    return this.apiService.post<ApiResponseDTO>(this.LOGIN_ENDPOINT, data);
   }
 
-  async loginUserWithGoogle(googleToken: string): Promise<any> {
-    const data = {
-      googleToken,
-    };
-    return this.apiService.post<any>(this.GOOGLE_LOGIN_ENDPOINT, data);
+  async loginUserWithGoogle(data: GoogleLoginDTO): Promise<ApiResponseDTO> {
+    return this.apiService.post<ApiResponseDTO>(this.GOOGLE_LOGIN_ENDPOINT, data);
   }
 
-  async logout(): Promise<any> {
-    return this.apiService.get<any>(this.LOGOUT_ENDPOINT);
+  async logout(): Promise<ApiResponseDTO> {
+    return this.apiService.get<ApiResponseDTO>(this.LOGOUT_ENDPOINT);
   }
 }
 
