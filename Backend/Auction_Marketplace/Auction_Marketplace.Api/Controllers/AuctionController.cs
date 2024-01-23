@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auction_Marketplace.Services.Interface;
-using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models.Auction;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -22,26 +21,32 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                List<Auction> auctions = await _auctionsService.GetAllAuctions();
-                return Ok(auctions);
+                var response = await _auctionsService.GetAllAuctions();
+                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"{ex.Message}");
             }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAuctionById([FromRoute]int id)
         {
-            var auction = await _auctionsService.GetAuctionById(id);
-
-            if (auction == null)
+            try
             {
-                return NotFound();
-            }
+                var response = await _auctionsService.GetAuctionById(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(auction);
+                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -50,7 +55,6 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.CreateAuction(auction);
-
                 return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
@@ -65,12 +69,11 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.UpdateAuction(id, updatedAuction);
-
-                return response.Succeed == true ? Ok(response) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Message) : BadRequest(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"{ex.Message}");
             }
         }
 
@@ -80,11 +83,11 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.DeleteAuction(id);
-                return Ok(response);
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"{ex.Message}");
             }
         }
     }

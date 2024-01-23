@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
@@ -20,7 +21,7 @@ namespace Auction_Marketplace.Services.Implementation
             _auctionRepository = auctionRepository;
         }
 
-        public async Task<Response<string>> CreateAuction(AuctionViewModel auction)
+        public async Task<Response<Auction>> CreateAuction(AuctionViewModel auction)
         {
             try
             {
@@ -28,7 +29,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (userExists == null)
                 {
-                    return new Response<string>
+                    return new Response<Auction>
                     {
                         Succeed = false,
                         Message = $"User with UserId '{auction.UserId}' does not exist."
@@ -37,14 +38,14 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (auction == null)
                 {
-                    return new Response<string>
+                    return new Response<Auction>
                     {
                         Succeed = false,
                         Message = "Invalid auction data. UserId is missing."
                     };
                 }
 
-                var newAuction = new Auction
+                Auction newAuction = new Auction
                 {
                     UserId = auction.UserId,
                     Name = auction.Name,
@@ -53,7 +54,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (newAuction == null || string.IsNullOrEmpty(newAuction.Name) || newAuction.UserId <= 0)
                 {
-                    return new Response<string>
+                    return new Response<Auction>
                     {
                         Succeed = false,
                         Message = "Invalid auction data."
@@ -62,14 +63,15 @@ namespace Auction_Marketplace.Services.Implementation
 
                 await _auctionRepository.AddAuction(newAuction);
 
-                return new Response<string>
+                return new Response<Auction>
                 {
-                    Succeed = true
+                    Succeed = true,
+                    Data = newAuction
                 };
             }
             catch (Exception ex)
             {
-                return new Response<string>
+                return new Response<Auction>
                 {
                     Succeed = false,
                     Message = "An error occurred while creating the auction. See logs for details."
@@ -77,7 +79,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Auction> DeleteAuction(int auctionId)
+        public async Task<Response<string>> DeleteAuction(int auctionId)
         {
             try
             {
@@ -88,7 +90,11 @@ namespace Auction_Marketplace.Services.Implementation
                     await _auctionRepository.DeleteAuction(auctionId);
                 }
 
-                return null;
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Message = $"Successfully deleted auction with Id: {auctionId}"
+                };
             }
             catch (Exception ex)
             {
@@ -97,13 +103,16 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<List<Auction>> GetAllAuctions()
+        public async Task<Response<List<Auction>>> GetAllAuctions()
         {
             try
             {
                 List<Auction> auctions = await _dbContext.Auctions.ToListAsync();
-
-                return auctions;
+                return new Response<List<Auction>>
+                {
+                    Succeed = true,
+                    Data = auctions
+                };
             }
             catch (Exception ex)
             {
@@ -112,12 +121,16 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Auction> GetAuctionById(int auctionId)
+        public async Task<Response<Auction>> GetAuctionById(int auctionId)
         {
             try
             {
                 Auction auction = await _auctionRepository.FindAuctionById(auctionId);
-                return auction;
+                return new Response<Auction>
+                {
+                    Succeed = true,
+                    Data = auction
+                };
             }
             catch (Exception ex)
             {

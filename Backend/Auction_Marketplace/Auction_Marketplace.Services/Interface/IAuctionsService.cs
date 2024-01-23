@@ -6,13 +6,13 @@ namespace Auction_Marketplace.Services.Interface
 {
 	public interface IAuctionsService : IService
 	{
-        Task<List<Auction>> GetAllAuctions();
+        Task<Response<List<Auction>>> GetAllAuctions();
 
-        Task<Auction> GetAuctionById(int auctionId);
+        Task<Response<Auction>> GetAuctionById(int auctionId);
 
-        Task<Auction> DeleteAuction(int auctionId);
+        Task<Response<string>> DeleteAuction(int auctionId);
 
-        Task<Response<string>> CreateAuction(AuctionViewModel auction);
+        Task<Response<Auction>> CreateAuction(AuctionViewModel auction);
 
         Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction);
     }
