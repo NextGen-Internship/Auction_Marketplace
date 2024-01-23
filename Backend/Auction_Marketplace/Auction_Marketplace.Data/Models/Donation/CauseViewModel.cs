@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Auction_Marketplace.Data.Models.Cause
+namespace Auction_Marketplace.Data.Models.Donation
 {
 	public class CauseViewModel
 	{
