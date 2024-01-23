@@ -28,6 +28,7 @@
     <None Remove="Models\Google\" />
     <None Remove="Repositories\Interfaces\" />
     <None Remove="Repositories\Implementation\" />
+    <None Remove="Models\Cause\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
@@ -38,5 +39,6 @@
     <Folder Include="Models\Google\" />
     <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Repositories\Implementation\" />
+    <Folder Include="Models\Cause\" />
   </ItemGroup>
 </Project>
