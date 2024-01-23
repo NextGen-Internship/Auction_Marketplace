@@ -1,4 +1,5 @@
-﻿using Auction_Marketplace.Data;
+﻿using System;
+using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Cause;
@@ -19,14 +20,14 @@ namespace Auction_Marketplace.Services.Implementation
             _causeRepository = causeRepository;
 		}
 
-        public async Task<Response<string>> CreateCause(CauseViewModel cause)
+        public async Task<Response<Cause>> CreateCause(CauseViewModel cause)
         {
             try
             {
-                var causeExsist = _causeRepository.Find(c => c.UserId == cause.UserId).FirstOrDefault();
-                if (causeExsist == null)
+                var userExsist = _causeRepository.Find(u => u.UserId == cause.UserId).FirstOrDefault();
+                if (userExsist == null)
                 {
-                    return new Response<string>
+                    return new Response<Cause>
                     {
                         Succeed = false,
                         Message = $"Cause with UserId '{cause.UserId}' does not exist."
@@ -35,12 +36,13 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (cause == null)
                 {
-                    return new Response<string>
+                    return new Response<Cause>
                     {
                         Succeed = false,
                         Message = "Invalid cause data."
                     };
                 }
+
                 var newCause = new Cause
                 {
                     UserId = cause.UserId,
@@ -53,7 +55,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name) || newCause.UserId <= 0)
                 {
-                    return new Response<string>
+                    return new Response<Cause>
                     {
                         Succeed = false,
                         Message = "Invalid auction data."
@@ -62,14 +64,15 @@ namespace Auction_Marketplace.Services.Implementation
 
                 await _causeRepository.AddCause(newCause);
 
-                return new Response<string>
+                return new Response<Cause>
                 {
-                    Succeed = true
+                    Succeed = true,
+                    Data = newCause
                 };
             }
             catch (Exception ex)
             {
-                return new Response<string>
+                return new Response<Cause>
                 {
                     Succeed = false,
                     Message = "An error occurred while creating the cause. See logs for details."
@@ -77,18 +80,21 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Cause> DeleteCause(int causeId)
+        public async Task<Response<string>> DeleteCause(int causeId)
         {
             try
             {
                 Cause cause = await _causeRepository.FindCauseById(causeId);
-
                 if (cause != null)
                 {
                     await _causeRepository.DeleteCause(causeId);
                 }
 
-                return null;
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Message = $"Successfully deleted auction with Id: {causeId}"
+                };
             }
             catch (Exception ex)
             {
@@ -97,13 +103,16 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<List<Cause>> GetAllCauses()
+        public async Task<Response<List<Cause>>> GetAllCauses()
         {
             try
             {
                 List<Cause> causes = await _dbContext.Causes.ToListAsync();
-
-                return causes;
+                return new Response<List<Cause>>
+                {
+                    Succeed = true,
+                    Data = causes
+                };
             }
             catch (Exception ex)
             {
@@ -112,12 +121,16 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Cause> GetCauseById(int causeId)
+        public async Task<Response<Cause>> GetCauseById(int causeId)
         {
             try
             {
                 Cause cause = await _causeRepository.FindCauseById(causeId);
-                return cause;
+                return new Response<Cause>
+                {
+                    Succeed = true,
+                    Data = cause
+                };
             }
             catch (Exception ex)
             {

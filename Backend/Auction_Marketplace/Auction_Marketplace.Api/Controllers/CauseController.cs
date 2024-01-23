@@ -23,8 +23,8 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                List<Cause> causes = await _causeService.GetAllCauses();
-                return Ok(causes);
+                var response = await _causeService.GetAllCauses();
+                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -35,14 +35,19 @@ namespace Auction_Marketplace.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCauseById([FromRoute] int id)
         {
-            var cause = await _causeService.GetCauseById(id);
-
-            if (cause == null)
+            try
             {
-                return NotFound();
+                var response = await _causeService.GetCauseById(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
             }
-
-            return Ok(cause);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -51,7 +56,6 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _causeService.CreateCause(cause);
-
                 return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
@@ -66,8 +70,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _causeService.UpdateCause(id, updatedCause);
-
-                return response.Succeed == true ? Ok(response) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Message) : BadRequest(response);
             }
             catch (Exception ex)
             {
@@ -81,7 +84,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _causeService.DeleteCause(id);
-                return Ok(response);
+                return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)
             {

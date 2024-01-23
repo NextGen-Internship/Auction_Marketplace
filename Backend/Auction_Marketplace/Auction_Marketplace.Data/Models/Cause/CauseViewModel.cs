@@ -5,9 +5,6 @@ namespace Auction_Marketplace.Data.Models.Cause
 	public class CauseViewModel
 	{
         [Required]
-        public int CauseId { get; set; }
-
-        [Required]
         public int UserId { get; set; }
 
         [Required]
