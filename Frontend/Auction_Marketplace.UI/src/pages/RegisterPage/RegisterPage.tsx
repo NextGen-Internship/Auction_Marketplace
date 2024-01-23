@@ -6,7 +6,6 @@ import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
 import UserService from '../../Services/UserService';
-import readFileAsBase64 from './ReadFileAsBase64';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -91,14 +90,13 @@ const RegisterPage: React.FC = () => {
   const handleRegister = async () => {
     if (firstName && lastName && validateEmail(email) && validatePassword(password)) {
       try {
-        const base64ProfilePicture = profilePicture ? await readFileAsBase64(profilePicture) : null;
 
         const registerResponse : ApiResponseDTO = await userService.registerUser({
           firstName: firstName,
           lastName: lastName,
           email: email,
           password: password,
-          profilePicture: base64ProfilePicture ?? undefined,
+          profilePicture: profilePicture ?? undefined,
         });
 
         if (registerResponse.success) {

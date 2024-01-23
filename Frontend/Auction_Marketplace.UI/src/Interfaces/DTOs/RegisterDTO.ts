@@ -3,7 +3,7 @@ interface RegisterDTO {
     lastName: string;
     email: string;
     password: string;
-    profilePicture?: string;
+    profilePicture?: File;
   }
 
   export default RegisterDTO;
