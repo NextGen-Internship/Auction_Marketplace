@@ -12,7 +12,7 @@
 
         public decimal AmountCurrent { get; set; }
 
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; set; } = false;
 
         public ICollection<PaymentViewModel> Donations { get; set; } = new List<PaymentViewModel>();
     }

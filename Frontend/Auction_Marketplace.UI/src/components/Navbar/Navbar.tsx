@@ -2,10 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
-
-interface NavbarProps {
-  showAuthButtons?: boolean;
-}
+import NavbarProps from '../../Interfaces/ComponentProps';
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const navigate = useNavigate();

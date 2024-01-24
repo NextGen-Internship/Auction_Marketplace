@@ -1,6 +1,7 @@
 ﻿using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
+using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
@@ -12,18 +13,20 @@ namespace Auction_Marketplace.Services.Implementation
 	{
         private readonly ApplicationDbContext _dbContext;
         private readonly ICauseRepository _causeRepository;
+        private readonly IUserService _userService;
 
-        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository)
+        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService)
 		{
             _dbContext = dbContext;
             _causeRepository = causeRepository;
+            _userService = userService;
 		}
 
         public async Task<Response<Cause>> CreateCause(CauseViewModel cause)
         {
             try
             {
-                var userExists = await _causeRepository.Find(u => u.UserId == cause.UserId).FirstOrDefaultAsync();
+                var userExists = await _userService.GetUserById(cause.UserId);
                 if (userExists == null)
                 {
                     return new Response<Cause>
@@ -33,7 +36,7 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                if (cause == null)
+                if (cause == null || cause.AmountCurrent > cause.AmountNeeded)
                 {
                     return new Response<Cause>
                     {
@@ -47,19 +50,8 @@ namespace Auction_Marketplace.Services.Implementation
                     UserId = cause.UserId,
                     Name = cause.Name,
                     Description = cause.Description,
-                    AmountNeeded  = cause.AmountNeeded,
-                    AmountCurrent = cause.AmountCurrent,
-                    IsCompleted = cause.IsCompleted,
-                    Donations = cause.Donations.Select(d => new Payment
-                    {
-                        UserId = d.UserId,
-                        EndUserId = d.EndUserId,
-                        Type = d.Type,
-                        UserPaymentMethodId = d.MethodId,
-                        IsCompleted = d.IsCompleted,
-                        Amount = d.Amount,
-                        Date = d.Date
-                    }).ToList()
+                    AmountNeeded = cause.AmountNeeded,
+                    AmountCurrent = cause.AmountCurrent
                 };
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name) || newCause.UserId <= 0)
@@ -67,7 +59,7 @@ namespace Auction_Marketplace.Services.Implementation
                     return new Response<Cause>
                     {
                         Succeed = false,
-                        Message = "Invalid auction data."
+                        Message = "Invalid cause data."
                     };
                 }
 

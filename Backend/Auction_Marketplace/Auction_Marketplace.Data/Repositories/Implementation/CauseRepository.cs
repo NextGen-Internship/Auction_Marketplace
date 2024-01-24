@@ -28,10 +28,9 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
 
         }
 
-        public Task<Cause> FindCauseById(int causeId)
+        public async Task<Cause?> FindCauseById(int causeId)
         {
-            Cause cause = _context.Causes.FirstOrDefault(c => c.CauseId == causeId);
-            return Task.FromResult(cause);
+            return await this._context.Causes.FirstOrDefaultAsync(c => c.CauseId == causeId);
         }
 
         public async Task UpdateCause(Cause cause)

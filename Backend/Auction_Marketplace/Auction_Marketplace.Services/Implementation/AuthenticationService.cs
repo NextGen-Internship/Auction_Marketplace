@@ -11,7 +11,7 @@ namespace Auction_Marketplace.Services.Implementation
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserService _userSevice;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
@@ -26,7 +26,7 @@ namespace Auction_Marketplace.Services.Implementation
                                         IConfiguration configuration
                                         )
         {
-            _userSevice = userSevice;
+            _userService = userSevice;
             _emailService = emailService;
             _tokenService = tokenService;
             _configuration = configuration;
@@ -36,7 +36,7 @@ namespace Auction_Marketplace.Services.Implementation
 
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
-            var userExists = await _userSevice.GetByEmailAsync(registerUser.Email);
+            var userExists = await _userService.GetByEmailAsync(registerUser.Email);
 
             if (userExists != null)
             {
@@ -96,7 +96,7 @@ namespace Auction_Marketplace.Services.Implementation
 
             var email = validation.Email;
 
-            var existingUser = await _userSevice.GetByEmailAsync(email);
+            var existingUser = await _userService.GetByEmailAsync(email);
 
             if (existingUser == null)
             {
