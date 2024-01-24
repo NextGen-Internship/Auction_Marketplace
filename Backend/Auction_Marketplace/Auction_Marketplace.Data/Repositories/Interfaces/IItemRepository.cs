@@ -4,6 +4,5 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
 {
     public interface IItemRepository : IRepository<Item>
 	{
-		
 	}
 }
