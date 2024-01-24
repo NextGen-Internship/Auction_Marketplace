@@ -4,8 +4,8 @@ import '../LoginPage/LoginPage.css';
 import './ProfilePicture.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
-import readFileAsBase64 from './ReadFileAsBase64';
-import Navbar from '../../Components/Navbar/NavbarLogin';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
+import UserService from '../../Services/UserService';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -20,8 +20,9 @@ const RegisterPage: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
+  const userService = new UserService(apiService);
+
   const navigate = useNavigate();
-  localStorage.clear();
 
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -89,22 +90,20 @@ const RegisterPage: React.FC = () => {
   const handleRegister = async () => {
     if (firstName && lastName && validateEmail(email) && validatePassword(password)) {
       try {
-        const base64ProfilePicture = profilePicture ? await readFileAsBase64(profilePicture) : null;
 
-        const registerResponse = await apiService.post<any>('api/Authentication/Register', {
-          firstName,
-          lastName,
-          email,
-          password,
-          profilePicture: base64ProfilePicture,
-                  //do not set pic
+        const registerResponse : ApiResponseDTO = await userService.registerUser({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          profilePicture: profilePicture ?? undefined,
         });
 
-        if (registerResponse.succeed) {
+        if (registerResponse.success) {
           console.log('Registartion successful.');
           localStorage.setItem('token', registerResponse.data);
           navigate('/home');
-        } else if (!registerResponse.succeed) {
+        } else if (!registerResponse.success) {
           alert('Register failed. Try again.');
           navigate('/login');
         }
@@ -129,7 +128,6 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="login-container">
-      <Navbar />
       <h2 className='register-header-container'>
         Register
       </h2>

@@ -43,6 +43,7 @@ namespace Auction_Marketplace.Services.Implementation
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
             var userExists = await _userSevice.GetByEmailAsync(registerUser.Email);
+
             if (userExists != null)
             {
                 return new Response<string>()
