@@ -1,16 +1,22 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
+import profilePicture from "../../assets/profilePicture.jpg";
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [profilePic] = useState(profilePicture);
 
   const handleLogout = async () => {
-    localStorage.clear(); 
+    localStorage.clear();
     navigate('/login');
   };
+
+  const isLogOutPage = location.pathname === '/login';
 
   return (
     <nav className="navbar">
@@ -20,35 +26,48 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
             <img src={logo} alt="Logo" className="logo" />
           </Link>
         </div>
-        <div className="nav-links">
+        <div className="nav-links-default">
           <Link to="/home" className="nav-item">
             Home
           </Link>
-          <Link to="/marketplace" className="nav-item">
-            Marketplace
+          <Link to="/auctions" className="nav-item">
+            Auctions
           </Link>
-          <Link to="/aboutUs" className="nav-item">
-            About us
+          <Link to="/causes" className="nav-item">
+            Causes
           </Link>
           <Link to="/policy" className="nav-item">
             Policy
           </Link>
-          {showAuthButtons && (
-            <>
+        </div>
+        {showAuthButtons && (
+          <>
+            <div className="nav-links-user">
               <Link to="/login" className="nav-item">
                 Login
               </Link>
               <Link to="/register" className="nav-item">
                 Register
               </Link>
-            </>
-          )}
-          {!showAuthButtons && (
+            </div>
+          </>
+        )}
+        {!showAuthButtons && !isLogOutPage && (
+          <div className="nav-links-user">
+            <Link to="/profile">
+              <div className="profile-picture-container">
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  className="profile-picture"
+                />
+              </div>
+            </Link>
             <Link to="/login" className="nav-item" onClick={handleLogout}>
               Log out
             </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );

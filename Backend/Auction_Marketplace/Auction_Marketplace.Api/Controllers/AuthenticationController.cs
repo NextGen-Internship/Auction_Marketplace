@@ -72,18 +72,15 @@ namespace Auction_Marketplace.Api.Controllers
         [Authorize]
         public async Task<IActionResult> LogOut()
         {
-
             try
             {
                 await _authService.Logout();
-
                 return Ok();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
-            
+            }  
         }
 
     }
