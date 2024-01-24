@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/NavbarUser';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 
@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar showAuthButtons={false} />
       <div className="header-menu">
         <h1>Welcome to the Blankfactor Auction/Donation Marketplace</h1>
         <p>Buy or donate items for a good cause!</p>
