@@ -31,6 +31,7 @@
     <None Remove="Models\Google\" />
     <None Remove="Repositories\Interfaces\" />
     <None Remove="Repositories\Implementation\" />
+    <None Remove="Models\Donation\" />
     <None Remove="Models\Auction\" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +43,7 @@
     <Folder Include="Models\Google\" />
     <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Repositories\Implementation\" />
+    <Folder Include="Models\Donation\" />
     <Folder Include="Models\Auction\" />
   </ItemGroup>
 </Project>

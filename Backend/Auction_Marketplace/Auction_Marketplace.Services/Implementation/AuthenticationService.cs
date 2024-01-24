@@ -15,7 +15,7 @@ namespace Auction_Marketplace.Services.Implementation
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserService _userSevice;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
@@ -32,7 +32,7 @@ namespace Auction_Marketplace.Services.Implementation
                                         IS3Service s3Service
                                         )
         {
-            _userSevice = userSevice;
+            _userService = userSevice;
             _emailService = emailService;
             _tokenService = tokenService;
             _configuration = configuration;
@@ -42,7 +42,7 @@ namespace Auction_Marketplace.Services.Implementation
         }
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
-            var userExists = await _userSevice.GetByEmailAsync(registerUser.Email);
+            var userExists = await _userService.GetByEmailAsync(registerUser.Email);
 
             if (userExists != null)
             {
@@ -94,6 +94,10 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
             var email = validation.Email;
+
+            var existingUser = await _userService.GetByEmailAsync(email);
+
+
             var existingUser = await _userSevice.GetByEmailAsync(email);
             if (existingUser == null)
             {
