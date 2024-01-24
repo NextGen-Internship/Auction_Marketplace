@@ -4,6 +4,8 @@ namespace Auction_Marketplace.Data.Models.Donation
 {
 	public class PaymentViewModel
 	{
+		public int UserId { get; set; }
+
 		public int EndUserId { get; set; }
 
 		public PaymentFor Type { get; set; }

@@ -14,7 +14,7 @@
 
         public bool IsCompleted { get; set; }
 
-        public IEnumerable<PaymentViewModel> Donations { get; set; } = new List<PaymentViewModel>();
+        public ICollection<PaymentViewModel> Donations { get; set; } = new List<PaymentViewModel>();
     }
 }
 

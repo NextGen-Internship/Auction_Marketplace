@@ -50,7 +50,16 @@ namespace Auction_Marketplace.Services.Implementation
                     AmountNeeded  = cause.AmountNeeded,
                     AmountCurrent = cause.AmountCurrent,
                     IsCompleted = cause.IsCompleted,
-                    Donations = (ICollection<Payment>)cause.Donations
+                    Donations = cause.Donations.Select(d => new Payment
+                    {
+                        UserId = d.UserId,
+                        EndUserId = d.EndUserId,
+                        Type = d.Type,
+                        UserPaymentMethodId = d.MethodId,
+                        IsCompleted = d.IsCompleted,
+                        Amount = d.Amount,
+                        Date = d.Date
+                    }).ToList()
                 };
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name) || newCause.UserId <= 0)
