@@ -83,14 +83,14 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
             await this.SetDeletedOn(entityId);
             return await this.SaveChangesAsync();
         }
-
+        
         public async Task<int> DeleteRangeAsync(IEnumerable<T> entities)// Soft delete
         {
             foreach (var entity in entities)
             {
                 entity.DeletedOn = DateTime.UtcNow;
             }
-
+        
             return await this.SaveChangesAsync();
         }
 
@@ -112,7 +112,7 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         private async Task SetDeletedOn(int id)
         {
             var entity = await GetAsync(id);
-
+        
             entity.DeletedOn = DateTime.UtcNow;
         }
     }
