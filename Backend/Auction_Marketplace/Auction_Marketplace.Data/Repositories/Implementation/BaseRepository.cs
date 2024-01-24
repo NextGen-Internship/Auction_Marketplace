@@ -78,21 +78,21 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
             return await this._context.SaveChangesAsync();
         }
 
-        //public async Task<int> DeleteAsync(int entityId)// Soft delete
-        //{
-        //    await this.SetDeletedOn(entityId);
-        //    return await this.SaveChangesAsync();
-        //}
-        //
-        //public async Task<int> DeleteRangeAsync(IEnumerable<T> entities)// Soft delete
-        //{
-        //    foreach (var entity in entities)
-        //    {
-        //        entity.DeletedOn = DateTime.UtcNow;
-        //    }
-        //
-        //    return await this.SaveChangesAsync();
-        //}
+        public async Task<int> DeleteAsync(int entityId)// Soft delete
+        {
+            await this.SetDeletedOn(entityId);
+            return await this.SaveChangesAsync();
+        }
+        
+        public async Task<int> DeleteRangeAsync(IEnumerable<T> entities)// Soft delete
+        {
+            foreach (var entity in entities)
+            {
+                entity.DeletedOn = DateTime.UtcNow;
+            }
+        
+            return await this.SaveChangesAsync();
+        }
 
 
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate)
@@ -109,12 +109,12 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
             }
         }
 
-        //private async Task SetDeletedOn(int id)
-        //{
-        //    var entity = await GetAsync(id);
-        //
-        //    entity.DeletedOn = DateTime.UtcNow;
-        //}
+        private async Task SetDeletedOn(int id)
+        {
+            var entity = await GetAsync(id);
+        
+            entity.DeletedOn = DateTime.UtcNow;
+        }
     }
 }
 

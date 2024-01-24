@@ -99,11 +99,14 @@ const RegisterPage: React.FC = () => {
           profilePicture: profilePicture ?? undefined,
         });
 
-        if (registerResponse.success) {
+        console.log(registerResponse);
+        
+
+        if (registerResponse.succeed) {
           console.log('Registartion successful.');
           localStorage.setItem('token', registerResponse.data);
           navigate('/home');
-        } else if (!registerResponse.success) {
+        } else {
           alert('Register failed. Try again.');
           navigate('/login');
         }

@@ -132,6 +132,7 @@ namespace Auction_Marketplace.Services.Implementation
             //Creates the JWT
             var token = _tokenService.GenerateJwtToken(user);
             await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.FirstName},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
+
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
 
             if (!isCreated.Succeeded)
