@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Auction_Marketplace.Services.Constants;
 using Google.Apis.Auth.OAuth2.Responses;
+using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -54,8 +55,8 @@ namespace Auction_Marketplace.Services.Implementation
             User user = new User();
             if (registerUser.ProfilePicture != null)
             {
-                var fileName = String.Format(AWSConstants.UploadProfilePictureName, user.Email);
-                var path = String.Format(AWSConstants.UploadProfilePicturePath, user.Email);
+                var fileName = String.Format(AWSConstants.UploadProfilePictureName, registerUser.Email);
+                var path = String.Format(AWSConstants.UploadProfilePicturePath, registerUser.Email);
                 user.ProfilePicture = await _s3Service.UploadFileAsync(registerUser.ProfilePicture, path, fileName);
             }
 

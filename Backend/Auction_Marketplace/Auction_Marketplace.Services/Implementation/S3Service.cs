@@ -4,29 +4,29 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
-using Amazon;
+using System.Net;
+using System.IO;
 
 namespace Auction_Marketplace.Services.Implementation
 {
 	public class S3Service : IS3Service
 	{
-		//private readonly IAmazonS3 _s3Client;
+		private readonly IAmazonS3 _s3Client;
         private readonly IConfiguration _configuration;
 
 
-        public S3Service(IConfiguration configuration)
+        public S3Service(IConfiguration configuration, IAmazonS3 s3Client)
 		{
-			//_s3Client = s3Client;
+			_s3Client = s3Client;
             _configuration = configuration;
 		}
 
         public async Task<string> UploadFileAsync(IFormFile file, string path, string fileName)
         {
-            var s3Client = new AmazonS3Client("AKIA5V4FKJ37BVNWYUWQ", "ZhCRGnOKyahzLpT0NgC2gMDE2gsdKuv5rXYZ8pDF", RegionEndpoint.EUCentral1);
+            string bucketName = _configuration["AWS:BUCKET_NAME"];
+            string key = $"{path}/{fileName}"; 
 
-
-            var bucketName = _configuration.GetSection("AWS").GetValue<string>("bf-int-auction-marketplace");
-
+            
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 InputStream = file.OpenReadStream(),
@@ -36,7 +36,7 @@ namespace Auction_Marketplace.Services.Implementation
                 ContentType = file.ContentType
             };
 
-            using (var fileTrasferUtility = new TransferUtility(s3Client))
+            using (var fileTrasferUtility = new TransferUtility(_s3Client))
             {
                 await fileTrasferUtility.UploadAsync(uploadRequest);
             }
@@ -44,14 +44,48 @@ namespace Auction_Marketplace.Services.Implementation
             var expiryUrlRequest = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
-                Key = $"{path}/{fileName}"
+                Key = $"{path}/{fileName}",
+                Expires = DateTime.UtcNow.AddDays(7)
             };
 
-            var url = s3Client.GetPreSignedURL(expiryUrlRequest);
+            var url = _s3Client.GetPreSignedURL(expiryUrlRequest);
 
             return url;
+            
         }
 
+        public async Task<byte[]> DownloadFileAsync(string file)
+        {
+            MemoryStream ms = null;
 
+            try
+            {
+                GetObjectRequest getObjectRequest = new GetObjectRequest
+                {
+                    BucketName = _configuration["AWS:BUCKET_NAME"],
+                    Key = file
+                };
+
+                using (var response = await _s3Client.GetObjectAsync(getObjectRequest))
+                {
+                    if (response.HttpStatusCode == HttpStatusCode.OK)
+                    {
+                        using (ms = new MemoryStream())
+                        {
+                            await response.ResponseStream.CopyToAsync(ms);
+                        }
+                    }
+                }
+
+                if (ms is null || ms.ToArray().Length < 1)
+                    throw new FileNotFoundException(string.Format("The document '{0}' is not found", file));
+
+                return ms.ToArray();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

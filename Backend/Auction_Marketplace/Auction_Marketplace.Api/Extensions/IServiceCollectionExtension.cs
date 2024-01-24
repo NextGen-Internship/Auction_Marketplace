@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using Amazon.Runtime;
 using Amazon.S3;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
@@ -119,9 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
 
-            //services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-
-            //services.AddAWSService<IAmazonS3>();
+            services.AddDefaultAWSOptions(configuration.GetAWSOptions()).AddAWSService<IAmazonS3>();
 
             return services;
         }
