@@ -1,9 +1,10 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.RegisterDbContext(builder.Configuration, builder.Environment)
                            .RegisterAuthentication(builder.Configuration)
-                           .ConfigureServices();
+                           .ConfigureServices(builder.Configuration);
 
 builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>

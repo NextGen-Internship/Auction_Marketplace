@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
            password
           });
         console.log('Login response:', loginResponse);
-        if (loginResponse.success) {
+        if (loginResponse.succeed) {
           console.log('Authentication successful');
           localStorage.setItem('token', loginResponse.data);
           navigate('/home');
@@ -72,14 +72,14 @@ const LoginPage: React.FC = () => {
     console.log('Google Login success:', credentialResponse);
     try {
       const loginResponse = await userService.loginUserWithGoogle(credentialResponse.credential);
-      if (loginResponse.success) {
+      if (loginResponse.succeed) {
         console.log('Authentication successful');
         localStorage.setItem('token', loginResponse.data);
         navigate('/home');
       } else {
      
           const createUserResponse = await userService.loginUserWithGoogle(credentialResponse.profile.email);
-          if (createUserResponse.success) {
+          if (createUserResponse.succeed) {
             console.log('User created successfully. Logging in...');
             navigate('/home');
           } else {

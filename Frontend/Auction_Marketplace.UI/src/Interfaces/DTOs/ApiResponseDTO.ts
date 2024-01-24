@@ -1,5 +1,5 @@
 interface ApiResponseDTO {
-    success: boolean;
+    succeed: boolean;
     message?: string;
     data?: any;
   }
