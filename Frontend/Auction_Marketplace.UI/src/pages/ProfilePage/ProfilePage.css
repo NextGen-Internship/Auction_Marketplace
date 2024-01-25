@@ -1,25 +1,66 @@
-.profile-page-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5; 
-    padding: 20px; 
-    border: 1px solid #ddd; 
-    border-radius: 10px; 
-    content: normal;
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
   }
   
-.profile-picture-page-container {
+  .profile-container {
+    background-color: white;
+    margin: 2px;
+    position: static;
+    border-radius: 5px;
+    padding: 40px;
+  }
+
+  .user-info {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+  }
+  
+  .user-avatar img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid black;
-    margin: 20px;
-}
+    margin-right: 60px;
+    object-fit: cover; 
+  }
   
-.profile-picture {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+  .user-details {
+    flex-grow: 1;
+  }
+
+  .profile-edit {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .profile-edit form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-edit label {
+    margin-bottom: 8px;
+  }
+  
+  .profile-edit input {
+    padding: 8px;
+  }
+  
+  .profile-edit button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-edit button:hover {
+    background-color: #0056b3;
+  }
+  
