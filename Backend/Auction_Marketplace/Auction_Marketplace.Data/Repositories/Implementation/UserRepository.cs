@@ -1,4 +1,5 @@
 ﻿using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,19 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
         }
 
+        public Task<Response<List<User>>> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetUserById(int userId)
+        {
+            return await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
         }
     }
 }

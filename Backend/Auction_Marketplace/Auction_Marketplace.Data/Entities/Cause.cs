@@ -1,13 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Auction_Marketplace.Data.Entities.Abstract;
 
 namespace Auction_Marketplace.Data.Entities
 {
-	public class Cause : IBaseEntity
-	{
+    public class Cause : IBaseEntity
+    {
         [Key]
         public int CauseId { get; set; }
 
@@ -31,6 +30,8 @@ namespace Auction_Marketplace.Data.Entities
         [Required]
         [DefaultValue(false)]
         public bool IsCompleted { get; set; }
+
+        public ICollection<Payment> Donations { get; set; } = new List<Payment>();
 
         // Implementing IBaseEntity interface
         public DateTime CreatedAt { get; set; }

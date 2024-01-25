@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Auction_Marketplace.Data.Entities;
 
 namespace Auction_Marketplace.Data.Models.Auction
 {

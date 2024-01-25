@@ -1,4 +1,5 @@
 ﻿using Auction_Marketplace.Data.Entities.Abstract;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,8 +15,7 @@ namespace Auction_Marketplace.Data.Entities
         [MaxLength(50)]
         public string LastName { get; set; }
 
-        [MaxLength(255)]
-        public string? ProfilePicture { get; set; }
+        public string ProfilePicture { get; set; }
 
         // Implementing IBaseEntity interface
         public DateTime CreatedAt { get; set; }
