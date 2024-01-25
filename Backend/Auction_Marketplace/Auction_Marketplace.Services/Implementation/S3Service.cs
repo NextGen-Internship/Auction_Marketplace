@@ -5,11 +5,10 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
 using System.Net;
-using System.IO;
 
 namespace Auction_Marketplace.Services.Implementation
 {
-	public class S3Service : IS3Service
+	public class S3Service //: IS3Service
 	{
 		private readonly IAmazonS3 _s3Client;
         private readonly IConfiguration _configuration;
@@ -54,38 +53,38 @@ namespace Auction_Marketplace.Services.Implementation
             
         }
 
-        public async Task<byte[]> DownloadFileAsync(string file)
-        {
-            MemoryStream ms = null;
+        //public async Task<byte[]> DownloadFileAsync(string file)
+        //{
+        //    MemoryStream ms = null;
 
-            try
-            {
-                GetObjectRequest getObjectRequest = new GetObjectRequest
-                {
-                    BucketName = _configuration["AWS:BUCKET_NAME"],
-                    Key = file
-                };
+        //    try
+        //    {
+        //        GetObjectRequest getObjectRequest = new GetObjectRequest
+        //        {
+        //            BucketName = _configuration["AWS:BUCKET_NAME"],
+        //            Key = file
+        //        };
 
-                using (var response = await _s3Client.GetObjectAsync(getObjectRequest))
-                {
-                    if (response.HttpStatusCode == HttpStatusCode.OK)
-                    {
-                        using (ms = new MemoryStream())
-                        {
-                            await response.ResponseStream.CopyToAsync(ms);
-                        }
-                    }
-                }
+        //        using (var response = await _s3Client.GetObjectAsync(getObjectRequest))
+        //        {
+        //            if (response.HttpStatusCode == HttpStatusCode.OK)
+        //            {
+        //                using (ms = new MemoryStream())
+        //                {
+        //                    await response.ResponseStream.CopyToAsync(ms);
+        //                }
+        //            }
+        //        }
 
-                if (ms is null || ms.ToArray().Length < 1)
-                    throw new FileNotFoundException(string.Format("The document '{0}' is not found", file));
+        //        if (ms is null || ms.ToArray().Length < 1)
+        //            throw new FileNotFoundException(string.Format("The document '{0}' is not found", file));
 
-                return ms.ToArray();
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-        }
+        //        return ms.ToArray();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

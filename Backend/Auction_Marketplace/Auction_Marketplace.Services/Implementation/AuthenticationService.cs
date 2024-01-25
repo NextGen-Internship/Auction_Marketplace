@@ -6,10 +6,7 @@ using Newtonsoft.Json;
 using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
 using Auction_Marketplace.Services.Constants;
-using Google.Apis.Auth.OAuth2.Responses;
-using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -98,7 +95,7 @@ namespace Auction_Marketplace.Services.Implementation
             var existingUser = await _userService.GetByEmailAsync(email);
 
 
-            var existingUser = await _userSevice.GetByEmailAsync(email);
+           // var existingUser = await _userSevice.GetByEmailAsync(email);
             if (existingUser == null)
             {
 

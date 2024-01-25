@@ -1,6 +1,6 @@
-﻿using Auction_Marketplace.Services.Implementation;
+﻿using Auction_Marketplace.Data.Models.Stripe;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Stripe.Checkout;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -8,17 +8,18 @@ namespace Auction_Marketplace.Api.Controllers
     [ApiController]
     public class CheckoutApiController : ControllerBase
     {
-        private readonly StripeService _stripeService;
+        private readonly IStripeService _stripeService;
 
-        public CheckoutApiController(StripeService stripeService)
+        public CheckoutApiController(IStripeService stripeService)
         {
             _stripeService = stripeService;
         }
 
         [HttpPost]
-        public IActionResult CreateCheckoutSession()
+        [Route("create-checkout-session")]
+        public IActionResult CreateCheckoutSession(CauseViewModel model)
         {
-            var session = _stripeService.CreateCheckoutSession();
+            var session = _stripeService.CreateCheckoutSession(model);
 
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);

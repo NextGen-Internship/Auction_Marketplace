@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 
 const HomePage: React.FC = () => {
   const token = getToken();
