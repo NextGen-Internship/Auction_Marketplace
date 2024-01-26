@@ -1,15 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
-import profilePicture from "../../assets/profilePicture.jpg";
+import { getToken } from '../../utils/AuthUtil';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
+import UserService from '../../Services/UserService';
+import ApiService from '../../Services/ApiService';
+
+const apiService = new ApiService;
+const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
+  const token = getToken();
+
   const navigate = useNavigate();
   const location = useLocation();
+  const [profilePicture, setProfilePicture] = useState();
 
-  const [profilePic] = useState(profilePicture);
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    profilePicture: ''
+  })
+
+  const fetchUserProfile = async () => {
+    try {
+      if (token) {
+        const response: ApiResponseDTO = await userService.fetchUser();
+        const userData = response.data;
+        if (response.succeed) {
+          setUser(userData);
+        }
+      }
+    } catch (error) {
+      console.error('Error during user profile fetch:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchUserProfile();
+    }
+  }, [token]
+  );
 
   const handleLogout = async () => {
     localStorage.clear();
@@ -57,7 +92,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
             <Link to="/profile">
               <div className="profile-picture-container">
                 <img
-                  src={profilePic}
+                  src={user.profilePicture}
                   alt="Profile"
                   className="profile-picture"
                 />

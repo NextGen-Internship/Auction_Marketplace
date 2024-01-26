@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import profilePicture from "../../assets/profilePicture.jpg";
 import "./ProfilePage.css";
 import { FaEdit } from 'react-icons/fa';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
@@ -19,12 +18,14 @@ const ProfilePage: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [profilePicture, setProfilePicture] = useState('');
+    const [email] = useState('');
 
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
         email: '',
+        profilePicture: ''
     });
 
     const fetchUserProfile = async () => {
@@ -45,34 +46,22 @@ const ProfilePage: React.FC = () => {
         if (token) {
             fetchUserProfile();
         }
-    }, [token]);
+    }, [token]
+    );
 
     const handleEditClick = () => {
         setEditMode(true);
     };
 
-   const handleSaveClick = async () => {
+    const handleSaveClick = async () => {
         setEditMode(false);
-
-        //TO DO: update
         try {
-            const response = await fetch('YOUR_BACKEND_ENDPOINT', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Add any necessary authentication headers (e.g., JWT token)
-                    // 'Authorization': `Bearer ${YOUR_JWT_TOKEN}`,
-                },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                }),
-            });
-            if (response.ok) {
-                console.log('Profile updated successfully!');
-            } else {
-                console.error('Failed to update profile:', response.statusText);
+            if (token) {
+                const response: ApiResponseDTO = await userService.updateUser(user);
+                const userData = response.data;
+                if (response.succeed) {
+                    setUser(userData);
+                }
             }
         } catch (error) {
             console.error('Error during profile update:', error);
@@ -80,7 +69,6 @@ const ProfilePage: React.FC = () => {
             setEditMode(false);
         }
     };
-    
 
     if (!token) {
         return (
@@ -101,7 +89,7 @@ const ProfilePage: React.FC = () => {
                     <h2>User Profile</h2>
                     <div className="user-info">
                         <div className="user-avatar">
-                            <img src={profilePicture} alt="Profile" />
+                            <img src={user.profilePicture} alt="Profile" />
                         </div>
                         <div className="user-details">
                             <div className="user-detail">
@@ -109,7 +97,7 @@ const ProfilePage: React.FC = () => {
                                 {editMode ? (
                                     <input
                                         type="text"
-                                        value={user.firstName}
+                                        value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                     />
                                 ) : (
@@ -127,7 +115,7 @@ const ProfilePage: React.FC = () => {
                                 {editMode ? (
                                     <input
                                         type="text"
-                                        value={user.lastName}
+                                        value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                     />
                                 ) : (

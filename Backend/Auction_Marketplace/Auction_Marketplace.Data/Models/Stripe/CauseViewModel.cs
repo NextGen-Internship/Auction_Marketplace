@@ -1,5 +1,4 @@
-﻿using System;
-namespace Auction_Marketplace.Data.Models.Stripe
+﻿namespace Auction_Marketplace.Data.Models.Stripe
 {
 	public class CauseViewModel
 	{

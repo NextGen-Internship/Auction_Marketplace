@@ -51,6 +51,34 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
+        public async Task<Response<string>> UpdateUserInfo(string email, UserViewModel updatedUser)
+        {
+            try
+            {
+                var existingUser = await _userRepository.GetUserByViewModel(email);
+
+                existingUser.FirstName = updatedUser.FirstName;
+                existingUser.LastName = updatedUser.LastName;
+                existingUser.ProfilePicture = updatedUser.ProfilePicture;
+
+                await _userRepository.UpdateUserInfo(existingUser);
+
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Data = updatedUser.ToString()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = $"{ex.Message}"
+                };
+            }
+        }
+
         public async Task<Response<List<User>>> GetAllUsers()
         {
             try

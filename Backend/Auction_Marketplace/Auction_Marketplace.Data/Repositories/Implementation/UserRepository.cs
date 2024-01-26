@@ -30,5 +30,11 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
             return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
+
+        public async Task UpdateUserInfo(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -16,4 +16,3 @@ namespace Auction_Marketplace.Data.Models.User
 		public string? ProfilePicture { get; set; }
 	}
 }
-
