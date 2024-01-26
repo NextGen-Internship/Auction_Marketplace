@@ -3,3 +3,4 @@ VITE_BASE_URL=https://localhost:7141
 VITE_REGISTER_ENDPOINT=api/Authentication/Register
 VITE_LOGIN_ENDPOINT=api/Authentication/Login
 VITE_GOOGLE_LOGIN_ENDPOINT=api/Authentication/google-login
+VITE_CREATE_CAUSE_ENDPOINT=api/Cause

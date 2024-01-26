@@ -50,7 +50,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCause(CauseViewModel cause)
+        public async Task<IActionResult> CreateCause([FromForm] NewCauseViewModel cause)
         {
             try
             {

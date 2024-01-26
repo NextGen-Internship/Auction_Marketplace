@@ -19,11 +19,13 @@ namespace Auction_Marketplace.Data.Entities
 
         public string Description { get; set; }
 
+        public string Photo { get; set; }
+
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal AmountNeeded { get; set; }
 
-        [Required]
+ 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal AmountCurrent { get; set; }
 
