@@ -94,8 +94,6 @@ namespace Auction_Marketplace.Services.Implementation
 
             var existingUser = await _userService.GetByEmailAsync(email);
 
-
-           // var existingUser = await _userSevice.GetByEmailAsync(email);
             if (existingUser == null)
             {
 

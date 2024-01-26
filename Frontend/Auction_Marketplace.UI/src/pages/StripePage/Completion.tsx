@@ -1,4 +1,4 @@
-function Completion(props: any){
+function Completion(){
     return <h1>Your payment has been succssesful!</h1>
 }
 

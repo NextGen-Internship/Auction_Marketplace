@@ -6,7 +6,7 @@ namespace Auction_Marketplace.Services.Interface
 {
 	public interface IStripeService : IService
 	{
-		Session CreateCheckoutSession(CauseViewModel cause);
+		Session CreateCheckoutSession(ItemOrDonationViewModel cause);
 	}
 }
 

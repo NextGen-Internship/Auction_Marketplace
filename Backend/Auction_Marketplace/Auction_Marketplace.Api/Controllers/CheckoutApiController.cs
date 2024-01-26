@@ -16,8 +16,8 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
-        [Route("create-checkout-session")]
-        public IActionResult CreateCheckoutSession(CauseViewModel model)
+        [Route("create-session")]
+        public IActionResult CreateCheckoutSession([FromForm] ItemOrDonationViewModel model)
         {
             var session = _stripeService.CreateCheckoutSession(model);
 

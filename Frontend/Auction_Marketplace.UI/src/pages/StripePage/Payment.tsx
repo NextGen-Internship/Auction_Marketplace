@@ -3,14 +3,14 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckForm from "./CheckoutForm";
 
-function Payment(props: any) {
+function Payment() {
   const [stripePromise, setStripePromise] = useState<Stripe | null>(null);
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
     const fetchStripeKeys = async () => {
       try {
-        const response = await fetch("https://your-backend-api/api/stripe-keys");
+        const response = await fetch("https://localhost:7141/api/CheckoutApi/create-session");
         const { publishableKey } = await response.json();
 
         setStripePromise(await loadStripe(publishableKey));
@@ -26,7 +26,7 @@ function Payment(props: any) {
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
-        const response = await fetch("https://your-backend-api/api/client-secret", {
+        const response = await fetch("https://localhost:7141/api/CheckoutApi/create-session", {
           method: "POST",
           body: JSON.stringify({}),
         });

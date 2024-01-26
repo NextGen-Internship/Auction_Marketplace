@@ -1,19 +1,29 @@
 ﻿using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Stripe.Checkout;
 
 namespace Auction_Marketplace.Services.Implementation
 {
+    
     public class StripeService : IStripeService
     {
-        public Session CreateCheckoutSession(CauseViewModel cause)
+        private readonly IConfiguration _configuration;
+
+        public StripeService(IConfiguration configuration)
         {
-            var domain = "https://localhost:7141/"; // ToDo: add to appsettings
+            _configuration = configuration;
+        }
+
+        public Session CreateCheckoutSession(ItemOrDonationViewModel cause)
+        {
+            var domain = _configuration["AppDomain"];
             var options = new SessionCreateOptions()
             {
                 Mode = "payment",
-                SuccessUrl = domain + "Checkout/OrderConfirmation", 
-                CancelUrl = domain + "Checkout/CancelPayment",  
+                SuccessUrl = domain + "OrderConfirmation",
+                CancelUrl = domain + "CancelPayment",
                 LineItems = new List<SessionLineItemOptions>()
                 {
                     new SessionLineItemOptions()
@@ -22,7 +32,11 @@ namespace Auction_Marketplace.Services.Implementation
                         PriceData = new SessionLineItemPriceDataOptions
                         {
                             Currency = "usd",
-                            UnitAmountDecimal = cause.Price,
+                            UnitAmountDecimal = 100,
+                            ProductData= new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = "eho"
+                            }
                         }
                     }
                 },
@@ -40,5 +54,5 @@ namespace Auction_Marketplace.Services.Implementation
             return session;
         }
     }
-}
+ }
 
