@@ -2,6 +2,7 @@ import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import GoogleLoginDTO from '../Interfaces/DTOs/GoogleLoginDTO';
 import LoginDTO from '../Interfaces/DTOs/LoginDTO';
 import RegisterDTO from '../Interfaces/DTOs/RegisterDTO';
+import UserDTO from '../Interfaces/DTOs/UserDTO';
 import ApiService from './ApiService';
 
 class UserService {
@@ -9,6 +10,7 @@ class UserService {
   private LOGIN_ENDPOINT = import.meta.env.VITE_LOGIN_ENDPOINT;
   private GOOGLE_LOGIN_ENDPOINT = import.meta.env.VITE_GOOGLE_LOGIN_ENDPOINT;
   private LOGOUT_ENDPOINT = import.meta.env.VITE_LOGOUT_ENDPOINT;
+  private GET_USER_ENDPOINT = import.meta.env.VITE_GET_USER_ENDPOINT;
   private apiService: ApiService;
 
   constructor(apiService: ApiService) {
@@ -38,6 +40,10 @@ class UserService {
 
   async logout(): Promise<ApiResponseDTO> {
     return this.apiService.get<ApiResponseDTO>(this.LOGOUT_ENDPOINT);
+  }
+
+  async fetchUser(): Promise<ApiResponseDTO> {
+    return this.apiService.get<ApiResponseDTO>(this.GET_USER_ENDPOINT);
   }
 }
 

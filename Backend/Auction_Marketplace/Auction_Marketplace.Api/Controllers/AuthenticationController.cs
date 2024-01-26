@@ -19,6 +19,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Route("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel registerUser)
         {
             try
@@ -31,7 +32,6 @@ namespace Auction_Marketplace.Api.Controllers
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
-            
         }
 
         [HttpPost]
@@ -53,7 +53,8 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost("google-login")]
-        public async Task<IActionResult> GoogleLogin(GoogleLoginViewModel googleLogin)
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginViewModel googleLogin)
         {
             try
             {

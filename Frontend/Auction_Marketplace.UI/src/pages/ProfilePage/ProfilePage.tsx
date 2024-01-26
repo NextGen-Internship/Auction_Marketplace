@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
@@ -6,15 +6,48 @@ import '../../Components/TokenExp/TokenExpContainer.css';
 import profilePicture from "../../assets/profilePicture.jpg";
 import "./ProfilePage.css";
 import { FaEdit } from 'react-icons/fa';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
+import UserService from '../../Services/UserService.ts';
+import ApiService from '../../Services/ApiService.ts';
 
+const apiService = new ApiService;
+const userService = new UserService(apiService);
 
 const ProfilePage: React.FC = () => {
     const token = getToken();
 
     const [editMode, setEditMode] = useState(false);
-    const [firstName, setFirstName] = useState('Savina');
-    const [lastName, setLastName] = useState('Valchanova');
-    const [email, setEmail] = useState('test@example.com');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+    });
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                if (token) {
+                    const response: ApiResponseDTO = await userService.fetchUser();
+                    console.log('Login response:', response);
+                    if (response.succeed) {
+                        const userData = response.data;
+                        setUser(userData);
+                    }
+                }
+            } catch (error) {
+                console.error('Error during user profile fetch:', error);
+            }
+        };
+
+        if (token) {
+            fetchUserProfile();
+        }
+    }, [token]);
+
 
     const handleEditClick = () => {
         setEditMode(true);
@@ -86,6 +119,9 @@ const ProfilePage: React.FC = () => {
                                 {editMode && (
                                     <FaEdit className="edit-icon" onClick={handleSaveClick} />
                                 )}
+                                {!editMode && (
+                                    <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                )}
                             </div>
                             <div className="user-detail">
                                 <label>Last name:</label>
@@ -101,25 +137,13 @@ const ProfilePage: React.FC = () => {
                                 {editMode && (
                                     <FaEdit className="edit-icon" onClick={handleSaveClick} />
                                 )}
+                                {!editMode && (
+                                    <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                )}
                             </div>
                             <div className="user-detail">
-                                <label>Email:</label>
-                                {editMode ? (
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                ) : (
-                                    <p>{email}</p>
-                                )}
-                                {editMode && (
-                                    <FaEdit className="edit-icon" onClick={handleSaveClick} />
-                                )}
+                                <label>Email: {email}</label>
                             </div>
-                            {!editMode && (
-                                <FaEdit className="edit-icon" onClick={handleEditClick} />
-                            )}
                         </div>
                     </div>
                 </div>

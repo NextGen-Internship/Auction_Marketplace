@@ -25,5 +25,10 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
             return await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
         }
+
+        public async Task<User?> GetUserByViewModel(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+        }
     }
 }
