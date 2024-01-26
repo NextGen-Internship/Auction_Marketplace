@@ -27,33 +27,31 @@ const ProfilePage: React.FC = () => {
         email: '',
     });
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                if (token) {
-                    const response: ApiResponseDTO = await userService.fetchUser();
-                    console.log('Login response:', response);
-                    if (response.succeed) {
-                        const userData = response.data;
-                        setUser(userData);
-                    }
+    const fetchUserProfile = async () => {
+        try {
+            if (token) {
+                const response: ApiResponseDTO = await userService.fetchUser();
+                const userData = response.data;
+                if (response.succeed) {
+                    setUser(userData);
                 }
-            } catch (error) {
-                console.error('Error during user profile fetch:', error);
             }
-        };
+        } catch (error) {
+            console.error('Error during user profile fetch:', error);
+        }
+    };
 
+    useEffect(() => {
         if (token) {
             fetchUserProfile();
         }
     }, [token]);
 
-
     const handleEditClick = () => {
         setEditMode(true);
     };
 
-    const handleSaveClick = async () => {
+   const handleSaveClick = async () => {
         setEditMode(false);
 
         //TO DO: update
@@ -82,6 +80,7 @@ const ProfilePage: React.FC = () => {
             setEditMode(false);
         }
     };
+    
 
     if (!token) {
         return (
@@ -110,11 +109,11 @@ const ProfilePage: React.FC = () => {
                                 {editMode ? (
                                     <input
                                         type="text"
-                                        value={firstName}
+                                        value={user.firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                     />
                                 ) : (
-                                    <p>{firstName}</p>
+                                    <p>{user.firstName}</p>
                                 )}
                                 {editMode && (
                                     <FaEdit className="edit-icon" onClick={handleSaveClick} />
@@ -128,11 +127,11 @@ const ProfilePage: React.FC = () => {
                                 {editMode ? (
                                     <input
                                         type="text"
-                                        value={lastName}
+                                        value={user.lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                     />
                                 ) : (
-                                    <p>{lastName}</p>
+                                    <p>{user.lastName}</p>
                                 )}
                                 {editMode && (
                                     <FaEdit className="edit-icon" onClick={handleSaveClick} />
@@ -142,7 +141,7 @@ const ProfilePage: React.FC = () => {
                                 )}
                             </div>
                             <div className="user-detail">
-                                <label>Email: {email}</label>
+                                <label>Email: {user.email}</label>
                             </div>
                         </div>
                     </div>

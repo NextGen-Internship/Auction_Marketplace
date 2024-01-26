@@ -2,7 +2,6 @@ import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import GoogleLoginDTO from '../Interfaces/DTOs/GoogleLoginDTO';
 import LoginDTO from '../Interfaces/DTOs/LoginDTO';
 import RegisterDTO from '../Interfaces/DTOs/RegisterDTO';
-import UserDTO from '../Interfaces/DTOs/UserDTO';
 import ApiService from './ApiService';
 
 class UserService {
