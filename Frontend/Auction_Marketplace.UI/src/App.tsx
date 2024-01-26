@@ -11,6 +11,7 @@ import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 function App() {
   return (
     <div>
+      <img src="/Users/Teoslava.Yordanova/Downloads/%2FHidden_Resources%2FUsers%2Fwsedrf@abv.bg%2FProfilePicture%2Fwsedrf@abv.bg%2FProfilePicture" alt="" />
       <Router>
         <Navbar showAuthButtons={true} />
         <Routes>
