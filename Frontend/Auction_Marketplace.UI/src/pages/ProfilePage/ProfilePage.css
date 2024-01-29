@@ -1,70 +1,97 @@
 .profile-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .profile-container {
-    background-color: white;
-    margin: 2px;
-    position: static;
-    border-radius: 5px;
-    padding: 40px;
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  .user-info {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 5px;
-    display: flex;
-  }
-  
-  .user-avatar img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-right: 0px;
-    object-fit: cover; 
-  }
-  
-  .user-details {
-    flex-grow: 1;
-  }
+.profile-container {
+  background-color: white;
+  margin: 2px;
+  position: static;
+  border-radius: 5px;
+  padding: 40px;
+}
 
-  .profile-edit {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  .profile-edit form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .profile-edit label {
-    margin-bottom: 8px;
-  }
-  
-  .profile-edit input {
-    padding: 8px;
-  }
-  
-  .profile-edit button {
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .profile-edit button:hover {
-    background-color: #0056b3;
-  }
+.user-info {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+}
 
-  .edit-icon {
-    padding: 10px;
-  }
-  
+.user-avatar {
+  border-style: solid;
+}
+
+.user-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 30px;
+  object-fit: cover;
+  border-style: solid;
+}
+
+.user-details label {
+  flex-grow: 1;
+  margin-right: 5px;
+}
+
+.user-detail {
+  margin: 20px;
+  border-style: solid;
+  padding: 10px;
+}
+
+.profile-edit {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.profile-edit form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-edit label {
+  margin-bottom: 50px;
+}
+
+.profile-edit input {
+  padding: 8px;
+}
+
+.profile-edit button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-edit {
+  background-color: #0056b3;
+}
+
+.save-icon {
+  margin: 20px;
+}
+
+.edit-icon {
+  margin-left: 20px;
+}
+
+.edit-icons {
+  margin-left: 12px;
+}
+
+.edit-icon-label {
+  margin: 30px;
+}
+
+.edit-label {
+  margin: 10px;
+}

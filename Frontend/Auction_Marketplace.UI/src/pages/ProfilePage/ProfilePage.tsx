@@ -4,7 +4,7 @@ import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import "./ProfilePage.css";
-import { FaEdit } from 'react-icons/fa';
+import { FaCheck, FaEdit } from 'react-icons/fa';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
 import UserService from '../../Services/UserService.ts';
 import ApiService from '../../Services/ApiService.ts';
@@ -144,12 +144,19 @@ const ProfilePage: React.FC = () => {
                                         onChange={handleProfilePictureChange}
                                         accept="image/*"
                                     />
-                                    <FaEdit className="edit-icon" onClick={handleSaveClick} />
                                 </label>
                             )}
                             {!editMode && (
+                                <div className="edit-icons">
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />
-                                )}
+                                    <span className="edit-label"></span>
+                                </div>
+                            )}
+                            {editMode && (
+                                <div className="edit-icons">
+                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
+                                </div>
+                            )}
                         </div>
                         <div className="user-details">
                             <div className="user-detail">
@@ -161,10 +168,10 @@ const ProfilePage: React.FC = () => {
                                         onChange={(e) => setFirstName(e.target.value)}
                                     />
                                 ) : (
-                                    <p>{user.firstName}</p>
+                                    <label>{user.firstName}</label>
                                 )}
                                 {editMode && (
-                                    <FaEdit className="edit-icon" onClick={handleSaveClick} />
+                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
                                 )}
                                 {!editMode && (
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />
@@ -179,17 +186,19 @@ const ProfilePage: React.FC = () => {
                                         onChange={(e) => setLastName(e.target.value)}
                                     />
                                 ) : (
-                                    <p>{user.lastName}</p>
+                                    <label>{user.lastName}</label>
                                 )}
                                 {editMode && (
-                                    <FaEdit className="edit-icon" onClick={handleSaveClick} />
+                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
                                 )}
                                 {!editMode && (
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />
                                 )}
                             </div>
                             <div className="user-detail">
-                                <label>Email: {user.email}</label>
+                                <label>Email: <span className="edit-label"></span> {user.email}
+                                    <span className="edit-label"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
