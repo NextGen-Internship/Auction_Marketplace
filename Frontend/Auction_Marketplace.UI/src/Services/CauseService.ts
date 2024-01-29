@@ -13,12 +13,9 @@ class CauseService {
 
   async createCause(data: CauseDTO): Promise<ApiResponseDTO> {
     const formData = new FormData();
-    formData.append('userId', String(data.userId));
     formData.append('name', data.name);
     formData.append('description', data.description);
-    formData.append('moneyNeeded', String(data.amountNeeded));
-    formData.append('amountCurrent', String(data.amountCurrent || 0));
-    formData.append('isCompleted', String(data.isCompleted || false));
+    formData.append('amountNeeded', String(data.amountNeeded));
 
     if (data.photo) {
       formData.append('photo', data.photo);

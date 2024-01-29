@@ -1,11 +1,14 @@
-﻿using Auction_Marketplace.Data;
+﻿using System.Security.Claims;
+using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -15,13 +18,16 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly ICauseRepository _causeRepository;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
+        private readonly IHttpContextAccessor _contextAccessor; 
 
-        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service)
+        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service, IHttpContextAccessor contextAccessor)
 		{
             _dbContext = dbContext;
             _causeRepository = causeRepository;
             _userService = userService;
             _s3Service = s3Service;
+            _contextAccessor = contextAccessor;
+
         }
 
         public async Task<Response<Cause>> CreateCause(NewCauseViewModel cause)
@@ -38,8 +44,21 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
+                var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+                if (email == null)
+                {
+                    return new Response<Cause>
+                    {
+                        Succeed = false,
+                        Message = "Invalid cause data."
+                    };
+                }
+                var user = await _userService.GetByEmailAsync(email);
+           
+
                 var newCause = new Cause
                 {
+                    UserId = user.Id,
                     Name = cause.Name,
                     Description = cause.Description,
                     AmountNeeded = cause.AmountNeeded,
@@ -63,7 +82,8 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                await _causeRepository.AddCause(newCause);
+                await _causeRepository.AddAsync(newCause);
+                await _causeRepository.SaveChangesAsync();
 
                 return new Response<Cause>
                 {

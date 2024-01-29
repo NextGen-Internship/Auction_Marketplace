@@ -2,7 +2,6 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import './AddCauseForm.css'; 
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
-import CauseDTO from '../../Interfaces/DTOs/CauseDTO'; 
 import CauseService from '../../Services/CauseService';
 
 
@@ -35,6 +34,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    if (name === 'amountNeeded' && !/^\d*$/.test(value)) {
+    return; 
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -80,7 +82,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
       if (response.succeed) {
         console.log('Cause created successfully:', response.data);
-        onClose(); // Close the form after successful submission
+        onClose(); 
       } else {
         console.error('Failed to create cause:', response.message);
       }
