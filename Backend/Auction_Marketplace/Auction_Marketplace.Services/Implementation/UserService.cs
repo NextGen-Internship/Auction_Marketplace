@@ -3,6 +3,7 @@ using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.User;
 using Auction_Marketplace.Data.Repositories.Interfaces;
+using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,13 @@ namespace Auction_Marketplace.Services.Implementation
 	{
         private readonly IUserRepository _userRepository;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IS3Service _s3Service;
 
-        public UserService(IUserRepository userRepository, ApplicationDbContext dbContext)
+        public UserService(IUserRepository userRepository, ApplicationDbContext dbContext, IS3Service s3Service)
         {
             _userRepository = userRepository;
             _dbContext = dbContext;
+            _s3Service = s3Service;
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -51,27 +54,39 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<string>> UpdateUserInfo(string email, UserViewModel updatedUser)
+        public async Task<Response<UpdateUserViewModel>> UpdateUserInfo(string email, UpdateUserViewModel updatedUser)
         {
             try
             {
-                var existingUser = await _userRepository.GetUserByViewModel(email);
+                var existingUser = await _userRepository.GetByEmailAsync(email);
+                if(existingUser is null)
+                {
+                    return new Response<UpdateUserViewModel>
+                    {
+                        Succeed = false,
+                        Message = "No such user!"
+                    };
+                }
 
-                existingUser.FirstName = updatedUser.FirstName;
-                existingUser.LastName = updatedUser.LastName;
-                existingUser.ProfilePicture = updatedUser.ProfilePicture;
+                existingUser.FirstName = updatedUser.FirstName ?? existingUser.FirstName;
+                existingUser.LastName = updatedUser.LastName ?? existingUser.LastName;
+
+                var fileName = String.Format(AWSConstants.UploadProfilePictureName, existingUser.Email);
+                var path = String.Format(AWSConstants.UploadProfilePicturePath, existingUser.Email);
+
+                existingUser.ProfilePicture = updatedUser.ProfilePicture is not null ? await _s3Service.UploadFileAsync(updatedUser.ProfilePicture, path, fileName) : existingUser.ProfilePicture;
 
                 await _userRepository.UpdateUserInfo(existingUser);
 
-                return new Response<string>
+                return new Response<UpdateUserViewModel>
                 {
                     Succeed = true,
-                    Data = updatedUser.ToString()
+                    Data = updatedUser
                 };
             }
             catch (Exception ex)
             {
-                return new Response<string>
+                return new Response<UpdateUserViewModel>
                 {
                     Succeed = false,
                     Message = $"{ex.Message}"

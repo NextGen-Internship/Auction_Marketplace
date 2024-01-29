@@ -46,7 +46,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPut]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateUserInfo(UserViewModel updatedUser)
+        public async Task<IActionResult> UpdateUserInfo([FromForm] UpdateUserViewModel updatedUser)
         {
             try
             {

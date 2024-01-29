@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import './HomePage.css'
+import '../HomePage/HomePage.css'
 
 
 const AboutUsPage: React.FC = () => {

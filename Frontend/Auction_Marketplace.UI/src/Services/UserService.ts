@@ -48,9 +48,18 @@ class UserService {
     return this.apiService.get<ApiResponseDTO>(this.GET_USER_ENDPOINT);
   }
 
-  async updateUser(data: UserDTO): Promise<ApiResponseDTO> {
-    return this.apiService.put<ApiResponseDTO>(this.UPDATE_USER_ENDPOINT, data);
+  async updateUser(data: UserDTO) : Promise<ApiResponseDTO> {
+    const formData = new FormData();
+    formData.append('firstName', data.firstName);
+    formData.append('lastName', data.lastName);
+    formData.append('email', data.email);
+    if (data.profilePicture) {
+      formData.append('profilePicture', data.profilePicture);
+    }
+
+    return this.apiService.put<ApiResponseDTO>(this.UPDATE_USER_ENDPOINT, formData);
   }
+
 }
 
 export default UserService;

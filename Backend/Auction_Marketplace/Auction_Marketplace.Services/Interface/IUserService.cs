@@ -15,7 +15,7 @@ namespace Auction_Marketplace.Services.Interface
 
         Task<Response<UserViewModel>> GetUserByViewModel(string email);
 
-        Task<Response<string>> UpdateUserInfo(string email, UserViewModel updatedUser);
+        Task<Response<UpdateUserViewModel>> UpdateUserInfo(string email, UpdateUserViewModel updatedUser);
     }
 }
 

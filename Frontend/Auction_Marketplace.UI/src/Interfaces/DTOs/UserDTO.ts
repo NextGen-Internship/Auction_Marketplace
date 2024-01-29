@@ -2,7 +2,7 @@ interface UserDTO {
     firstName: string;
     lastName: string;
     email: string;
-    profilePicture: string
+    profilePicture?: File;
   }
 
   export default UserDTO;
