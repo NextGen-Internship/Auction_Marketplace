@@ -23,7 +23,7 @@ function Payment() {
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
-        const response = await fetch("https://localhost:7141/api/CheckoutApi/create-session", {
+        const response = await fetch("https://localhost:44348/api/CheckoutApi/create-session", {
           method: "POST",
           body: JSON.stringify({}),
         });
@@ -41,7 +41,7 @@ function Payment() {
 
   return (
     <>
-      <h1>React Stripe Integration</h1>
+      <h1>Stripe Payment Integration</h1>
       {stripePromise && clientSecret &&(
       <Elements stripe={stripePromise}  options={ {clientSecret} }>
         <CheckForm />

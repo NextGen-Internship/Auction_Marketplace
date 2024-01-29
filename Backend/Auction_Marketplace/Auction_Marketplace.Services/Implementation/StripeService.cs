@@ -46,7 +46,7 @@ namespace Auction_Marketplace.Services.Implementation
             var paymentIntentService = new PaymentIntentService();
             var paymentIntent = paymentIntentService.Create(new PaymentIntentCreateOptions
             {
-                Amount = 100,
+                Amount = 1000,
                 Currency = "bgn",
 
                 AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
+import "./CheckoutForm.css"
 
 export default function CheckForm(){
 
@@ -22,7 +23,7 @@ export default function CheckForm(){
         const {error} = await stripe.confirmPayment({
           elements,
           confirmParams:{
-            return_url: `${window.location.origin}`,  //Todo: Fix the urls!!!!
+            return_url: `${"http://localhost:5173/completion"}`,  //Todo: Fix the urls!!!!
           },
         });
 
@@ -34,15 +35,18 @@ export default function CheckForm(){
     }
 
     return(
-        <form id="payment-form" onSubmit={handleSubmit}>
-          <PaymentElement/>
-          <button disabled={isProcessing} id="submit">
-            <span id="button-text">
-                {isProcessing ? "Processing" : "Pay Now"}
-            </span>
-          </button>
-
-          {message && <div id="payment-message">{message}</div>}
-        </form>
+      <div id="payment-container">
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement/>
+        <button disabled={isProcessing} id="submit">
+          <span id="button-text">
+            {isProcessing ? "Processing" : "Pay Now"}
+          </span>
+        </button>
+    
+        {message && <div id="payment-message">{message}</div>}
+      </form>
+    </div>
+    
     );
 }
