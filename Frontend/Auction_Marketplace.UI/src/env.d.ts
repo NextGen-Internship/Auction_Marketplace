@@ -7,6 +7,7 @@ interface ImportMetaEnv {
     readonly VITE_BASE_URL: string
     readonly VITE_GOOGLE_CLIENT_ID: string
     readonly VITE_CREATE_CAUSE_ENDPOINT: string
+    readonly VITE_GET_ALL_CAUSES_ENDPOINT: string
 }
 
 interface ImportMeta {
