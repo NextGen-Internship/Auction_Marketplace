@@ -10,11 +10,8 @@ function Payment() {
   useEffect(() => {
     const fetchStripeKeys = async () => {
       try {
-        const response = await fetch("https://localhost:7141/api/CheckoutApi/create-session");
-        const { publishableKey } = await response.json();
-
-        setStripePromise(await loadStripe(publishableKey));
-        console.log(publishableKey);
+        var a = await loadStripe("pk_test_51ObkXKJrf8KR40wbZtUyrRm5hute8V5k8UOTlOzaKI5MkjNzDzKPV2aggIykCLyG4tznibC64I9tuD3Z5WKcM1zD000gqODeB8");
+        setStripePromise(a);
       } catch (error) {
         console.error("Error fetching Stripe keys:", error);
       }
@@ -31,7 +28,7 @@ function Payment() {
           body: JSON.stringify({}),
         });
         const { clientSecret } = await response.json();
-
+        
         setClientSecret(clientSecret);
         console.log(clientSecret);
       } catch (error) {

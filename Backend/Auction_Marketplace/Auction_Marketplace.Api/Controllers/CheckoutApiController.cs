@@ -1,5 +1,4 @@
-﻿using Auction_Marketplace.Data.Models.Stripe;
-using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -17,12 +16,11 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Route("create-session")]
-        public IActionResult CreateCheckoutSession([FromForm] ItemOrDonationViewModel model)
+        public IActionResult CreateCheckoutSession()
         {
-            var session = _stripeService.CreateCheckoutSession(model);
+            var session = _stripeService.CreateCheckoutSession();
 
-            Response.Headers.Add("Location", session.Url);
-            return new StatusCodeResult(303);
+            return Ok(new { clientSecret = session.ClientSecret });
         }
     }
 }
