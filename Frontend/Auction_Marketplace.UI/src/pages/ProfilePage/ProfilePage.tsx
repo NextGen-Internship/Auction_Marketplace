@@ -73,7 +73,7 @@ const ProfilePage: React.FC = () => {
                 if (response.succeed) {
                     setUser(userData);
                 }
-                alert("Refresh page.")
+                navigate('/profile');
             }
         } catch (error) {
             console.error('Error during profile update:', error);
@@ -111,7 +111,7 @@ const ProfilePage: React.FC = () => {
         const fileInput = document.getElementById('user-avatar');
         if (fileInput) {
             fileInput.click();
-            navigate('/prfoile');
+            navigate('/profile');
         }
     };
 
