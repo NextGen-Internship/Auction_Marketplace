@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Marketplace from './pages/MarketplacePage/MarketplacePage.tsx';
-import Navbar from './components/Navbar/Navbar.tsx';
-import LoginPage from './pages/LoginPage/LoginPage.tsx';
-import HomePage from './pages/HomePage/HomePage.tsx';
-import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
-import Footer from './components/Footer/Footer.tsx';
+import Marketplace from './Pages/MarketplacePage/MarketplacePage.tsx';
+import Navbar from './Components/Navbar/Navbar.tsx';
+import LoginPage from './Pages/LoginPage/LoginPage.tsx';
+import HomePage from './Pages/HomePage/HomePage.tsx';
+import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
+import Footer from './Components/Footer/Footer.tsx';
 
 function App() {
   return (
