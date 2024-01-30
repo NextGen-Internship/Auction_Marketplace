@@ -3,47 +3,31 @@ import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddCauseForm from '/Users/Teoslava.Yordanova/Documents/Auction_Marketplace/Frontend/Auction_Marketplace.UI/src/components/AddCauseForm/AddCauseForm.tsx';
+import AddCauseForm from '../../components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService'; 
 import ApiService from '../../Services/ApiService';
 import './CausesPage.css';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
+import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
+import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
 
-interface Cause {
-  id: number;
-  name: string;
-  photo: string;
-}
 
-interface CauseCreated {
-  causeId: number;
-  userId: number;
-  user: any; // Replace 'any' with the actual type of 'user'
-  name: string;
-  description: string;
-  photo: string;
-  amountNeeded: number;
-  amountCurrent: number;
-  isCompleted: boolean;
-  donations: any[]; // Replace 'any' with the actual type of 'donations'
-  createdAt: string;
-  updatedAt: string;
-  deletedOn: string | null;
-}
 
 const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
-  const [causes, setCauses] = useState<CauseCreated[]>([]);
+  const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apiService = new ApiService();
         const causeService = new CauseService(apiService);
-        const causesResponse: ApiResponseDTO<CauseCreated[]> = await causeService.getAllCauses();
-        const causes: CauseCreated[] = causesResponse.data || [];
+        const causesResponse: ApiResponseDTO = await causeService.getAllCauses();
+         console.log('Causes Response:', causesResponse);
+
+        const causes: CauseDTO[] = causesResponse.data || [];
         setCauses(causes);
       } catch (error) {
         console.error('Error fetching causes:', error);

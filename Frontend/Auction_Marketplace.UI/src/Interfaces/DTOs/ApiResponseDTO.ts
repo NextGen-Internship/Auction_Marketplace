@@ -1,7 +1,7 @@
-interface ApiResponseDTO<T = any> {
+interface ApiResponseDTO{
     succeed: boolean;
     message?: string;
-    data?: T;
+    data?: any;
 }
 
 export default ApiResponseDTO;

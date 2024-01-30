@@ -1,16 +1,57 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
+import { getToken } from '../../utils/AuthUtil';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
+import UserService from '../../Services/UserService';
+import ApiService from '../../Services/ApiService';
+
+const apiService = new ApiService;
+const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
+  const token = getToken();
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const [profilePicture, setProfilePicture] = useState();
+
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    profilePicture: ''
+  })
+
+  const fetchUserProfile = async () => {
+    try {
+      if (token) {
+        const response: ApiResponseDTO = await userService.fetchUser();
+        const userData = response.data;
+        if (response.succeed) {
+          setUser(userData);
+        }
+      }
+    } catch (error) {
+      console.error('Error during user profile fetch:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchUserProfile();
+    }
+  }, [token]
+  );
 
   const handleLogout = async () => {
-    localStorage.clear(); 
+    localStorage.clear();
     navigate('/login');
   };
+
+  const isLogOutPage = location.pathname === '/login';
 
   return (
     <nav className="navbar">
@@ -20,38 +61,48 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
             <img src={logo} alt="Logo" className="logo" />
           </Link>
         </div>
-        <div className="nav-links">
+        <div className="nav-links-default">
           <Link to="/home" className="nav-item">
             Home
           </Link>
-          <Link to="/marketplace" className="nav-item">
-            Marketplace
+          <Link to="/auctions" className="nav-item">
+            Auctions
+          </Link>
+          <Link to="/causes" className="nav-item">
+            Causes
           </Link>
           <Link to="/aboutUs" className="nav-item">
             About us
           </Link>
-            <Link to="/causes" className="nav-item">
-            Causes
-          </Link>
-          <Link to="/policy" className="nav-item">
-            Policy
-          </Link>
-          {showAuthButtons && (
-            <>
+        </div>
+        {showAuthButtons && (
+          <>
+            <div className="nav-links-user">
               <Link to="/login" className="nav-item">
                 Login
               </Link>
               <Link to="/register" className="nav-item">
                 Register
               </Link>
-            </>
-          )}
-          {!showAuthButtons && (
+            </div>
+          </>
+        )}
+        {!showAuthButtons && !isLogOutPage && (
+          <div className="nav-links-user">
+            <Link to="/profile">
+              <div className="profile-picture-container">
+                <img
+                  src={user.profilePicture}
+                  alt="Profile"
+                  className="profile-picture"
+                />
+              </div>
+            </Link>
             <Link to="/login" className="nav-item" onClick={handleLogout}>
               Log out
             </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );
