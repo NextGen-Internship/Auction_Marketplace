@@ -12,8 +12,6 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
 
-
-
 const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
@@ -80,3 +78,4 @@ const CausesPage: React.FC = () => {
 };
 
 export default CausesPage;
+

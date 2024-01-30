@@ -1,5 +1,4 @@
 ﻿using Auction_Marketplace.Data.Entities.Abstract;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 

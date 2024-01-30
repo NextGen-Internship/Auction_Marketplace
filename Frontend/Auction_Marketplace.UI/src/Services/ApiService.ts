@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { getToken } from '../utils/AuthUtil';
 
 class ApiService {
     private baseUrl = import.meta.env.VITE_BASE_URL;
@@ -24,6 +25,7 @@ class ApiService {
     async get<T>(endpoint: string): Promise<T> {
         return this.request<T>({
             method: 'get',
+            headers: {"Authorization": `Bearer ${getToken()}`},
             url: `${this.baseUrl}/${endpoint}`,
         });
     }
@@ -32,6 +34,7 @@ class ApiService {
         console.log(data);
         return this.request<T>({
             method: 'post',
+            headers: {"Authorization": `Bearer ${getToken()}`},
             url: `${this.baseUrl}/${endpoint}`,
             data,
         });
@@ -40,6 +43,7 @@ class ApiService {
     async put<T>(endpoint: string, data: any): Promise<T> {
         return this.request<T>({
             method: 'put',
+            headers: {"Authorization": `Bearer ${getToken()}`},
             url: `${this.baseUrl}/${endpoint}`,
             data,
         });
@@ -48,6 +52,7 @@ class ApiService {
     async delete<T>(endpoint: string): Promise<T> {
         return this.request<T>({
             method: 'delete',
+            headers: {"Authorization": `Bearer ${getToken()}`},
             url: `${this.baseUrl}/${endpoint}`,
         });
     }

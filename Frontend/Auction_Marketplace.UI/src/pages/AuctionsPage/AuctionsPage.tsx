@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../Components/Navbar/Navbar';
 
-const Marketplace: React.FC = () => {
+const AuctionsPage: React.FC = () => {
     const token = getToken();
-
+    
     if (!token) {
         return (
             <div className='token-exp-container'>
@@ -20,9 +20,9 @@ const Marketplace: React.FC = () => {
 
     return (
         <div>
-            <Navbar showAuthButtons={false} />
-        </div>
+        <Navbar showAuthButtons={false} />
+    </div>
     );
 };
 
-export default Marketplace;
+export default AuctionsPage;

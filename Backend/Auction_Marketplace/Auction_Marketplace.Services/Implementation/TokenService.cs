@@ -31,6 +31,7 @@ namespace Auction_Marketplace.Services.Implementation
             var claims = new List<Claim>()
             {
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("profilePicture", user.ProfilePicture),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
             };

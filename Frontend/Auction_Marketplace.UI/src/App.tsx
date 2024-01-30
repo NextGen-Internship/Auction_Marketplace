@@ -1,11 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Marketplace from './pages/MarketplacePage/MarketplacePage.tsx';
-import Navbar from './components/Navbar/Navbar.tsx';
-import LoginPage from './pages/LoginPage/LoginPage.tsx';
-import HomePage from './pages/HomePage/HomePage.tsx';
-import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
-import Footer from './components/Footer/Footer.tsx';
-import Causes from './pages/CausesPage/CausesPage.tsx';
+
+import Navbar from './Components/Navbar/Navbar.tsx';
+import LoginPage from './Pages/LoginPage/LoginPage.tsx';
+import HomePage from './Pages/HomePage/HomePage.tsx';
+import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
+import Footer from './Components/Footer/Footer.tsx';
+import AuctionsPage from './Pages/AuctionsPage/AuctionsPage.tsx';
+import CausesPage from './Pages/CausesPage/CausesPage.tsx';
+import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
+import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
+
 
 function App() {
   return (
@@ -18,8 +22,10 @@ function App() {
           <Route path="/register" Component={RegisterPage}></Route>
           <Route path="/" element={<LoginPage />} ></Route>
           <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/marketplace" element={<Marketplace />}></Route>
-          <Route path="/causes" element={<Causes />} />
+          <Route path="/profile" element={<ProfilePage />}></Route>
+          <Route path="/auctions" element={<AuctionsPage />}></Route>
+          <Route path="/causes" element={<CausesPage />}></Route>
+          <Route path="/aboutUs" element={<AboutUsPage />}></Route>
         </Routes>
         <Footer />
       </Router>
