@@ -7,7 +7,7 @@ import '../HomePage/HomePage.css'
 
 
 const AboutUsPage: React.FC = () => {
- /* const token = getToken();
+  const token = getToken();
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -18,8 +18,6 @@ const AboutUsPage: React.FC = () => {
       </div>
     );
   }
-
-  */
 
   return (
     <div>
