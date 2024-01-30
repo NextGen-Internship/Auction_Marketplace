@@ -1,4 +1,4 @@
-button {
+.create-new-auction-btn {
     background-color: #3498db;
     color: #fff;
     padding: 10px 15px;
@@ -7,11 +7,11 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.create-new-auction-btn:hover {
     background-color: #2980b9;
 }
 
-form {
+.create-new-auction-form {
     max-width: 400px;
     margin: 20px auto;
     padding: 20px;
@@ -21,12 +21,12 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
+.inputs {
     display: block;
     margin-bottom: 8px;
 }
 
-input[type="text"],
+.inputs[type="text"],
 textarea {
     width: 100%;
     padding: 8px;
@@ -36,14 +36,20 @@ textarea {
     box-sizing: border-box;
 }
 
-input[type="checkbox"] {
+.input-label [type="checkbox"] {
     margin-right: 8px;
 }
 
 .auctions-container {
-    max-height: max-content; 
-    max-width: max-content;/* Set a maximum height for the container, adjust as needed */
+    max-height: 400px; /* Set a maximum height for the container, adjust as needed */
     overflow-y: auto; /* Add vertical scrollbar if content exceeds container height */
     border: 1px solid #ccc; /* Optional: Add border for better visual separation */
-    padding: 10px; /* Optional: Add padding for better visual appearance */
+    padding: 10px; 
+}
+
+.auction-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
