@@ -49,13 +49,10 @@ const LoginPage: React.FC = () => {
           });
         console.log('Login response:', loginResponse);
         if (loginResponse.succeed) {
-          console.log('Authentication successful');
           localStorage.setItem('token', loginResponse.data);
           navigate('/home');
-        } else {
-          
-            console.error('Authentication failed:', loginResponse.message);
-          
+        } else {          
+            console.error('Authentication failed:', loginResponse.message); 
         }
       } catch (error) {
         console.error('Error during login:', error);
@@ -71,22 +68,12 @@ const LoginPage: React.FC = () => {
   const handleGoogleLogin = async (credentialResponse: any) => {
     console.log('Google Login success:', credentialResponse);
     try {
-      const loginResponse = await userService.loginUserWithGoogle(credentialResponse.credential);
+      const loginResponse = await userService.loginUserWithGoogle({googleToken: credentialResponse.credential});
       if (loginResponse.succeed) {
         console.log('Authentication successful');
         localStorage.setItem('token', loginResponse.data);
         navigate('/home');
-      } else {
-     
-          const createUserResponse = await userService.loginUserWithGoogle(credentialResponse.profile.email);
-          if (createUserResponse.succeed) {
-            console.log('User created successfully. Logging in...');
-            navigate('/home');
-          } else {
-            console.error('User creation failed:', createUserResponse.message);
-          }
-       
-      }
+      } 
     } catch (error) {
       console.error('Error during Google Authentication:', error);
       alert('Error during Google Authentication');

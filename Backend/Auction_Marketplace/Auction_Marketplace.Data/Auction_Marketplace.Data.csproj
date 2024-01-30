@@ -33,6 +33,7 @@
     <None Remove="Repositories\Implementation\" />
     <None Remove="Models\Donation\" />
     <None Remove="Models\Auction\" />
+    <None Remove="Models\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
@@ -45,5 +46,6 @@
     <Folder Include="Repositories\Implementation\" />
     <Folder Include="Models\Donation\" />
     <Folder Include="Models\Auction\" />
+    <Folder Include="Models\User\" />
   </ItemGroup>
 </Project>

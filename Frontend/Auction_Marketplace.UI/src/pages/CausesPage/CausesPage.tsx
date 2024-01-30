@@ -2,11 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../Components/Navbar/Navbar';
 
 const Marketplace: React.FC = () => {
     const token = getToken();
-
     if (!token) {
         return (
             <div className='token-exp-container'>

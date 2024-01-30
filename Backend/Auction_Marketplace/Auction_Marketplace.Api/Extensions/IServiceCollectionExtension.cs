@@ -82,8 +82,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     ValidAudience = configuration["JwtConfig:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(key),
 
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true
                 };
