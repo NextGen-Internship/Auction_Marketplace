@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -15,6 +13,7 @@ namespace Auction_Marketplace.Api.Controllers
             _s3Service = s3Service;
 
         }
+
         [HttpGet("{documentName}")]
         public IActionResult GetDocumentFromS3(string documentName)
         {

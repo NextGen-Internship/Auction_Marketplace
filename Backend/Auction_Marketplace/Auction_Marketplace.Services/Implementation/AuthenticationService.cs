@@ -61,7 +61,6 @@ namespace Auction_Marketplace.Services.Implementation
             var token = await RegisterUser(registerUser, user);
 
             return token != null ? new Response<string> { Succeed = true, Data = token } : new Response<string> { Succeed = false, Message = "Invalid Registration" };
-
         }
 
         public async Task<Response<string>> Login(LoginViewModel loginUser)
@@ -91,12 +90,10 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
             var email = validation.Email;
-
             var existingUser = await _userService.GetByEmailAsync(email);
 
             if (existingUser == null)
             {
-
                 var registerUser = new RegisterViewModel
                 {
                     FirstName = validation.FirstName,
@@ -109,7 +106,6 @@ namespace Auction_Marketplace.Services.Implementation
                 user.ProfilePicture = validation.ProfilePicture;
 
                 var token = await RegisterUser(registerUser, user);
-
                 return new Response<string> { Succeed = true, Data = token };
             }
 

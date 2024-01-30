@@ -1,6 +1,7 @@
 ﻿using Auction_Marketplace.Data.Models.Authentication;
 using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -18,6 +19,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpGet]
         [Route("All")]
+        [Authorize]
         public async Task<IActionResult> GetAllCauses()
         {
             try
@@ -32,6 +34,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCauseById([FromRoute] int id)
         {
             try
@@ -50,6 +53,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCause(CauseViewModel cause)
         {
             try
@@ -64,6 +68,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateCause([FromRoute] int id, CauseViewModel updatedCause)
         {
             try
@@ -78,6 +83,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCause([FromRoute] int id)
         {
             try
