@@ -15,7 +15,7 @@ class CauseService {
   }
 
 
-  async createCause(data: CreateCauseDTO): Promise<CreateCauseDTO> {
+  async createCause(data: CreateCauseDTO): Promise<ApiResponseDTO> {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('description', data.description);
@@ -25,7 +25,7 @@ class CauseService {
       formData.append('photo', data.photo);
     }
 
-    return this.apiService.post<CreateCauseDTO>(this.CREATE_CAUSE_ENDPOINT, formData);
+    return this.apiService.post<ApiResponseDTO>(this.CREATE_CAUSE_ENDPOINT, formData);
   }
  
   async getAllCauses(): Promise<ApiResponseDTO> {

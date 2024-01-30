@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
@@ -16,6 +16,9 @@ const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
   const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
+  const [hideCausesContainer, setHideCausesContainer] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const causesPerPage = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +26,7 @@ const CausesPage: React.FC = () => {
         const apiService = new ApiService();
         const causeService = new CauseService(apiService);
         const causesResponse: ApiResponseDTO = await causeService.getAllCauses();
-         console.log('Causes Response:', causesResponse);
+        console.log('Causes Response:', causesResponse);
 
         const causes: CauseDTO[] = causesResponse.data || [];
         setCauses(causes);
@@ -50,10 +53,37 @@ const CausesPage: React.FC = () => {
 
   const handleAddCauseClick = () => {
     setShowAddCauseForm(true);
+    setHideCausesContainer(true);
   };
 
   const handleCloseForm = () => {
     setShowAddCauseForm(false);
+    setHideCausesContainer(false);
+  };
+
+  const indexOfLastCause = currentPage * causesPerPage;
+  const indexOfFirstCause = indexOfLastCause - causesPerPage;
+  const currentCauses = causes.slice(indexOfFirstCause, indexOfLastCause);
+
+  const renderMiniPages = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(causes.length / causesPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <div className="pagination">
+        {pageNumbers.map((number) => (
+          <button
+            key={number}
+            className={number === currentPage ? 'active' : ''}
+            onClick={() => setCurrentPage(number)}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -65,17 +95,22 @@ const CausesPage: React.FC = () => {
 
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
 
-      <div className="cause-info-container">
-        {causes.map((cause) => (
-          <div key={cause.causeId} className="cause-info">
-            <h3>{cause.name}</h3>
-            <img src={cause.photo} alt={cause.name} />
-          </div>
-        ))}
-      </div>
+      {!hideCausesContainer && (
+        <div className="cause-info-container">
+          {currentCauses.map((cause) => (
+            <div key={cause.causeId} className="cause-info">
+              <h3>{cause.name}</h3>
+              <img src={cause.photo} alt={cause.name} />
+              <Link to={`/details/${cause.causeId}`} className="details-button">
+                Details
+              </Link>
+            </div>
+          ))}
+          {renderMiniPages()}
+        </div>
+      )}
     </div>
   );
 };
 
 export default CausesPage;
-
