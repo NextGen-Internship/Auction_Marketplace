@@ -131,7 +131,7 @@ const ProfilePage: React.FC = () => {
             <Navbar showAuthButtons={false} />
             <form>
                 <div className='profile-container'>
-                    <h2>User Profile</h2>
+                    <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
                     <div className="user-info">
                         <div className="user-avatar">
                             <img src={user.profilePicture} alt="Profile" />

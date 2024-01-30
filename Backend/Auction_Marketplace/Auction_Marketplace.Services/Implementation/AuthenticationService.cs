@@ -7,6 +7,7 @@ using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Auction_Marketplace.Services.Constants;
+using AuctionMarketplace.Data.Migrations;
 
 namespace Auction_Marketplace.Services.Implementation
 {
