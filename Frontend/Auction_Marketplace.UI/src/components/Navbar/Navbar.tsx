@@ -71,8 +71,8 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
           <Link to="/causes" className="nav-item">
             Causes
           </Link>
-          <Link to="/policy" className="nav-item">
-            Policy
+          <Link to="/aboutUs" className="nav-item">
+            About us
           </Link>
         </div>
         {showAuthButtons && (

@@ -1,10 +1,12 @@
-﻿using Auction_Marketplace.Data;
+﻿using System.Security.Claims;
+using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.User;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Services.Implementation
@@ -14,12 +16,17 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IUserRepository _userRepository;
         private readonly ApplicationDbContext _dbContext;
         private readonly IS3Service _s3Service;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public UserService(IUserRepository userRepository, ApplicationDbContext dbContext, IS3Service s3Service)
+        public UserService(IUserRepository userRepository,
+            ApplicationDbContext dbContext,
+            IS3Service s3Service,
+            IHttpContextAccessor httpContext)
         {
             _userRepository = userRepository;
             _dbContext = dbContext;
             _s3Service = s3Service;
+            _httpContext = httpContext;
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -27,12 +34,13 @@ namespace Auction_Marketplace.Services.Implementation
             return await _userRepository.GetByEmailAsync(email);
         }
 
-        public async Task<Response<UserViewModel>> GetUserByViewModel(string email)
+        public async Task<Response<UserViewModel>> GetUser()
         {
             try
             {
-                var userEmail = await _userRepository.Find(u => u.Email == email).FirstOrDefaultAsync();
-
+                var email = await _userRepository.GetUserByEmail();
+                var userEmail = await _userRepository.GetByEmailAsync(email);
+                
                 UserViewModel user = new UserViewModel()
                 {
                     FirstName = userEmail.FirstName,
@@ -54,12 +62,14 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<UpdateUserViewModel>> UpdateUserInfo(string email, UpdateUserViewModel updatedUser)
+        public async Task<Response<UpdateUserViewModel>> UpdateUserInfo(UpdateUserViewModel updatedUser)
         {
             try
             {
+                var email = await _userRepository.GetUserByEmail();
+
                 var existingUser = await _userRepository.GetByEmailAsync(email);
-                if(existingUser is null)
+                if (existingUser is null)
                 {
                     return new Response<UpdateUserViewModel>
                     {

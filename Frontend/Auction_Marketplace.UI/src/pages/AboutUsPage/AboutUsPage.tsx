@@ -7,6 +7,7 @@ import '../HomePage/HomePage.css'
 
 
 const AboutUsPage: React.FC = () => {
+
   const token = getToken();
   if (!token) {
     return (

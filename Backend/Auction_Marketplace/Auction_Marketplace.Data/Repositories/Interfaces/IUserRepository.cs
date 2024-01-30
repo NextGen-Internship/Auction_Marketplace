@@ -8,7 +8,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
         public Task<User?> GetByEmailAsync(string email);
         public Task<Response<List<User>>> GetAllUsers();
         public Task<User> GetUserById(int userId);
-        public Task<User?> GetUserByViewModel(string email);
         public Task UpdateUserInfo(User existingUser);
+        public Task<string> GetUserByEmail();
     }
 }

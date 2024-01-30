@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';

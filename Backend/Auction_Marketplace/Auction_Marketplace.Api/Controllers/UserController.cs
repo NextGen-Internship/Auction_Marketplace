@@ -28,14 +28,7 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var email = _httpContext.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-
-                if(email is null)
-                {
-                    return Unauthorized();
-                }
-
-                var response = await _userService.GetUserByViewModel(email);
+                var response = await _userService.GetUser();
                 return Ok(response);
             }
             catch (Exception ex)
@@ -50,9 +43,7 @@ namespace Auction_Marketplace.Api.Controllers
         {
             try
             {
-                var email = _httpContext.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-
-                var response = await _userService.UpdateUserInfo(email, updatedUser);
+                var response = await _userService.UpdateUserInfo(updatedUser);
                 return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Data);
             }
             catch (Exception ex)
