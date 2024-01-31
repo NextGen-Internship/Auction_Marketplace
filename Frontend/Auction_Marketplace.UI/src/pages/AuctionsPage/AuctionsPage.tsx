@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 
 const AuctionsPage: React.FC = () => {
     const token = getToken();
