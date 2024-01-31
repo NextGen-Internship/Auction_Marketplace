@@ -9,13 +9,13 @@ namespace Auction_Marketplace.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class CauseController : ControllerBase
-	{
+    {
         private readonly ICauseService _causeService;
 
         public CauseController(ICauseService causeService)
-		{
+        {
             _causeService = causeService;
-		}
+        }
 
         [HttpGet]
         [Route("All")]
@@ -25,7 +25,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _causeService.GetAllCauses();
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -54,7 +54,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateCause(CauseViewModel cause)
+        public async Task<IActionResult> CreateCause([FromForm] NewCauseViewModel cause)
         {
             try
             {

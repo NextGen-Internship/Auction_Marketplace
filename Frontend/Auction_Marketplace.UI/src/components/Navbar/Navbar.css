@@ -47,6 +47,7 @@
 .nav-item.active {
   font-weight: bold;
   border-color: green; 
+
 }
 
 .nav-links-user {
@@ -57,6 +58,7 @@
 .logo {
   width: 120px;
 } 
+
 
 @media (max-width: 1395px) {
   .nav-item {
@@ -80,8 +82,8 @@
   }
 
   .logo {
-    width: 100px; 
-  } 
+    width: 100px;
+  }
 }
 
 .profile-picture-container {

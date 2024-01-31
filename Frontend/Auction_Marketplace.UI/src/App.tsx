@@ -4,9 +4,9 @@ import LoginPage from './Pages/LoginPage/LoginPage.tsx';
 import HomePage from './Pages/HomePage/HomePage.tsx';
 import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
 import Footer from './Components/Footer/Footer.tsx';
-import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 import AuctionsPage from './Pages/AuctionsPage/AuctionsPage.tsx';
 import CausesPage from './Pages/CausesPage/CausesPage.tsx';
+import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
 
 function App() {
