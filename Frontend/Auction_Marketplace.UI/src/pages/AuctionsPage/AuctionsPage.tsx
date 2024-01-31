@@ -17,7 +17,7 @@ const AuctionsPage: React.FC = () => {
     const [auctions, setAuctions] = useState<CreateAuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const auctionsPerPage = 3;
+    const auctionsPerPage = 10;
 
     useEffect(() => {
         const fetchAuctions = async () => {
@@ -90,19 +90,20 @@ const AuctionsPage: React.FC = () => {
 
     return (
         <div>
-            <Navbar showAuthButtons={false} />
-            <button className="add-auction-button" onClick={handleAddAuctionClick}>
-                Add Auction
-            </button>
+            <label className='label-buttons'>
+                <button className="add-auction-button" onClick={handleAddAuctionClick}>
+                    Add Auction
+                </button>
 
+            </label>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
-            
+
             {!hideAuctionContainer && (
                 <div className="auction-info-container">
                     {currentAuction.map((auction) => (
                         <div key={auction.auctionId} className="auction-info">
                             <h3>{auction.name}</h3>
-                            <Link to={`/details/${auction.auctionId}`} className="details-button">
+                            <Link to={`/details/${auction.auctionId}`} className="details-button-auctions">
                                 Details
                             </Link>
                         </div>
@@ -110,6 +111,7 @@ const AuctionsPage: React.FC = () => {
                     {renderMiniPages()}
                 </div>
             )}
+            <Navbar showAuthButtons={false} />
         </div>
     );
 };

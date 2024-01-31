@@ -23,6 +23,9 @@
     align-items: center;
     padding: 20px;
     margin-top: 20%;
+    max-width: 660px; 
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cause-info {

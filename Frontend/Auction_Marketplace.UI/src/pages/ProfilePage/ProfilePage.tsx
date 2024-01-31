@@ -53,8 +53,8 @@ const ProfilePage: React.FC = () => {
 
         if (isTokenExpired()) {
             clearToken();
-          }
-          
+        }
+
     }, [token]
     );
 
@@ -139,18 +139,19 @@ const ProfilePage: React.FC = () => {
                     <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
                     <div className="user-info">
                         <div className="user-avatar">
-                            <img src={user.profilePicture} alt="Profile" />
-                            {editMode && (
-                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
-                                    <input
-                                        type="file"
-                                        id="profilePicture"
-                                        name="profilePicture"
-                                        onChange={handleProfilePictureChange}
-                                        accept="image/*"
-                                    />
-                                </label>
-                            )}
+                            <img src={user.profilePicture} alt="Profile"
+                                {...editMode && (
+                                    <label className="edit-icon-label" onClick={handleEditPictureClick}>
+                                        <input
+                                            type="file"
+                                            id="profilePicture"
+                                            name="profilePicture"
+                                            onChange={handleProfilePictureChange}
+                                            accept="image/*"
+                                        />
+                                    </label>)}
+                            />
+                            
                             {!editMode && (
                                 <div className="edit-icons">
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />

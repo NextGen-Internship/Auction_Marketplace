@@ -17,7 +17,7 @@ const CausesPage: React.FC = () => {
   const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
   const [hideCausesContainer, setHideCausesContainer] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const causesPerPage = 3;
+  const causesPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +41,7 @@ const CausesPage: React.FC = () => {
     if (isTokenExpired()) {
         clearToken();
     }
-    
+
   }, [token]);
 
   if (!token) {
