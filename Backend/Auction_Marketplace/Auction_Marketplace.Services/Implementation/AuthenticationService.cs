@@ -61,7 +61,6 @@ namespace Auction_Marketplace.Services.Implementation
             var token = await RegisterUser(registerUser, user);
 
             return token != null ? new Response<string> { Succeed = true, Data = token } : new Response<string> { Succeed = false, Message = "Invalid Registration" };
-
         }
 
         public async Task<Response<string>> Login(LoginViewModel loginUser)
@@ -91,12 +90,10 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var validation = await ValidateGoogleTokenAsync(googleLogin.GoogleToken);
             var email = validation.Email;
-
             var existingUser = await _userService.GetByEmailAsync(email);
 
             if (existingUser == null)
             {
-
                 var registerUser = new RegisterViewModel
                 {
                     FirstName = validation.FirstName,
@@ -109,7 +106,6 @@ namespace Auction_Marketplace.Services.Implementation
                 user.ProfilePicture = validation.ProfilePicture;
 
                 var token = await RegisterUser(registerUser, user);
-
                 return new Response<string> { Succeed = true, Data = token };
             }
 
@@ -131,7 +127,6 @@ namespace Auction_Marketplace.Services.Implementation
             //Creates the JWT
             var token = _tokenService.GenerateJwtToken(user);
             await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.FirstName},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
-
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
 
             if (!isCreated.Succeeded)

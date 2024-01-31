@@ -133,6 +133,10 @@ namespace AuctionMarketplace.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -215,6 +219,9 @@ namespace AuctionMarketplace.Data.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("CauseId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -247,6 +254,8 @@ namespace AuctionMarketplace.Data.Migrations
                     b.HasIndex("AuctionId");
 
                     b.HasIndex("CauseId");
+
+                    b.HasIndex("CauseId1");
 
                     b.HasIndex("EndUserId");
 
@@ -685,6 +694,10 @@ namespace AuctionMarketplace.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Auction_Marketplace.Data.Entities.Cause", null)
+                        .WithMany("Donations")
+                        .HasForeignKey("CauseId1");
+
                     b.HasOne("Auction_Marketplace.Data.Entities.User", "EndUser")
                         .WithMany()
                         .HasForeignKey("EndUserId")
@@ -793,6 +806,11 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Cause", b =>
+                {
+                    b.Navigation("Donations");
                 });
 #pragma warning restore 612, 618
         }

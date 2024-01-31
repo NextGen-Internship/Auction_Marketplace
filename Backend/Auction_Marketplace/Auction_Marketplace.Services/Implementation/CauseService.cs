@@ -1,10 +1,14 @@
-﻿using Auction_Marketplace.Data;
+﻿using System.Security.Claims;
+using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Interfaces;
+using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -13,29 +17,25 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly ApplicationDbContext _dbContext;
         private readonly ICauseRepository _causeRepository;
         private readonly IUserService _userService;
+        private readonly IS3Service _s3Service;
+        private readonly IHttpContextAccessor _contextAccessor; 
 
-        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService)
+        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service, IHttpContextAccessor contextAccessor)
 		{
             _dbContext = dbContext;
             _causeRepository = causeRepository;
             _userService = userService;
-		}
+            _s3Service = s3Service;
+            _contextAccessor = contextAccessor;
 
-        public async Task<Response<Cause>> CreateCause(CauseViewModel cause)
+        }
+
+        public async Task<Response<Cause>> CreateCause(NewCauseViewModel cause)
         {
             try
             {
-                var userExists = await _userService.GetUserById(cause.UserId);
-                if (userExists == null)
-                {
-                    return new Response<Cause>
-                    {
-                        Succeed = false,
-                        Message = $"User with UserId '{cause.UserId}' does not exist."
-                    };
-                }
 
-                if (cause == null || cause.AmountCurrent > cause.AmountNeeded)
+                if (cause == null)
                 {
                     return new Response<Cause>
                     {
@@ -43,17 +43,37 @@ namespace Auction_Marketplace.Services.Implementation
                         Message = "Invalid cause data."
                     };
                 }
+
+                var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+                if (email == null)
+                {
+                    return new Response<Cause>
+                    {
+                        Succeed = false,
+                        Message = "Invalid cause data."
+                    };
+                }
+                var user = await _userService.GetByEmailAsync(email);
+           
 
                 var newCause = new Cause
                 {
-                    UserId = cause.UserId,
+                    UserId = user.Id,
                     Name = cause.Name,
                     Description = cause.Description,
                     AmountNeeded = cause.AmountNeeded,
-                    AmountCurrent = cause.AmountCurrent
+                    IsCompleted = false
                 };
 
-                if (newCause == null || string.IsNullOrEmpty(newCause.Name) || newCause.UserId <= 0)
+                if (cause.Photo != null)
+                {
+                    var fileName = String.Format(AWSConstants.UploadCausePictureName, cause.Name);
+                    var path = String.Format(AWSConstants.UploadCausePicturePath, cause.Name);
+                    newCause.Photo = await _s3Service.UploadFileAsync(cause.Photo, path, fileName);
+                    
+                }
+
+                if (newCause == null || string.IsNullOrEmpty(newCause.Name))
                 {
                     return new Response<Cause>
                     {
@@ -62,7 +82,8 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                await _causeRepository.AddCause(newCause);
+                await _causeRepository.AddAsync(newCause);
+                await _causeRepository.SaveChangesAsync();
 
                 return new Response<Cause>
                 {

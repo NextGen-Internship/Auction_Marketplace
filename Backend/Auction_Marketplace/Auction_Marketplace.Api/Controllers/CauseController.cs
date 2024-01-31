@@ -1,5 +1,9 @@
 ﻿using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Data.Models.Authentication;
+using Auction_Marketplace.Data.Models.Donation;
+using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auction_Marketplace.Api.Controllers
@@ -7,22 +11,23 @@ namespace Auction_Marketplace.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class CauseController : ControllerBase
-	{
+    {
         private readonly ICauseService _causeService;
 
         public CauseController(ICauseService causeService)
-		{
+        {
             _causeService = causeService;
-		}
+        }
 
         [HttpGet]
         [Route("All")]
+        [Authorize]
         public async Task<IActionResult> GetAllCauses()
         {
             try
             {
                 var response = await _causeService.GetAllCauses();
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -31,6 +36,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCauseById([FromRoute] int id)
         {
             try
@@ -49,7 +55,8 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCause(CauseViewModel cause)
+        [Authorize]
+        public async Task<IActionResult> CreateCause([FromForm] NewCauseViewModel cause)
         {
             try
             {
@@ -63,6 +70,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateCause([FromRoute] int id, CauseViewModel updatedCause)
         {
             try
@@ -77,6 +85,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCause([FromRoute] int id)
         {
             try
