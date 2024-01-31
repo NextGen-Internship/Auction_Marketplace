@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
-import { getToken } from '../../utils/AuthUtil.ts';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import "./ProfilePage.css";
 import { FaCheck, FaEdit } from 'react-icons/fa';
@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
 
     const navigate = useNavigate();
@@ -50,6 +50,11 @@ const ProfilePage: React.FC = () => {
         if (token) {
             fetchUserProfile();
         }
+
+        if (isTokenExpired()) {
+            clearToken();
+          }
+          
     }, [token]
     );
 

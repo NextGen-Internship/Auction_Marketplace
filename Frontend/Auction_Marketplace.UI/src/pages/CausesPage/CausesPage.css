@@ -26,7 +26,8 @@
 }
 
 .cause-info {
-    width: 40%;
+    width:fit-content;
+    height: fit-content;
     max-height: 20%;
     box-sizing: border-box;
     background-color: #f9f9f9;

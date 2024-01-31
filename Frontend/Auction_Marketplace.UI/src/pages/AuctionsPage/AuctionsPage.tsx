@@ -1,82 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getToken } from '../../utils/AuthUtil';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../Components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
-import './AuctionsPage.css';
-
-const apiService = new ApiService;
-const auctionService = new AuctionService(apiService);
+import './AuctionsPage.css'
+import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
+import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
+import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
 
 const AuctionsPage: React.FC = () => {
     const token = getToken();
-
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [isCompleted, setIsCompleted] = useState('');
-
-    const [auction, setAuction] = useState({
-        name: '',
-        description: '',
-        isCompleted: false,
-    });
-
-    const handleNewAuctionClick = () => {
-        setShowNewAuctionForm(true);
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setAuction((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setAuction((prevData) => ({
-            ...prevData,
-            [name]: checked,
-        }));
-    };
-
-    const handleNewAuctionSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        setAuction({
-            name: '',
-            description: '',
-            isCompleted: false,
-        });
-        setShowNewAuctionForm(false);
-        fetchAuctions();
-    };
-
-    const fetchAuctions = async () => {
-        try {
-            const response: ApiResponseDTO = await auctionService.fetchAuctions();
-            const auctionData = await response.data;
-            if (response.succeed) {
-                setAuction(auctionData);
-                console.log(auctionData);
-            }
-
-        } catch (error) {
-            console.error('Error fetching auctions:', error);
-        }
-    };
+    const [auctions, setAuctions] = useState<CreateAuctionDTO[]>([]);
+    const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const auctionsPerPage = 3;
 
     useEffect(() => {
+        const fetchAuctions = async () => {
+            try {
+                const apiService = new ApiService;
+                const auctionService = new AuctionService(apiService);
+                const response: ApiResponseDTO = await auctionService.fetchAuctions();
+
+                const auctions: AuctionDTO[] = response.data || [];
+                setAuctions(auctions);
+            } catch (error) {
+                console.error('Error fetching auctions:', error);
+            }
+        };
         if (token) {
             fetchAuctions();
         }
-    }, [token]
-    );
+
+        if (isTokenExpired()) {
+            clearToken();
+        }
+
+    }, [token]);
 
     if (!token) {
         return (
@@ -89,41 +53,63 @@ const AuctionsPage: React.FC = () => {
         );
     }
 
+    const handleAddAuctionClick = () => {
+        setShowNewAuctionForm(true);
+        setHideAuctionContainer(true);
+    };
+
+    const handleCloseForm = () => {
+        setShowNewAuctionForm(false);
+        setHideAuctionContainer(false);
+    };
+
+    const indexOfLastAuction = currentPage * auctionsPerPage;
+    const indexOfFirstAuction = indexOfLastAuction - auctionsPerPage;
+    const currentAuction = auctions.slice(indexOfFirstAuction, indexOfLastAuction);
+
+    const renderMiniPages = () => {
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(auctions.length / auctionsPerPage); i++) {
+            pageNumbers.push(i);
+        }
+
+        return (
+            <div className="pagination">
+                {pageNumbers.map((number) => (
+                    <button
+                        key={number}
+                        className={number === currentPage ? 'active' : ''}
+                        onClick={() => setCurrentPage(number)}
+                    >
+                        {number}
+                    </button>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <div>
             <Navbar showAuthButtons={false} />
-            <div>
-                <div className="auctions-container">
-                    <button className="create-new-auction-btn" onClick={handleNewAuctionClick}>
-                        New Auction
-                    </button>
-                    {showNewAuctionForm && (
-                        <form className="create-new-auction-form" onSubmit={handleNewAuctionSubmit}>
-                            <label className="inputs">
-                                Name:
-                                <input className="input-label" type="text" name="name" value={auction.name} onChange={handleInputChange} />
-                            </label>
-                            <br />
-                            <label className="inputs">
-                                Description:
-                                <textarea name="description" value={auction.description} onChange={handleInputChange} />
-                            </label>
-                            <br />
-                            <label className="inputs">
-                                Is Completed:
-                                <input className="input-label"
-                                    type="checkbox"
-                                    name="isCompleted"
-                                    checked={auction.isCompleted}
-                                    onChange={handleCheckboxChange}
-                                />
-                            </label>
-                            <br />
-                            <button className="create-new-auction-btn" type="submit">Create Auction</button>
-                        </form>
-                    )}
+            <button className="add-auction-button" onClick={handleAddAuctionClick}>
+                Add Auction
+            </button>
+
+            {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
+            
+            {!hideAuctionContainer && (
+                <div className="auction-info-container">
+                    {currentAuction.map((auction) => (
+                        <div key={auction.auctionId} className="auction-info">
+                            <h3>{auction.name}</h3>
+                            <Link to={`/details/${auction.auctionId}`} className="details-button">
+                                Details
+                            </Link>
+                        </div>
+                    ))}
+                    {renderMiniPages()}
                 </div>
-            </div>
+            )}
         </div>
     );
 };

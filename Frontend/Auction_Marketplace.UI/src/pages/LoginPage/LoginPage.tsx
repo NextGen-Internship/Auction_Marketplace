@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const navigate = useNavigate();
   localStorage.clear();
-
+  
   const validateEmailOrUsername = (input: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_.]{8,}$/;

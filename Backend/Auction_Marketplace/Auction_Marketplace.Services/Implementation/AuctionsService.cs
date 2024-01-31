@@ -1,11 +1,14 @@
 ﻿
 using System;
+using System.Security.Claims;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
+using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Services.Implementation
@@ -14,42 +17,51 @@ namespace Auction_Marketplace.Services.Implementation
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IAuctionRepository _auctionRepository;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserService _userService;
 
-        public AuctionsService(ApplicationDbContext dbContext, IAuctionRepository auctionRepository)
+        public AuctionsService(ApplicationDbContext dbContext,
+            IAuctionRepository auctionRepository,
+            IHttpContextAccessor contextAccessor,
+            IUserService userService)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
+            _contextAccessor = contextAccessor;
+            _userService = userService;
         }
 
-        public async Task<Response<Auction>> CreateAuction(AuctionViewModel auction)
+        public async Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction)
         {
             try
             {
-                var userExists = await _auctionRepository.Find(u => u.UserId == auction.UserId).FirstOrDefaultAsync();
-
-                if (userExists == null)
+                if(auction == null)
                 {
                     return new Response<Auction>
                     {
                         Succeed = false,
-                        Message = $"User with UserId '{auction.UserId}' does not exist."
+                        Message = "Invalid auction data."
                     };
                 }
 
-                if (auction == null)
+                var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+                if (email == null)
                 {
                     return new Response<Auction>
                     {
                         Succeed = false,
-                        Message = "Invalid auction data. UserId is missing."
+                        Message = "User is not existing."
                     };
                 }
+
+                var user = await _userService.GetByEmailAsync(email);
 
                 Auction newAuction = new Auction
                 {
-                    UserId = auction.UserId,
+                    UserId = user.Id,
                     Name = auction.Name,
                     Description = auction.Description,
+                    IsCompleted = false
                 };
 
                 if (newAuction == null || string.IsNullOrEmpty(newAuction.Name) || newAuction.UserId <= 0)
@@ -62,6 +74,7 @@ namespace Auction_Marketplace.Services.Implementation
                 }
 
                 await _auctionRepository.AddAuction(newAuction);
+                await _auctionRepository.SaveChangesAsync();
 
                 return new Response<Auction>
                 {

@@ -5,7 +5,6 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
 using System.Net;
-using System.IO;
 
 namespace Auction_Marketplace.Services.Implementation
 {

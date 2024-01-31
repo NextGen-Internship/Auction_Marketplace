@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
-import { getToken } from '../../utils/AuthUtil.ts';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import '../HomePage/HomePage.css'
 
@@ -9,6 +9,13 @@ import '../HomePage/HomePage.css'
 const AboutUsPage: React.FC = () => {
 
   const token = getToken();
+
+  useEffect(() => {
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, []);
+
   if (!token) {
     return (
       <div className='token-exp-container'>

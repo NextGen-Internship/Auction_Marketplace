@@ -4,7 +4,6 @@ import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
 import CauseService from '../../Services/CauseService';
 
-
 interface AddCauseFormProps {
   onClose: () => void;
 }

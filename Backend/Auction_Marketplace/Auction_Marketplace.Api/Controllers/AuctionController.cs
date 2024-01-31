@@ -54,7 +54,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateAuction(AuctionViewModel auction)
+        public async Task<IActionResult> CreateAuction([FromForm] NewAuctionViewModel auction)
         {  
             try
             {

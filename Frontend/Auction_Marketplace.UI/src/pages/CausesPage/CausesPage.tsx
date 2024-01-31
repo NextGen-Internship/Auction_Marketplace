@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
-import { getToken } from '../../utils/AuthUtil.ts';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
 import AddCauseForm from '../../Components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService'; 
 import ApiService from '../../Services/ApiService';
-import './CausesPage.css';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
@@ -38,6 +37,11 @@ const CausesPage: React.FC = () => {
     if (token) {
       fetchData();
     }
+
+    if (isTokenExpired()) {
+        clearToken();
+    }
+    
   }, [token]);
 
   if (!token) {

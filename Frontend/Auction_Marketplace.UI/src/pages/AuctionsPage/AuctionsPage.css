@@ -1,55 +1,78 @@
-.create-new-auction-btn {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 15px;
+.add-auction-button {
+    position: fixed;
+    top: 80px;
+    left: 25%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+.add-auction-button:hover {
+    background-color: #0056b3;
+}
+
+.auction-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.auction-info {
+    width: fit-content;
+    height: fit-content;
+    max-height: 20%;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.auction-info h3 {
+    overflow: hidden;
+    color: #007bff;
+}
+
+.details-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: block;
+    padding: 8px 12px;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.create-new-auction-btn:hover {
-    background-color: #2980b9;
+.details-button:hover {
+    background-color: #45a049;
 }
 
-.create-new-auction-form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* Styles for pagination buttons */
+.pagination button {
+    margin: 0 5px;
+    background-color: #ddd;
+    border: none;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.inputs {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.inputs[type="text"],
-textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.input-label [type="checkbox"] {
-    margin-right: 8px;
-}
-
-.auctions-container {
-    max-height: 400px; /* Set a maximum height for the container, adjust as needed */
-    overflow-y: auto; /* Add vertical scrollbar if content exceeds container height */
-    border: 1px solid #ccc; /* Optional: Add border for better visual separation */
-    padding: 10px; 
-}
-
-.auction-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
 }

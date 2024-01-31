@@ -1,19 +1,15 @@
-import CreateCauseDTO from '../Interfaces/DTOs/CreateCauseDTO'; 
-import CauseDTO from '../Interfaces/DTOs/CauseDTO'; 
+import CreateCauseDTO from '../Interfaces/DTOs/CreateCauseDTO';
 import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import ApiService from './ApiService';
 
-
-
 class CauseService {
-  private CREATE_CAUSE_ENDPOINT = import.meta.env.VITE_CREATE_CAUSE_ENDPOINT; 
-  private GET_ALL_CAUSES_ENDPOINT = import.meta.env.VITE_GET_ALL_CAUSES_ENDPOINT; 
+  private CREATE_CAUSE_ENDPOINT = import.meta.env.VITE_CREATE_CAUSE_ENDPOINT;
+  private GET_ALL_CAUSES_ENDPOINT = import.meta.env.VITE_GET_ALL_CAUSES_ENDPOINT;
   private apiService: ApiService;
 
   constructor(apiService: ApiService) {
     this.apiService = apiService;
   }
-
 
   async createCause(data: CreateCauseDTO): Promise<ApiResponseDTO> {
     const formData = new FormData();
@@ -27,11 +23,10 @@ class CauseService {
 
     return this.apiService.post<ApiResponseDTO>(this.CREATE_CAUSE_ENDPOINT, formData);
   }
- 
+
   async getAllCauses(): Promise<ApiResponseDTO> {
     return this.apiService.get<ApiResponseDTO>(this.GET_ALL_CAUSES_ENDPOINT);
-}
-  
+  }
 }
 
 export default CauseService;
