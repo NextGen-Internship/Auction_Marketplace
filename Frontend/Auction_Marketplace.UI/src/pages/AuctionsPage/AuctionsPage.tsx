@@ -11,31 +11,34 @@ import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
 
+const apiService = new ApiService;
+const auctionService = new AuctionService(apiService);
+
 const AuctionsPage: React.FC = () => {
     const token = getToken();
+    const [editMode, setEditMode] = useState(false);
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [auctions, setAuctions] = useState<CreateAuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [editAuctionId, setEditAuctionId] = useState<string | null>(null);
     const auctionsPerPage = 3;
 
-    useEffect(() => {
-        const fetchAuctions = async () => {
-            try {
-                const apiService = new ApiService;
-                const auctionService = new AuctionService(apiService);
-                const response: ApiResponseDTO = await auctionService.fetchAuctions();
+    const fetchAuctions = async () => {
+        try {
+            const response: ApiResponseDTO = await auctionService.fetchAuctions();
 
-                const auctions: AuctionDTO[] = response.data || [];
-                setAuctions(auctions);
-            } catch (error) {
-                console.error('Error fetching auctions:', error);
-            }
-        };
+            const auctions: AuctionDTO[] = response.data || [];
+            setAuctions(auctions);
+        } catch (error) {
+            console.error('Error fetching auctions:', error);
+        }
+    };
+
+    useEffect(() => {
         if (token) {
             fetchAuctions();
         }
-
         if (isTokenExpired()) {
             clearToken();
         }
@@ -66,6 +69,36 @@ const AuctionsPage: React.FC = () => {
     const indexOfLastAuction = currentPage * auctionsPerPage;
     const indexOfFirstAuction = indexOfLastAuction - auctionsPerPage;
     const currentAuction = auctions.slice(indexOfFirstAuction, indexOfLastAuction);
+/*
+    const handleSaveClick = async () => {
+        try {
+            if (editAuctionId) {
+                const editedAuction = {
+                    name: '',
+                    description: ' ',
+                    isCompleted: false,
+                    photo: '',
+                };
+
+                const response: ApiResponseDTO = await auctionService.updateAuction(editedAuction);
+                if (response.succeed) {
+                    setAuctions((prevAuctions) =>
+                        prevAuctions.map((auction) =>
+                            auction.auctionId === editAuctionId ? response.data : auction
+                        )
+                    );
+                }
+            } else {
+                
+            }
+        } catch (error) {
+            console.error('Error during auction save:', error);
+        } finally {
+            setEditMode(false);
+            setEditAuctionId(null);
+        }
+    };
+    */
 
     const renderMiniPages = () => {
         const pageNumbers = [];
@@ -106,6 +139,7 @@ const AuctionsPage: React.FC = () => {
                             <Link to={`/details/${auction.auctionId}`} className="details-button">
                                 Details
                             </Link>
+                            <button onClick={() => setEditAuctionId(auction.auctionId)}>Edit</button>
                         </div>
                     ))}
                     {renderMiniPages()}
