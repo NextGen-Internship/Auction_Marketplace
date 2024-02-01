@@ -6,8 +6,7 @@ import Navbar from '../../Components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
-import './AuctionsPage.css'
-import AuctionList from '../../Components/Auctions/AuctionList';
+import '../CausesPage/CausesPage.css';
 import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
@@ -18,7 +17,7 @@ const AuctionsPage: React.FC = () => {
     const [auctions, setAuctions] = useState<CreateAuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const auctionsPerPage = 10;
+    const auctionsPerPage = 3;
 
     useEffect(() => {
         const fetchAuctions = async () => {
@@ -92,13 +91,23 @@ const AuctionsPage: React.FC = () => {
     return (
         <div>
             <Navbar showAuthButtons={false} />
-            <button className="add-auction-button" onClick={handleAddAuctionClick}>
-                Add Auction
-            </button>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
             {!hideAuctionContainer && (
-                <div className="auction-info-container">
-                    <AuctionList auctions={currentAuction} />
+                <div className="cause-info-container">
+                    <div>
+                        <button className="add-cause-button" onClick={handleAddAuctionClick}>
+                            Add Auction
+                        </button>
+                    </div>
+                    {currentAuction.map((auction) => (
+                        <div key={auction.auctionId} className="cause-info">
+                            <h3>{auction.name}</h3>
+                            <img src={auction.photo} alt={auction.name} />
+                            <Link to={`/details/${auction.auctionId}`} className="details-button">
+                                Details
+                            </Link>
+                        </div>
+                    ))}
                     {renderMiniPages()}
                 </div>
             )}

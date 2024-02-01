@@ -12,6 +12,7 @@ interface FormData {
   name: string;
   description: string;
   isCompleted: boolean;
+  photo: File | null;
 }
 
 const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
@@ -20,8 +21,10 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
     name: '',
     description: '',
     isCompleted: false,
+    photo: null,
   });
 
+  const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
   const auctionService = new AuctionService(apiService);
 
@@ -35,6 +38,34 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      if (allowedFileTypes.includes(file.type)) {
+        setFormData((prevData) => ({
+          ...prevData,
+          photo: file,
+        }));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          photo: null,
+        }));
+        alert('Invalid file type. Please upload a JPEG or PNG image.');
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        photo: null,
+      }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -84,6 +115,14 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           value={formData.description}
           onChange={handleInputChange}
           required
+        />
+
+        <input
+          type="file"
+          id="photo"
+          name="photo"
+          onChange={handleFileChange}
+          accept="image/*"
         />
 
         <button type="submit">Submit</button>

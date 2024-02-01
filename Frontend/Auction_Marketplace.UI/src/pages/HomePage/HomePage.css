@@ -1,10 +1,10 @@
 .header-menu {
     max-width: 1200px;
     text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 100px 46px;
+    margin: 0 auto;
     background-color: #f5f5f5;
-}
+  }
 
 .description {
     margin-top: 20px;

@@ -3,6 +3,7 @@ interface AuctionDTO {
     userId: number;
     user: any;
     name: string;
+    photo: string
     description: string;
     isCompleted: boolean;
     createdAt: string;

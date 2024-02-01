@@ -32,20 +32,23 @@ const HomePage: React.FC = () => {
     );
   }
 
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   const images = [
     firstPhoto,
     secondPhoto,
     thirdPhoto,
     forthPhoto
   ];
+
+  const carouselSettings = {
+    showThumbs: false,
+    interval: 4000, 
+    infiniteLoop: true,
+    autoPlay: true,
+    transitionTime: 500,
+    stopOnHover: false,
+    dynamicHeight: false,
+  };
+
 
 
   return (
@@ -54,7 +57,7 @@ const HomePage: React.FC = () => {
       <div className="header-menu">
         <h1>Welcome to the Blankfactor Auction/Donation Marketplace</h1>
         <p>Buy or donate items for a good cause!</p>
-       <Carousel showThumbs={false}>
+       <Carousel {...carouselSettings}>
          {images.map((imageUrl, index) => (
            <div key={index}>
                <img src={imageUrl} alt={`Photo ${index + 1}`} />

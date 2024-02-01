@@ -5,7 +5,7 @@ import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
 import AddCauseForm from '../../Components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
-import CauseService from '../../Services/CauseService'; 
+import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
@@ -17,7 +17,7 @@ const CausesPage: React.FC = () => {
   const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
   const [hideCausesContainer, setHideCausesContainer] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const causesPerPage = 10;
+  const causesPerPage = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +39,7 @@ const CausesPage: React.FC = () => {
     }
 
     if (isTokenExpired()) {
-        clearToken();
+      clearToken();
     }
 
   }, [token]);
@@ -93,9 +93,11 @@ const CausesPage: React.FC = () => {
   return (
     <div>
       <Navbar showAuthButtons={false} />
-      <button className="add-cause-button" onClick={handleAddCauseClick}>
-        Add Your Cause
-      </button>
+      <div className="add-cause-container">
+        <button className="add-cause-button" onClick={handleAddCauseClick}>
+          Add Your Cause
+        </button>
+      </div>
 
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
 

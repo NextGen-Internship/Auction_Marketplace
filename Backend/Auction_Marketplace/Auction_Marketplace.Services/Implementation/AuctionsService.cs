@@ -7,6 +7,7 @@ using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
 using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
+using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +20,18 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IAuctionRepository _auctionRepository;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
+        private readonly IS3Service _s3Service;
 
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService)
+            IUserService userService, IS3Service s3Service)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
             _contextAccessor = contextAccessor;
             _userService = userService;
+            _s3Service = s3Service;
         }
 
         public async Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction)
@@ -61,8 +64,16 @@ namespace Auction_Marketplace.Services.Implementation
                     UserId = user.Id,
                     Name = auction.Name,
                     Description = auction.Description,
-                    IsCompleted = false
+                    IsCompleted = false,
                 };
+
+                if (auction.Photo != null)
+                {
+                    var fileName = String.Format(AWSConstants.UploadCausePictureName, auction.Name);
+                    var path = String.Format(AWSConstants.UploadCausePicturePath, auction.Name);
+                    newAuction.Photo = await _s3Service.UploadFileAsync(auction.Photo, path, fileName);
+                }
+
 
                 if (newAuction == null || string.IsNullOrEmpty(newAuction.Name) || newAuction.UserId <= 0)
                 {

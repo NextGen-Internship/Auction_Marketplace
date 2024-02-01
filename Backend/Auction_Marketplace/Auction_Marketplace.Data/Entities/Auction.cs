@@ -21,6 +21,8 @@ namespace Auction_Marketplace.Data.Entities
         [StringLength(1000)]
         public string Description { get; set; }
 
+        public string Photo { get; set; }
+
         [Required]
         [DefaultValue(false)]
         public bool IsCompleted { get; set; }
