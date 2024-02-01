@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import Navbar from './components/Navbar/Navbar.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
@@ -7,6 +6,7 @@ import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
 import Footer from './components/Footer/Footer.tsx';
 import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
 import CausesPage from './pages/CausesPage/CausesPage.tsx';
+import CauseDetailsPage from './pages/CauseDetailsPage/CauseDetailsPage.tsx';
 import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
 
@@ -25,6 +25,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
+          <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
         </Routes>
         <Footer />
