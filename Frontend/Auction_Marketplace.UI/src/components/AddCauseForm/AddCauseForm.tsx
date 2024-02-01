@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './AddCauseForm.css'; 
+import './AddCauseForm.css';
 import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseService from '../../Services/CauseService';
 
 interface AddCauseFormProps {
@@ -24,8 +24,8 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
   });
 
   const allowedFileTypes = ['image/jpeg', 'image/png'];
-  const apiService = new ApiService(); 
-  const causesService = new CauseService(apiService); 
+  const apiService = new ApiService();
+  const causesService = new CauseService(apiService);
 
   const handleClose = () => {
     onClose();
@@ -34,7 +34,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === 'amountNeeded' && !/^\d*$/.test(value)) {
-    return; 
+      return;
     }
     setFormData((prevData) => ({
       ...prevData,
@@ -76,12 +76,12 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-     try {
+    try {
       const response: ApiResponseDTO = await causesService.createCause(formData);
 
       if (response.succeed) {
         console.log('Cause created successfully:', response.data);
-        onClose(); 
+        onClose();
       } else {
         console.error('Failed to create cause:', response.message);
       }

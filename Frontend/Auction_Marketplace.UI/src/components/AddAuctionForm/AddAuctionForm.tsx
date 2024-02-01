@@ -3,7 +3,6 @@ import ApiService from "../../Services/ApiService";
 import '../AddCauseForm/AddCauseForm.css';
 import AuctionService from "../../Services/AuctionService";
 import ApiResponseDTO from "../../Interfaces/DTOs/ApiResponseDTO";
-import { useNavigate } from 'react-router-dom';
 
 interface AddAuctionFormProps {
   onClose: () => void;
@@ -16,7 +15,6 @@ interface FormData {
 }
 
 const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
     name: '',

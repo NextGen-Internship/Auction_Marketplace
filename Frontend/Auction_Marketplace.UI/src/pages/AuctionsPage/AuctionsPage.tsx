@@ -7,6 +7,7 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import './AuctionsPage.css'
+import AuctionList from '../../Components/Auctions/AuctionList';
 import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
@@ -90,28 +91,17 @@ const AuctionsPage: React.FC = () => {
 
     return (
         <div>
-            <label className='label-buttons'>
-                <button className="add-auction-button" onClick={handleAddAuctionClick}>
-                    Add Auction
-                </button>
-
-            </label>
+            <Navbar showAuthButtons={false} />
+            <button className="add-auction-button" onClick={handleAddAuctionClick}>
+                Add Auction
+            </button>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
-
             {!hideAuctionContainer && (
                 <div className="auction-info-container">
-                    {currentAuction.map((auction) => (
-                        <div key={auction.auctionId} className="auction-info">
-                            <h3>{auction.name}</h3>
-                            <Link to={`/details/${auction.auctionId}`} className="details-button-auctions">
-                                Details
-                            </Link>
-                        </div>
-                    ))}
+                    <AuctionList auctions={currentAuction} />
                     {renderMiniPages()}
                 </div>
             )}
-            <Navbar showAuthButtons={false} />
         </div>
     );
 };
