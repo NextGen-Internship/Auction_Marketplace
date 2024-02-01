@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getToken } from '../../utils/AuthUtil.ts';
-import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../components/Navbar/Navbar.tsx';
+import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
 import firstPhoto from '/src/assets/5-Reasons-Why-You-Should-Donate-to-Charity.jpg';
@@ -11,6 +10,7 @@ import thirdPhoto from '/src/assets/donate-2.jpg';
 import forthPhoto from '/src/assets/gettyimages-1189942849_900xx2121-1193-0-111.jpg';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
+
 
 const HomePage: React.FC = () => {
   const token = getToken();

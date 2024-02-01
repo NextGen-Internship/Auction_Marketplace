@@ -16,6 +16,9 @@ namespace Auction_Marketplace.Data.Entities
 
         public string ProfilePicture { get; set; }
 
+        [MaxLength(10)]
+        public string? CustomerId { get; set; }
+
         // Implementing IBaseEntity interface
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

@@ -16,7 +16,7 @@ namespace Auction_Marketplace.Data.Models.Authentication
                 [Required(ErrorMessage = "Password is required")]
                 public string Password { get; set; } = string.Empty;
 
-                public IFormFile ProfilePicture { get; set; }
+                public IFormFile? ProfilePicture { get; set; }
         }
 }
 

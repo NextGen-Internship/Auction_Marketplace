@@ -1,4 +1,3 @@
-import Marketplace from './pages/MarketplacePage/MarketplacePage.tsx';
 import Navbar from './components/Navbar/Navbar.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
@@ -11,6 +10,7 @@ import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
 import CausesPage from './pages/CausesPage/CausesPage.tsx';
 import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
+import NameForm from './pages/ProfilePage/StripeInformationPage.tsx';
 
 function App() {
   return (
@@ -23,13 +23,13 @@ function App() {
           <Route path="/register" Component={RegisterPage}></Route>
           <Route path="/" element={<LoginPage />} ></Route>
           <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/marketplace" element={<Marketplace />}></Route>
           <Route path="/payment" element={<Payment/>}></Route>
           <Route path="/completion" element={<Completion/>}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
+          <Route path='/profile/stripeInfo' element={<NameForm/>}></Route>
         </Routes>
         <Footer />
       </Router>
