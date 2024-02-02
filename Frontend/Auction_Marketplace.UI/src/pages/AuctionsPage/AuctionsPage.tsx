@@ -7,7 +7,6 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
-import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
 import UpdateAuctionForm from '../../Components/UpdateAuctionForm/UpdateAuctionForm';
@@ -23,7 +22,7 @@ interface AuctionsPageProps {
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AuctionsPage: React.FC<AuctionsPageProps> = ({ }) => {
+const AuctionsPage: React.FC = ({ }) => {
     const token = getToken();
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);

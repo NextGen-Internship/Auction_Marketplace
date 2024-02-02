@@ -6,6 +6,7 @@ import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
 import Footer from './Components/Footer/Footer.tsx';
 import AuctionsPage from './Pages/AuctionsPage/AuctionsPage.tsx';
 import CausesPage from './Pages/CausesPage/CausesPage.tsx';
+import CauseDetailsPage from './Pages/CauseDetailsPage/CauseDetailsPage.tsx';
 import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
+          <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
         </Routes>
         <Footer />

@@ -17,7 +17,7 @@ namespace Auction_Marketplace.Api.Controllers
         private readonly IHttpContextAccessor _httpContext;
 
         public UserController(IUserService userService, IHttpContextAccessor httpContext)
-		{
+        {
             _userService = userService;
             _httpContext = httpContext;
         }
@@ -51,6 +51,6 @@ namespace Auction_Marketplace.Api.Controllers
                 return StatusCode(500, $"{ex.Message}");
             }
         }
-    }   
+    }
 }
 

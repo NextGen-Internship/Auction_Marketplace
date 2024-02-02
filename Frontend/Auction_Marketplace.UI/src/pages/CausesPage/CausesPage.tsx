@@ -107,7 +107,7 @@ const CausesPage: React.FC = () => {
             <div key={cause.causeId} className="cause-info">
               <h3>{cause.name}</h3>
               <img src={cause.photo} alt={cause.name} />
-              <Link to={`/details/${cause.causeId}`} className="details-button">
+              <Link to={`/causes/details/${cause.causeId}`} className="details-button">
                 Details
               </Link>
             </div>
