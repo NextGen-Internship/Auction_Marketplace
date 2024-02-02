@@ -72,18 +72,19 @@ const ProfilePage: React.FC = () => {
                     firstName,
                     lastName,
                     email,
-                    profilePicture
+                    profilePicture,
+                    userId: 0
                 });
                 const userData = response.data;
                 if (response.succeed) {
                     setUser(userData);
                 }
-                navigate('/profile');
             }
         } catch (error) {
             console.error('Error during profile update:', error);
         } finally {
             setEditMode(false);
+            window.location.reload();
         }
     };
 
@@ -172,6 +173,11 @@ const ProfilePage: React.FC = () => {
                                         type="text"
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if(e.key === 'Enter') {
+                                                handleSaveClick();
+                                            }
+                                        }}
                                     />
                                 ) : (
                                     <label>{user.firstName}</label>
@@ -190,6 +196,11 @@ const ProfilePage: React.FC = () => {
                                         type="text"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if(e.key === 'Enter') {
+                                                handleSaveClick();
+                                            }
+                                        }}
                                     />
                                 ) : (
                                     <label>{user.lastName}</label>

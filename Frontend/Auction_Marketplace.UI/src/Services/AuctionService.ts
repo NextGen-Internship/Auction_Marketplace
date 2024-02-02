@@ -1,13 +1,13 @@
 import ApiService from './ApiService';
 import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import CreateAuctionDTO from '../Interfaces/DTOs/CreateAuctionDTO';
-import AuctionDTO from '../Interfaces/DTOs/AuctionDTO';
+import UpdateAuctionDTO from '../Interfaces/DTOs/UpdateAuctionDTO';
 
 class AuctionService {
     private GET_AUCTIONS_ENDPOINT = import.meta.env.VITE_GET_AUCTIONS;
     private CREATE_AUCTION_ENDPOINT = import.meta.env.VITE_CREATE_AUCTION_ENDPOINT;
     private UPDATE_AUCTION_ENDPOINT = import.meta.env.VITE_UPDATE_AUCTION_ENDPOINT;
-
+    private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
     private apiService: ApiService;
 
     constructor(apiService: ApiService) {
@@ -29,8 +29,8 @@ class AuctionService {
 
         return this.apiService.post<ApiResponseDTO>(this.CREATE_AUCTION_ENDPOINT, formData);
     }
-    
-    async updateAuction(data: AuctionDTO) : Promise<ApiResponseDTO> {
+
+    async updateAuction(data: UpdateAuctionDTO): Promise<ApiResponseDTO> {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
@@ -40,6 +40,11 @@ class AuctionService {
         }
 
         return this.apiService.put<ApiResponseDTO>(this.UPDATE_AUCTION_ENDPOINT, formData);
+    }
+    
+    async getAuctionById(auctioId: number): Promise<ApiResponseDTO> {
+        const endpoint = `${this.GET_AUCTION_BY_ID_ENDPOINT}/${auctioId}`;
+        return this.apiService.get<ApiResponseDTO>(endpoint);
     }
 }
 

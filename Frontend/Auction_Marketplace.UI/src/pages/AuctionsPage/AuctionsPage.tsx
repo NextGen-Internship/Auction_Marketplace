@@ -10,29 +10,63 @@ import '../CausesPage/CausesPage.css';
 import CreateAuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
+import UpdateAuctionForm from '../../Components/UpdateAuctionForm/UpdateAuctionForm';
+import UserService from '../../Services/UserService';
+import UserDTO from '../../Interfaces/DTOs/UserDTO';
 
 const apiService = new ApiService;
 const auctionService = new AuctionService(apiService);
+const userService = new UserService(apiService);
 
-const AuctionsPage: React.FC = () => {
+interface AuctionsPageProps {
+    user: UserDTO;
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AuctionsPage: React.FC<AuctionsPageProps> = ({ }) => {
     const token = getToken();
-    const [editMode, setEditMode] = useState(false);
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
-    const [auctions, setAuctions] = useState<CreateAuctionDTO[]>([]);
+    const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);
+    const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [editAuctionId, setEditAuctionId] = useState<string | null>(null);
     const auctionsPerPage = 3;
+    const [user, setUser] = useState<UserDTO>({
+        firstName: '',
+        lastName: '',
+        email: '',
+        userId: 0
+    });
+    const [selectedAuctionId, setSelectedAuctionId] = useState<string | null>(null);
+
+
+    const userResponse = async () => {
+        const response: ApiResponseDTO = await userService.fetchUser();
+        const userData = response.data;
+        setUser(userData);
+    }
 
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
+            const fetchAuctions: AuctionDTO[] = response.data || [];
+            setAuctions(fetchAuctions);
 
-            const auctions: AuctionDTO[] = response.data || [];
-            setAuctions(auctions);
         } catch (error) {
             console.error('Error fetching auctions:', error);
         }
+    };
+
+    const handleUpdateAuctionClick = (auctionId: number) => {
+        setShowUpdateAuctionForm(true);
+        setHideAuctionContainer(true);
+      //  setSelectedAuctionId(auctionId)
+    };
+
+    const handleCloseUpdateForm = () => {
+        setShowUpdateAuctionForm(false);
+        setHideAuctionContainer(false);
+        setSelectedAuctionId(null);
     };
 
     useEffect(() => {
@@ -69,36 +103,6 @@ const AuctionsPage: React.FC = () => {
     const indexOfLastAuction = currentPage * auctionsPerPage;
     const indexOfFirstAuction = indexOfLastAuction - auctionsPerPage;
     const currentAuction = auctions.slice(indexOfFirstAuction, indexOfLastAuction);
-/*
-    const handleSaveClick = async () => {
-        try {
-            if (editAuctionId) {
-                const editedAuction = {
-                    name: '',
-                    description: ' ',
-                    isCompleted: false,
-                    photo: '',
-                };
-
-                const response: ApiResponseDTO = await auctionService.updateAuction(editedAuction);
-                if (response.succeed) {
-                    setAuctions((prevAuctions) =>
-                        prevAuctions.map((auction) =>
-                            auction.auctionId === editAuctionId ? response.data : auction
-                        )
-                    );
-                }
-            } else {
-                
-            }
-        } catch (error) {
-            console.error('Error during auction save:', error);
-        } finally {
-            setEditMode(false);
-            setEditAuctionId(null);
-        }
-    };
-    */
 
     const renderMiniPages = () => {
         const pageNumbers = [];
@@ -124,22 +128,26 @@ const AuctionsPage: React.FC = () => {
     return (
         <div>
             <Navbar showAuthButtons={false} />
+            <div className="add-cause-container">
+                <button className="add-cause-button" onClick={handleAddAuctionClick}>
+                    Add Auction
+                </button>
+            </div>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
+            
             {!hideAuctionContainer && (
                 <div className="cause-info-container">
-                    <div>
-                        <button className="add-cause-button" onClick={handleAddAuctionClick}>
-                            Add Auction
-                        </button>
-                    </div>
                     {currentAuction.map((auction) => (
                         <div key={auction.auctionId} className="cause-info">
                             <h3>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
-                            <Link to={`/details/${auction.auctionId}`} className="details-button">
+                            <Link to={`auction/details/${auction.auctionId}`} className="details-button">
                                 Details
                             </Link>
-                            <button onClick={() => setEditAuctionId(auction.auctionId)}>Edit</button>
+                            {showUpdateAuctionForm && <UpdateAuctionForm onClose={handleCloseUpdateForm} />}
+                            <Link to={`/update/auction/${auction.auctionId}`} className="update-cause-button">
+                                Update {auction.name}
+                            </Link>
                         </div>
                     ))}
                     {renderMiniPages()}
