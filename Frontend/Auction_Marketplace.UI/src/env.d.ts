@@ -10,6 +10,7 @@ interface ImportMetaEnv {
     readonly VITE_GET_ALL_CAUSES_ENDPOINT: string
     readonly VITE_GET_USER_ENDPOINT: string
     readonly VITE_UPDATE_USER_ENDPOINT: string
+    readonly VITE_CHECK_STRIPE_USER: string
 
 }
 

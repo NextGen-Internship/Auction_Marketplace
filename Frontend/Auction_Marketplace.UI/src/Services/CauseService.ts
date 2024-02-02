@@ -1,5 +1,4 @@
 import CreateCauseDTO from '../Interfaces/DTOs/CreateCauseDTO'; 
-import CauseDTO from '../Interfaces/DTOs/CauseDTO'; 
 import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import ApiService from './ApiService';
 

@@ -42,5 +42,6 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
             return _httpContext.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         }
+
     }
 }

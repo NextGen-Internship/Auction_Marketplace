@@ -4,9 +4,11 @@ import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
 import AddCauseForm from '../../components/AddCauseForm/AddCauseForm.tsx';
+import AddStripeForm from '../../components/AddStripeForm/AddStripeForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService'; 
 import ApiService from '../../Services/ApiService';
+import StripeService from '../../Services/StripeService';
 import './CausesPage.css';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
@@ -15,6 +17,7 @@ import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
 const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
+  const [showAddStrypeForm, setShowAddStrypeForm] = useState(false);
   const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
   const [hideCausesContainer, setHideCausesContainer] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,13 +54,25 @@ const CausesPage: React.FC = () => {
     );
   }
 
-  const handleAddCauseClick = () => {
-    setShowAddCauseForm(true);
-    setHideCausesContainer(true);
+  const handleAddCauseClick = async () => {
+    try {
+      const apiService = new ApiService();
+      const stripeService = new StripeService(apiService);
+      const shouldOpenAddStrypeForm = await stripeService.StripeUserExists();
+      if (shouldOpenAddStrypeForm) {
+        setShowAddCauseForm(true);
+      } else {
+        setShowAddStrypeForm(true);
+      }
+      setHideCausesContainer(true);
+    } catch (error) {
+      console.error('Error checking condition:', error);
+    }
   };
 
   const handleCloseForm = () => {
     setShowAddCauseForm(false);
+    setShowAddStrypeForm(false);
     setHideCausesContainer(false);
   };
 
@@ -94,7 +109,7 @@ const CausesPage: React.FC = () => {
       </button>
 
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
-
+      {showAddStrypeForm && <AddStripeForm onClose={handleCloseForm} />}
       {!hideCausesContainer && (
         <div className="cause-info-container">
           {currentCauses.map((cause) => (

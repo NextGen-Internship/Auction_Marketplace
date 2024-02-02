@@ -22,6 +22,15 @@ namespace Auction_Marketplace.Api.Controllers
             return Ok(new {clientSecret = session.ClientSecret});
         }
 
+        [HttpPost]
+        [Route("stripe-account")]
+        public IActionResult CheckStripeAccount()
+        {
+            var hasConnectedAccount = _stripeService.CheckStripeAccount();
+
+            return Ok(new { hasConnectedAccount });
+        }
+
 
         [HttpPost]
         [Route("webhook")]

@@ -14,6 +14,7 @@ namespace Auction_Marketplace.Services.Interface
 
 		Task CreateConnectedUser(User user);
 
+		bool CheckStripeAccount();
     }
 }
 

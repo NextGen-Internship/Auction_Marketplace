@@ -1,5 +1,8 @@
-﻿using Auction_Marketplace.Data.Entities;
+﻿using System.Security.Claims;
+using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Stripe;
@@ -11,12 +14,18 @@ namespace Auction_Marketplace.Services.Implementation
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserRepository _userRepository;
 
         public StripeService(IConfiguration configuration,
-                            UserManager<User> userManager)
+                            UserManager<User> userManager,
+                            IHttpContextAccessor contextAccessor,
+                            IUserRepository userRepository)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _contextAccessor = contextAccessor;
+            _userRepository = userRepository;
         }
 
         public PaymentIntent CreateCheckoutSession()
@@ -98,7 +107,6 @@ namespace Auction_Marketplace.Services.Implementation
                         City = "Sofia",
                         PostalCode = "2900",
                         Country = "BG",
-                        
                     },
                     Email = user.Email,
                     Phone = "+359 89 546 7272",
@@ -112,7 +120,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 BusinessProfile = new AccountBusinessProfileOptions
                 {
-                    Mcc = "4816", // Merchant Category Code, if applicable
+                    Mcc = "4816", 
                     Url = "https://blankfactor.com/",
                 },
 
@@ -133,6 +141,20 @@ namespace Auction_Marketplace.Services.Implementation
             };
             var service = new AccountService();
             service.Create(options);
+        }
+
+        public bool CheckStripeAccount()
+        {
+           var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+
+           var user = _userRepository.GetByEmailAsync(email).Result;
+
+            if (user != null)
+            {
+                return user.CustomerId == null ? false : true;
+            }
+
+            return false;
         }
 
         private async Task CustomerCreated(Event stripeEvent)

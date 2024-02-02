@@ -16,6 +16,7 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IStripeService _stripeService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IS3Service _s3Service;
@@ -23,6 +24,7 @@ namespace Auction_Marketplace.Services.Implementation
         public AuthenticationService(IUserService userSevice,
                                         ITokenService tokenService,
                                         IEmailService emailService,
+                                        IStripeService stripeService,
                                         UserManager<User> userManager,
                                         SignInManager<User> signInManager,
                                         IConfiguration configuration,
@@ -32,6 +34,7 @@ namespace Auction_Marketplace.Services.Implementation
             _userService = userSevice;
             _emailService = emailService;
             _tokenService = tokenService;
+            _stripeService = stripeService;
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -59,6 +62,8 @@ namespace Auction_Marketplace.Services.Implementation
             }
 
             var token = await RegisterUser(registerUser, user);
+
+            //await _stripeService.CreateConnectedUser(user);
 
             return token != null ? new Response<string> { Succeed = true, Data = token } : new Response<string> { Succeed = false, Message = "Invalid Registration" };
         }
