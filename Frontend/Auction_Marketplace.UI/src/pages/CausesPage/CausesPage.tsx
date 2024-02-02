@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar.tsx';
 import { getToken } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import './CausesPage.css';
 import AddCauseForm from '../../components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService'; 
@@ -101,7 +100,7 @@ const CausesPage: React.FC = () => {
             <div key={cause.causeId} className="cause-info">
               <h3>{cause.name}</h3>
               <img src={cause.photo} alt={cause.name} />
-              <Link to={`/details/${cause.causeId}`} className="details-button">
+              <Link to={`/causes/details/${cause.causeId}`} className="details-button">
                 Details
               </Link>
             </div>
