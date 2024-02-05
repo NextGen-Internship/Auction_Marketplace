@@ -5,6 +5,19 @@ import RegisterDTO from '../Interfaces/DTOs/RegisterDTO';
 import UserDTO from '../Interfaces/DTOs/UserDTO';
 import ApiService from './ApiService';
 
+
+async function getDefaultProfilePicture(): Promise<File> {
+  try {
+    const response = await fetch('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+    const blob = await response.blob();
+    const file = new File([blob], 'default.jpg', { type: blob.type });
+    return file;
+  } catch (error) {
+    console.error('Error fetching default profile picture:', error);
+    throw error;
+  }
+}
+
 class UserService {
   private REGISTER_ENDPOINT = import.meta.env.VITE_REGISTER_ENDPOINT;
   private LOGIN_ENDPOINT = import.meta.env.VITE_LOGIN_ENDPOINT;
@@ -25,7 +38,10 @@ class UserService {
     formData.append('lastName', data.lastName);
     formData.append('email', data.email);
     formData.append('password', data.password);
-    if (data.profilePicture) {
+    if (!data.profilePicture) {
+      const defaultProfilePicture = await getDefaultProfilePicture();
+      formData.append('profilePicture', defaultProfilePicture, 'default.jpg');
+    } else {
       formData.append('profilePicture', data.profilePicture);
     }
 

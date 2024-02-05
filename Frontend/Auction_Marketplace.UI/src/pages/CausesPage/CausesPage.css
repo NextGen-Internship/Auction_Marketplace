@@ -1,7 +1,7 @@
 .add-cause-button {
     position: fixed;
     top: 80px;
-    left: 25%;
+    left: 50%;
     transform: translateX(-50%);
     background-color: #007bff;
     color: white;
@@ -13,8 +13,16 @@
     z-index: 1000;
 }
 
+.add-cause-container {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .add-cause-button:hover {
     background-color: #0056b3;
+    box-shadow: 0 10px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
 .cause-info-container {
@@ -23,10 +31,14 @@
     align-items: center;
     padding: 20px;
     margin-top: 20%;
+    max-width: 660px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cause-info {
-    width: 40%;
+    width: fit-content;
+    height: fit-content;
     max-height: 20%;
     box-sizing: border-box;
     background-color: #f9f9f9;
@@ -35,35 +47,65 @@
     padding: 10px;
     position: relative;
     overflow: hidden;
+    align-items: center;
+}
+
+.cause-info:hover {
+    box-shadow: 20px 20px 26px 10px rgba(0, 0, 0, 0.2);
 }
 
 .cause-info h3 {
     overflow: hidden;
+    margin-bottom: 20px;
     color: #007bff;
 }
 
 .cause-info img {
-    width: 40%;
+    width: 45%;
     height: auto;
     float: left;
-     margin-right: 20px;
-      border-radius: 5px;
+    margin-left: 5px;
+    margin-bottom: 40px;
+    border-radius: 5px;
 }
 
 .details-button {
     position: absolute;
     bottom: 10px;
-    right: 10px;
     display: block;
     padding: 8px 12px;
-    background-color: #4caf50;
+    background-color: #007bff;
     color: white;
     text-align: center;
     text-decoration: none;
     border-radius: 5px;
     cursor: pointer;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .details-button:hover {
-    background-color: #45a049;
+    background-color: #577bf1;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-buttons {
+    max-width: 1200px;
+    margin: 0px auto;
+    height: 32px;
+}
+
+.update-cause-button {
+    position: absolute;
+    display: block;
+    bottom: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    left: 66%;
+    transform: translateX(-50%);
 }

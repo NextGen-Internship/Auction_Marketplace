@@ -8,10 +8,14 @@ interface ImportMetaEnv {
     readonly VITE_GOOGLE_CLIENT_ID: string
     readonly VITE_CREATE_CAUSE_ENDPOINT: string
     readonly VITE_GET_ALL_CAUSES_ENDPOINT: string
+    readonly VITE_GET_CAUSE_BY_ID_ENDPOINT: string
     readonly VITE_GET_USER_ENDPOINT: string
     readonly VITE_UPDATE_USER_ENDPOINT: string
     readonly VITE_CHECK_STRIPE_USER: string
-
+    readonly VITE_GET_AUCTIONS: string
+    readonly VITE_CREATE_AUCTION_ENDPOINT: string
+    readonly VITE_UPDATE_AUCTION_ENDPOINT: string
+    readonly VITE_GET_AUCTION_BY_ID_ENDPOINT: string
 }
 
 interface ImportMeta {

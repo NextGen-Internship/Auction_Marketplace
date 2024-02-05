@@ -24,7 +24,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.GetAllAuctions();
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
@@ -54,12 +54,12 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateAuction(AuctionViewModel auction)
+        public async Task<IActionResult> CreateAuction([FromForm] NewAuctionViewModel auction)
         {  
             try
             {
                 var response = await _auctionsService.CreateAuction(auction);
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {

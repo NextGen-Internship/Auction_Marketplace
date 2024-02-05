@@ -13,7 +13,7 @@ namespace Auction_Marketplace.Services.Interface
 
         Task<Response<string>> DeleteAuction(int auctionId);
 
-        Task<Response<Auction>> CreateAuction(AuctionViewModel auction);
+        Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction);
 
         Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction);
     }

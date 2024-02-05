@@ -1,3 +1,4 @@
+
 import Navbar from './components/Navbar/Navbar.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
@@ -11,7 +12,6 @@ import CausesPage from './pages/CausesPage/CausesPage.tsx';
 import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
 import NameForm from './pages/ProfilePage/StripeInformationPage.tsx';
-
 function App() {
   return (
     <div>
@@ -28,6 +28,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
+          <Route path="/causes/details/:causeId" element={<CausesPage />} />
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
           <Route path='/profile/stripeInfo' element={<NameForm/>}></Route>
         </Routes>

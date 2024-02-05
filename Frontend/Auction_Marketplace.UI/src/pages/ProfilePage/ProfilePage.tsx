@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
-import { getToken } from '../../utils/AuthUtil.ts';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import "./ProfilePage.css";
 import { FaCheck, FaEdit } from 'react-icons/fa';
@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
 
     const navigate = useNavigate();
@@ -50,6 +50,11 @@ const ProfilePage: React.FC = () => {
         if (token) {
             fetchUserProfile();
         }
+
+        if (isTokenExpired()) {
+            clearToken();
+        }
+
     }, [token]
     );
 
@@ -67,18 +72,19 @@ const ProfilePage: React.FC = () => {
                     firstName,
                     lastName,
                     email,
-                    profilePicture
+                    profilePicture,
+                    userId: 0
                 });
                 const userData = response.data;
                 if (response.succeed) {
                     setUser(userData);
                 }
-                navigate('/profile');
             }
         } catch (error) {
             console.error('Error during profile update:', error);
         } finally {
             setEditMode(false);
+            window.location.reload();
         }
     };
 
@@ -131,21 +137,22 @@ const ProfilePage: React.FC = () => {
             <Navbar showAuthButtons={false} />
             <form>
                 <div className='profile-container'>
-                    <h2>User Profile</h2>
+                    <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
                     <div className="user-info">
                         <div className="user-avatar">
-                            <img src={user.profilePicture} alt="Profile" />
-                            {editMode && (
-                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
-                                    <input
-                                        type="file"
-                                        id="profilePicture"
-                                        name="profilePicture"
-                                        onChange={handleProfilePictureChange}
-                                        accept="image/*"
-                                    />
-                                </label>
-                            )}
+                            <img src={user.profilePicture} alt="Profile"
+                                {...editMode && (
+                                    <label className="edit-icon-label" onClick={handleEditPictureClick}>
+                                        <input
+                                            type="file"
+                                            id="profilePicture"
+                                            name="profilePicture"
+                                            onChange={handleProfilePictureChange}
+                                            accept="image/*"
+                                        />
+                                    </label>)}
+                            />
+                            
                             {!editMode && (
                                 <div className="edit-icons">
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />
@@ -166,6 +173,11 @@ const ProfilePage: React.FC = () => {
                                         type="text"
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if(e.key === 'Enter') {
+                                                handleSaveClick();
+                                            }
+                                        }}
                                     />
                                 ) : (
                                     <label>{user.firstName}</label>
@@ -184,6 +196,11 @@ const ProfilePage: React.FC = () => {
                                         type="text"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if(e.key === 'Enter') {
+                                                handleSaveClick();
+                                            }
+                                        }}
                                     />
                                 ) : (
                                     <label>{user.lastName}</label>

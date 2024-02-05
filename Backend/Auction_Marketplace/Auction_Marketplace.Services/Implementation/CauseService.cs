@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Services.Implementation
 {
-	public class CauseService : ICauseService
-	{
+    public class CauseService : ICauseService
+    {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICauseRepository _causeRepository;
         private readonly IStripeService _stripeService;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
-        private readonly IHttpContextAccessor _contextAccessor; 
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service, IHttpContextAccessor contextAccessor, IStripeService stripeService)
 		{
@@ -55,7 +55,7 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
                 var user = await _userService.GetByEmailAsync(email);
-           
+
 
                 var newCause = new Cause
                 {
@@ -71,7 +71,7 @@ namespace Auction_Marketplace.Services.Implementation
                     var fileName = String.Format(AWSConstants.UploadCausePictureName, cause.Name);
                     var path = String.Format(AWSConstants.UploadCausePicturePath, cause.Name);
                     newCause.Photo = await _s3Service.UploadFileAsync(cause.Photo, path, fileName);
-                    
+
                 }
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name))
@@ -202,4 +202,3 @@ namespace Auction_Marketplace.Services.Implementation
         }
     }
 }
-
