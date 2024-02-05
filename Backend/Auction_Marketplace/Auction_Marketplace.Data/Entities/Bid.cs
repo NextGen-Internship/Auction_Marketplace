@@ -18,10 +18,6 @@ namespace Auction_Marketplace.Data.Entities
         public int AuctionId { get; set; }
         public Auction Auction { get; set; }
 
-        [ForeignKey("Item")]
-        public int ItemId { get; set; }
-        public Item Item { get; set; }
-
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }

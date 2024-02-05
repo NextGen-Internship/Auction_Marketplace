@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddCauseForm from '../../Components/AddCauseForm/AddCauseForm.tsx';
+import AddCauseForm from '../../components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';

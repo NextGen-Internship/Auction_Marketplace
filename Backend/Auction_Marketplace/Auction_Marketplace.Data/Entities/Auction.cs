@@ -24,6 +24,13 @@ namespace Auction_Marketplace.Data.Entities
         public string Photo { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal StartPrice { get; set; }
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal FinalPrice { get; set; }
+
+        [Required]
         [DefaultValue(false)]
         public bool IsCompleted { get; set; }
 
