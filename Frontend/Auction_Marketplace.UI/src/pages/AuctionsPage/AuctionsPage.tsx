@@ -159,7 +159,7 @@ const AuctionsPage: React.FC = ({ }) => {
                                 Details
                             </Link>
 
-                            {handleCheckUserIdForAuction(auction, user.userId) &&  (
+                            {handleCheckUserIdForAuction(auction, user.userId) == false &&  (
                             <Link to={`${auction.auctionId}/update`} className='update-button' onClick={() => handleUpdateAuctionClick(auction.auctionId)} >
                                 Update
                             </Link>
