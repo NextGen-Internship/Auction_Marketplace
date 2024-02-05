@@ -56,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
     <nav className="navbar">
       <div className="nav-container">
         <div className="logo-container">
-          <Link to="/">
+          <Link to="/home">
             <img src={logo} alt="Logo" className="logo" />
           </Link>
         </div>

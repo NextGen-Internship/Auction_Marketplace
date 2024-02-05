@@ -14,12 +14,10 @@ namespace Auction_Marketplace.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IHttpContextAccessor _httpContext;
 
-        public UserController(IUserService userService, IHttpContextAccessor httpContext)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _httpContext = httpContext;
         }
 
         [HttpGet]

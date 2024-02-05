@@ -1,13 +1,13 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../Services/ApiService';
-import '../AddCauseForm/AddCauseForm.css'
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 
 interface UpdateAuctionFormProps {
-    auctionId: string; 
     onClose: () => void;
+    auctionId: number;
+    initialAuctionData: UpdateAuctionDTO | null; 
 }
 
 interface FormData {
@@ -17,21 +17,50 @@ interface FormData {
     photo: File | null;
 }
 
-const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
+const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ auctionId, onClose, initialAuctionData }) => {
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
         isCompleted: false,
-        photo: null,
+        photo: null
     });
 
     const allowedFileTypes = ['image/jpeg', 'image/png'];
     const apiService = new ApiService();
     const auctionService = new AuctionService(apiService);
 
-    const handleClose = () => {
+    useEffect(() => {
+        if (initialAuctionData) {
+            setFormData({
+                name: initialAuctionData.name,
+                description: initialAuctionData.description,
+                isCompleted: initialAuctionData.isCompleted,
+                photo: initialAuctionData.photo,
+            });
+        }
+    }, [initialAuctionData]);
+
+
+    const handleClose = async () => {
         onClose();
+        try {
+            const response: ApiResponseDTO = await auctionService.getAuctionById(auctionId);
+
+            if (response.succeed) {
+                const auctionData = response.data;
+                setFormData({
+                    name: auctionData.name,
+                    description: auctionData.description,
+                    isCompleted: auctionData.isCompleted,
+                    photo: auctionData.photo,
+                });
+            } else {
+                console.error('Failed to fetch auction details:', response.message);
+            }
+        } catch (error) {
+            console.error('Error fetching auction details:', error);
+        }
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -105,7 +134,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
             </div>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Auction:
+                    Auction name:
                 </label>
                 <input
                     type="text"

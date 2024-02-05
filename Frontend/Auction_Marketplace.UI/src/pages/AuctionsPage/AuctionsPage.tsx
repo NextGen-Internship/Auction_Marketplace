@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../Components/Navbar/Navbar';
@@ -17,26 +17,25 @@ const apiService = new ApiService;
 const auctionService = new AuctionService(apiService);
 const userService = new UserService(apiService);
 
-interface AuctionsPageProps {
-    user: UserDTO;
-    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 const AuctionsPage: React.FC = ({ }) => {
     const token = getToken();
+    const navigate = useNavigate(); 
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);
     const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedAuctionId, setSelectedAuctionId] = useState<number | null>(null);
     const auctionsPerPage = 3;
     const [user, setUser] = useState<UserDTO>({
         firstName: '',
         lastName: '',
         email: '',
-        userId: 0
+        userId: 0,
+        profilePicture: undefined
     });
-    const [selectedAuctionId, setSelectedAuctionId] = useState<number | null>(null);
+    const [initialAuctionFormData, setInitialAuctionFormData] = useState<FormData>(new FormData());
+
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
@@ -62,15 +61,25 @@ const AuctionsPage: React.FC = ({ }) => {
         }
     };
 
-    const handleUpdateAuctionClick = (auctionId: number) => {
-        if (user.userId === auctionId) {
-            setSelectedAuctionId(auctionId);
-            setShowUpdateAuctionForm(true);
-            setHideAuctionContainer(true);
-        } else {
-            console.warn('You are not the creator of this auction.');
+    const handleUpdateAuctionClick = async (auctionId: number) => {
+        try {
+            const response: ApiResponseDTO = await auctionService.getAuctionById(auctionId);
+            const auctionData = response.data;
+        
+            const auction = auctions.find((auction) => auction.auctionId === auctionId);
+            if (auction && user.userId === auction.userId) {
+                setSelectedAuctionId(auctionId);
+                setInitialAuctionFormData(auctionData);
+
+                navigate(`/auction/${auctionId}`);
+            } else {
+                console.warn('You are not the creator of this auction.');
+            }
+        } catch (error) {
+            console.error('Error fetching auction details:', error);
         }
     };
+    
 
     const handleCheckUserIdForAuction = (auction: AuctionDTO, userId: number): boolean => {
         return userId === auction.userId;
@@ -159,12 +168,21 @@ const AuctionsPage: React.FC = ({ }) => {
                                 Details
                             </Link>
 
-                            {handleCheckUserIdForAuction(auction, user.userId) == false &&  (
-                            <Link to={`${auction.auctionId}/update`} className='update-button' onClick={() => handleUpdateAuctionClick(auction.auctionId)} >
-                                Update
-                            </Link>
+                            {handleCheckUserIdForAuction(auction, user.userId) && (
+                                <React.Fragment key={auction.auctionId}>
+                                    <button className='update-button' onClick={() =>
+                                        handleUpdateAuctionClick(auction.auctionId)} >
+                                        Update
+                                    </button>
+                                    {showUpdateAuctionForm &&(
+                                        <UpdateAuctionForm
+                                            onClose={handleCloseUpdateForm}
+                                            auctionId={selectedAuctionId || 0}
+                                            initialAuctionData={initialAuctionFormData}
+                                        />
+                                    )}
+                                </React.Fragment>
                             )}
-
                         </div>
                     ))}
                     {renderMiniPages()}

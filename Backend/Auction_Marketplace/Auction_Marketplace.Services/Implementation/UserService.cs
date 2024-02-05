@@ -43,6 +43,7 @@ namespace Auction_Marketplace.Services.Implementation
                 
                 UserViewModel user = new UserViewModel()
                 {
+                    UserId = userEmail.Id,
                     FirstName = userEmail.FirstName,
                     LastName = userEmail.LastName,
                     Email = userEmail.Email,

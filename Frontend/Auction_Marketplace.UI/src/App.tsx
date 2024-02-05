@@ -9,6 +9,7 @@ import CausesPage from './Pages/CausesPage/CausesPage.tsx';
 import CauseDetailsPage from './Pages/CauseDetailsPage/CauseDetailsPage.tsx';
 import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
+import AuctionPage from './Pages/AuctionsPage/AuctionPage.tsx'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
           <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
+          <Route path="auction/:auctionId" element={<AuctionPage />}/>
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
         </Routes>
         <Footer />

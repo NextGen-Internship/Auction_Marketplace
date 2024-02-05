@@ -42,10 +42,9 @@ class AuctionService {
         return this.apiService.put<ApiResponseDTO>(this.UPDATE_AUCTION_ENDPOINT, formData);
     }
     
-    async getAuctionById(auctioId: number): Promise<ApiResponseDTO> {
-        const endpoint = `${this.GET_AUCTION_BY_ID_ENDPOINT}/${auctioId}`;
-        return this.apiService.get<ApiResponseDTO>(endpoint);
-    }
+    async getAuctionById(auctionId: number): Promise<ApiResponseDTO> {
+        return this.apiService.get<ApiResponseDTO>(`${this.GET_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
+    }    
 }
 
 export default AuctionService;
