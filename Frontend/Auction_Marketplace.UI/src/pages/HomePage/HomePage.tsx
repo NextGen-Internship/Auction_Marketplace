@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
-import { getToken } from '../../utils/AuthUtil.ts';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
 import firstPhoto from '/src/assets/5-Reasons-Why-You-Should-Donate-to-Charity.jpg';
@@ -14,6 +14,13 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const HomePage: React.FC = () => {
   const token = getToken();
+
+  useEffect(() => {
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, []);
+  
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -25,20 +32,23 @@ const HomePage: React.FC = () => {
     );
   }
 
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   const images = [
     firstPhoto,
     secondPhoto,
     thirdPhoto,
     forthPhoto
   ];
+
+  const carouselSettings = {
+    showThumbs: false,
+    interval: 4000, 
+    infiniteLoop: true,
+    autoPlay: true,
+    transitionTime: 500,
+    stopOnHover: false,
+    dynamicHeight: false,
+  };
+
 
 
   return (
@@ -47,7 +57,7 @@ const HomePage: React.FC = () => {
       <div className="header-menu">
         <h1>Welcome to the Blankfactor Auction/Donation Marketplace</h1>
         <p>Buy or donate items for a good cause!</p>
-       <Carousel showThumbs={false}>
+       <Carousel {...carouselSettings}>
          {images.map((imageUrl, index) => (
            <div key={index}>
                <img src={imageUrl} alt={`Photo ${index + 1}`} />

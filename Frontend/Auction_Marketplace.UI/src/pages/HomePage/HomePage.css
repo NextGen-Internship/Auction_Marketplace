@@ -1,11 +1,10 @@
 .header-menu {
     max-width: 1200px;
     text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
-    /* Ensure padding is included in the width */
+    padding: 100px 46px;
+    margin: 0 auto;
     background-color: #f5f5f5;
-}
+  }
 
 .description {
     margin-top: 20px;
@@ -18,16 +17,12 @@
 
 .carousel .slide {
     max-width: 750px;
-    /* Adjust the width as needed */
 }
 
 .carousel .slide img {
     max-height: 400px;
-    /* Adjust the max height as needed */
     max-width: 900px;
-    /* Maintain aspect ratio */
 }
-
 
 .carousel .carousel-root {
     width: 100%;
@@ -36,12 +31,9 @@
 .carousel .control-prev,
 .carousel .control-next {
     background-color: transparent !important;
-    /* Remove default background color */
     color: #000 !important;
-    /* Set the color to black */
 }
 
-/* Style for the left and right arrow buttons */
 .carousel .control-prev:before,
 .carousel .control-next:before {
     content: '';
@@ -51,17 +43,12 @@
     width: 0;
     height: 0;
     margin: 4px;
-    /* Adjust the margin as needed */
 }
 
-/* Style for the left arrow button */
 .carousel .control-prev:before {
     border-right: 4px solid #000 !important;
-    /* Set the border color to black */
 }
 
-/* Style for the right arrow button */
 .carousel .control-next:before {
     border-left: 4px solid #000 !important;
-    /* Set the border color to black */
 }

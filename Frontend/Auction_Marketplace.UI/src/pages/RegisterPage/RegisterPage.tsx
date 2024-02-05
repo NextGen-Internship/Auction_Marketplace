@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../LoginPage/LoginPage.css';
-import './ProfilePicture.css';
+import './ProfilePictureRegister.css';
 import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 

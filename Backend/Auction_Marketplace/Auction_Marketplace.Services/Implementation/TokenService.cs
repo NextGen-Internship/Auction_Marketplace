@@ -19,7 +19,6 @@ namespace Auction_Marketplace.Services.Implementation
         {
             _userManager = userManager;
             _configuration = configuration;
-
         }
 
         public string GenerateJwtToken(User user)

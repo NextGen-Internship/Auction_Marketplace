@@ -1,31 +1,32 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './AddCauseForm.css';
-import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import CauseService from '../../Services/CauseService';
+import ApiService from "../../Services/ApiService";
+import '../AddCauseForm/AddCauseForm.css';
+import AuctionService from "../../Services/AuctionService";
+import ApiResponseDTO from "../../Interfaces/DTOs/ApiResponseDTO";
 
-interface AddCauseFormProps {
+interface AddAuctionFormProps {
   onClose: () => void;
 }
 
 interface FormData {
   name: string;
   description: string;
+  isCompleted: boolean;
   photo: File | null;
-  amountNeeded: number;
 }
 
-const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
+const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
+    isCompleted: false,
     photo: null,
-    amountNeeded: 0,
   });
 
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
-  const causesService = new CauseService(apiService);
+  const auctionService = new AuctionService(apiService);
 
   const handleClose = () => {
     onClose();
@@ -33,9 +34,6 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    if (name === 'amountNeeded' && !/^\d*$/.test(value)) {
-      return;
-    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -51,12 +49,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           ...prevData,
           photo: file,
         }));
-
         const reader = new FileReader();
-
         reader.onloadend = () => {
         };
-
         reader.readAsDataURL(file);
       } else {
         setFormData((prevData) => ({
@@ -75,19 +70,19 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     try {
-      const response: ApiResponseDTO = await causesService.createCause(formData);
+      const response: ApiResponseDTO = await auctionService.createAuction(formData);
 
       if (response.succeed) {
-        console.log('Cause created successfully:', response.data);
+        console.log('Auction created successfully:', response.data);
         onClose();
       } else {
-        console.error('Failed to create cause:', response.message);
+        console.error('Failed to create auction:', response.message);
       }
     } catch (error) {
-      console.error('Error creating cause:', error);
-      alert(`Error creating cause: `);
+      console.error('Error creating auction:', error);
+      onClose();
+      alert(`Error creating auction: `);
     }
   };
 
@@ -97,16 +92,22 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         <span className="close-cross">&#10005;</span>
       </div>
       <form onSubmit={handleSubmit}>
+        <label>
+          Auction:
+        </label>
         <input
           type="text"
           id="name"
           name="name"
-          placeholder="Cause Name"
+          placeholder="Name"
           value={formData.name}
           onChange={handleInputChange}
           required
         />
 
+        <label>
+          Description
+        </label>
         <textarea
           id="description"
           name="description"
@@ -124,19 +125,10 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           accept="image/*"
         />
 
-        <input
-          type="number"
-          id="amountNeeded"
-          name="amountNeeded"
-          placeholder="Money Needed"
-          value={formData.amountNeeded}
-          onChange={handleInputChange}
-          required
-        />
         <button type="submit">Submit</button>
       </form>
     </div>
   );
-};
+}
 
-export default AddCauseForm;
+export default AddAuctionForm;
