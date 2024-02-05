@@ -46,10 +46,7 @@ namespace Auction_Marketplace.Api.Controllers
         [Route("pay-out")]
         public async Task<IActionResult> PayOut()
         {
-            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            var stripeSignature = Request.Headers["Stripe-Signature"];
-
-            await _stripeService.HandleWebhookEvent(json, stripeSignature);
+            await _stripeService.PayOut();
 
             return Ok();
         }

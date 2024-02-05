@@ -49,35 +49,6 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        public async Task HandleWebhookEvent(string json, string stripeSignature)
-        {
-            try
-            {
-                var stripeEvent = EventUtility.ConstructEvent(json,
-                    stripeSignature,
-                    _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
-
-                switch (stripeEvent.Type)
-                {
-                    case Events.CustomerCreated:
-                        await CustomerCreated(stripeEvent);
-                        break;
-                    case Events.CheckoutSessionAsyncPaymentSucceeded:
-                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-                        break;
-                    case Events.CheckoutSessionAsyncPaymentFailed:
-                        await HandleCheckoutSessionPaymentFailed(stripeEvent);
-                        break;
-                    default:
-                        Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
-                        break;
-                }
-            }
-            catch (StripeException e)
-            {
-                throw e;
-            }
-        }
 
         public async Task CreateConnectedUser(StripeFormViewModel model)
         {
@@ -184,7 +155,7 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     Amount = 100,
                     Currency = "bgn",
-                    Destination = "acct_1234567890" // Replace with the actual Connected Stripe Account ID
+                    Destination = "acct_1OgRP3Qq5O9btfnL" // Replace with the actual Connected Stripe Account ID
                 };
 
                 var service = new TransferService();
@@ -203,8 +174,38 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
+        public async Task HandleWebhookEvent(string json, string stripeSignature)
+        {
+            try
+            {
+                var stripeEvent = EventUtility.ConstructEvent(json,
+                    stripeSignature,
+                    _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
 
-       private async Task CustomerCreated(Event stripeEvent)
+                switch (stripeEvent.Type)
+                {
+                    case Events.CustomerCreated:
+                        await CustomerCreated(stripeEvent);
+                        break;
+                    case Events.CheckoutSessionAsyncPaymentSucceeded:
+                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+                        break;
+                    case Events.CheckoutSessionAsyncPaymentFailed:
+                        await HandleCheckoutSessionPaymentFailed(stripeEvent);
+                        break;
+                    default:
+                        Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                        break;
+                }
+            }
+            catch (StripeException e)
+            {
+                throw e;
+            }
+        }
+
+
+        private async Task CustomerCreated(Event stripeEvent)
         {
             var customer = stripeEvent.Data.Object as Customer;
 
