@@ -155,8 +155,8 @@ const AuctionsPage: React.FC = ({ }) => {
                         <div key={auction.auctionId} className="cause-info">
                             <h3>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
-                            <Link to={`auction/details/${auction.auctionId}`} className="details-button">
-                                Details
+                            <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
+                               Details
                             </Link>
 
                             {handleCheckUserIdForAuction(auction, user.userId) == false &&  (
