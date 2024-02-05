@@ -9,7 +9,7 @@ import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
-import UpdateAuctionForm from '../../Components/UpdateAuctionForm/UpdateAuctionForm';
+import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 
@@ -22,6 +22,7 @@ const AuctionsPage: React.FC = ({ }) => {
     const navigate = useNavigate(); 
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);
+    const [showDeleteAuctionForm, setShowDeleteAuctionForm] = useState(false);
     const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -79,6 +80,26 @@ const AuctionsPage: React.FC = ({ }) => {
             console.error('Error fetching auction details:', error);
         }
     };
+
+    const handleDeleteAuction = async (auctionId: number) => {
+        try {
+            const response: ApiResponseDTO = await auctionService.deleteAuction(auctionId);
+            const auctionData = response.data;
+    
+            const auction = auctions.find((auction) => auction.auctionId === auctionId);
+            if (auction && user.userId === auction.userId) {
+                setSelectedAuctionId(auctionId);
+                setInitialAuctionFormData(auctionData);
+    
+                navigate("/auctions");
+            } else {
+                console.warn('You are not the creator of this auction.');
+            }
+        } catch (error) {
+            console.error('Error deleting auction details:', error);
+        }
+    };
+    
     
 
     const handleCheckUserIdForAuction = (auction: AuctionDTO, userId: number): boolean => {
@@ -87,8 +108,6 @@ const AuctionsPage: React.FC = ({ }) => {
 
     const handleCloseUpdateForm = () => {
         setShowUpdateAuctionForm(false);
-        setHideAuctionContainer(false);
-        setSelectedAuctionId(null);
     };
 
     useEffect(() => {
@@ -176,7 +195,21 @@ const AuctionsPage: React.FC = ({ }) => {
                                     </button>
                                     {showUpdateAuctionForm &&(
                                         <UpdateAuctionForm
-                                            onClose={handleCloseUpdateForm}
+                                            auctionId={selectedAuctionId || 0}
+                                            initialAuctionData={initialAuctionFormData}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            )}
+
+                            {handleCheckUserIdForAuction(auction, user.userId) && (
+                                <React.Fragment key={auction.auctionId}>
+                                    <button className='delete-button' onClick={() =>
+                                        handleDeleteAuction(auction.auctionId)} >
+                                        Delete
+                                    </button>
+                                    {showDeleteAuctionForm &&(
+                                        <DeleteAuctionForm
                                             auctionId={selectedAuctionId || 0}
                                             initialAuctionData={initialAuctionFormData}
                                         />

@@ -8,6 +8,7 @@ class AuctionService {
     private CREATE_AUCTION_ENDPOINT = import.meta.env.VITE_CREATE_AUCTION_ENDPOINT;
     private UPDATE_AUCTION_ENDPOINT = import.meta.env.VITE_UPDATE_AUCTION_ENDPOINT;
     private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
+    private DELETE_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_DELETE_AUCTION_BY_ID_ENDPOINT;
     private apiService: ApiService;
 
     constructor(apiService: ApiService) {
@@ -44,7 +45,11 @@ class AuctionService {
     
     async getAuctionById(auctionId: number): Promise<ApiResponseDTO> {
         return this.apiService.get<ApiResponseDTO>(`${this.GET_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
-    }    
+    }   
+    
+    async deleteAuction(auctionId: number): Promise<ApiResponseDTO> {
+        return this.apiService.delete<ApiResponseDTO>(`${this.DELETE_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
+    } 
 }
 
 export default AuctionService;

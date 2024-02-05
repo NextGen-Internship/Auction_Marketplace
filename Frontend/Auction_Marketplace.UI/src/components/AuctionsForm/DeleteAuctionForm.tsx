@@ -7,7 +7,7 @@ import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 interface UpdateAuctionFormProps {
     onClose: () => void;
     auctionId: number;
-    initialAuctionData: UpdateAuctionDTO | null; 
+    initialAuctionData: UpdateAuctionDTO | null;
 }
 
 interface FormData {
@@ -42,26 +42,9 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ auctionId, onClos
     }, [initialAuctionData]);
 
 
-    const handleClose = async () => {
+    const handleClose = () => {
         onClose();
-        try {
-            const response: ApiResponseDTO = await auctionService.getAuctionById(auctionId);
-
-            if (response.succeed) {
-                const auctionData = response.data;
-                setFormData({
-                    name: auctionData.name,
-                    description: auctionData.description,
-                    isCompleted: auctionData.isCompleted,
-                    photo: auctionData.photo,
-                });
-            } else {
-                console.error('Failed to fetch auction details:', response.message);
-            }
-        } catch (error) {
-            console.error('Error fetching auction details:', error);
-        }
-    };
+    }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -71,11 +54,15 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ auctionId, onClos
         }));
     };
 
-    const handleUpdateAuction = async () => {
+    const handleUpdateAuction = async (e: FormEvent) => {
+        e.preventDefault();
+
         try {
             const updatedAuction = await auctionService.updateAuction(formData);
-            console.log('Auction updated:', updatedAuction);
-            onClose();
+            if (updatedAuction.succeed) {
+                console.log('Auction updated:', updatedAuction);
+                onClose();
+            }
         } catch (error) {
             console.error('Error updating auction:', error);
         }

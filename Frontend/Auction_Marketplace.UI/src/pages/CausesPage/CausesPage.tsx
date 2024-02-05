@@ -93,12 +93,10 @@ const CausesPage: React.FC = () => {
   return (
     <div>
       <Navbar showAuthButtons={false} />
-      <div className="add-cause-container">
         <button className="add-cause-button" onClick={handleAddCauseClick}>
           Add Your Cause
         </button>
-      </div>
-
+        
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
 
       {!hideCausesContainer && (

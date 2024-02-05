@@ -15,6 +15,7 @@ interface ImportMetaEnv {
     readonly VITE_CREATE_AUCTION_ENDPOINT: string
     readonly VITE_UPDATE_AUCTION_ENDPOINT: string
     readonly VITE_GET_AUCTION_BY_ID_ENDPOINT: string
+    readonly VITE_DELETE_AUCTION_BY_ID_ENDPOINT: string
 }
 
 interface ImportMeta {
