@@ -10,7 +10,7 @@ class StripeService {
     }
 
   async StripeUserExists(): Promise<boolean> {
-    return this.apiService.post<boolean>(this.CHECK_STRIPE_USER, {});
+    return this.apiService.post<boolean>(this.CHECK_STRIPE_USER, []);
   }
 }
 

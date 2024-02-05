@@ -1,4 +1,5 @@
-﻿using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Data.Models.Stripe;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -23,12 +24,34 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpPost]
+        [Route("create-stripe-account")]
+        public async Task<IActionResult> CreateStripeAccount(StripeFormViewModel model)
+        {
+            await _stripeService.CreateConnectedUser(model);
+
+            return Ok();
+        }
+
+
+        [HttpPost]
         [Route("stripe-account")]
         public IActionResult CheckStripeAccount()
         {
             var hasConnectedAccount = _stripeService.CheckStripeAccount();
 
             return Ok(new { hasConnectedAccount });
+        }
+
+        [HttpPost]
+        [Route("pay-out")]
+        public async Task<IActionResult> PayOut()
+        {
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            var stripeSignature = Request.Headers["Stripe-Signature"];
+
+            await _stripeService.HandleWebhookEvent(json, stripeSignature);
+
+            return Ok();
         }
 
 

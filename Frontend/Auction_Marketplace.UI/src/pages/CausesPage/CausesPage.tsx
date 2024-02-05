@@ -58,7 +58,7 @@ const CausesPage: React.FC = () => {
     try {
       const apiService = new ApiService();
       const stripeService = new StripeService(apiService);
-      const shouldOpenAddStrypeForm = await stripeService.StripeUserExists();
+      const shouldOpenAddStrypeForm = false; //await stripeService.StripeUserExists();
       if (shouldOpenAddStrypeForm) {
         setShowAddCauseForm(true);
       } else {

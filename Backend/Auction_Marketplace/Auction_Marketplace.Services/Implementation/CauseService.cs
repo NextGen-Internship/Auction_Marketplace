@@ -86,7 +86,7 @@ namespace Auction_Marketplace.Services.Implementation
                 await _causeRepository.AddAsync(newCause);
                 await _causeRepository.SaveChangesAsync();
 
-               // await _stripeService.CreateConnectedUser(user);
+           //     await _stripeService.CreateConnectedUser(user);
 
                 return new Response<Cause>
                 {

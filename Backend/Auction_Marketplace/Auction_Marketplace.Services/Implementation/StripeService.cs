@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -78,69 +79,87 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task CreateConnectedUser(User user)
+        public async Task CreateConnectedUser(StripeFormViewModel model)
         {
-            var options = new AccountCreateOptions
+            DateTime dob;
+            DateTime.TryParse(model.DateOfBirth, out dob);
+
+            try
             {
-                Type = "custom",
-                BusinessType = "individual",
-                Country = "BG",
-                Email = user.Email,
-                Capabilities = new AccountCapabilitiesOptions
+                var options = new AccountCreateOptions
                 {
-                    CardPayments = new AccountCapabilitiesCardPaymentsOptions
+                    Type = "custom",
+                    BusinessType = "individual",
+                    Country = model.CountryCode,
+                    Email = model.Email,
+                    Capabilities = new AccountCapabilitiesOptions
                     {
-                        Requested = true,
+                        CardPayments = new AccountCapabilitiesCardPaymentsOptions
+                        {
+                            Requested = true,
+                        },
+                        Transfers = new AccountCapabilitiesTransfersOptions
+                        {
+                            Requested = true
+                        },
                     },
-                    Transfers = new AccountCapabilitiesTransfersOptions
+                    Individual = new AccountIndividualOptions
                     {
-                        Requested = true
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Address = new AddressOptions
+                        {
+                            Line1 = model.Street,
+                            City = model.City,
+                            PostalCode = model.PostalCode,
+                            Country = model.CountryCode,
+                        },
+                        Email = model.Email,
+                        Phone = model.Phone,
+                        Dob = new DobOptions
+                        {
+                            Day = dob.Day,
+                            Month = dob.Month,
+                            Year = dob.Year,
+                        },
                     },
-                },
-                Individual = new AccountIndividualOptions
-                {
-                    FirstName = "Sami",
-                    LastName = "Hosny",
-                    Address = new AddressOptions
+
+                    BusinessProfile = new AccountBusinessProfileOptions
                     {
-                        Line1 = "ul Ivan Vazov 1",
-                        City = "Sofia",
-                        PostalCode = "2900",
-                        Country = "BG",
+                        Mcc = "4816",
+                        Url = "https://blankfactor.com/",
                     },
-                    Email = user.Email,
-                    Phone = "+359 89 546 7272",
-                    Dob = new DobOptions
+
+                    TosAcceptance = new AccountTosAcceptanceOptions
                     {
-                        Day = 1,
-                        Month = 1,
-                        Year = 1990,
+                        Date = DateTime.UtcNow,
+                        Ip = "127.0.0.1",
                     },
-                },
 
-                BusinessProfile = new AccountBusinessProfileOptions
+                    ExternalAccount = new AccountBankAccountOptions
+                    {
+                        AccountNumber = model.BankAccountNumber,
+                        Country = model.CountryCode,
+                        Currency = "bgn",
+                        AccountHolderType = "individual",
+                    },
+
+                };
+                var service = new AccountService();
+                var account = await service.CreateAsync(options);
+
+                var dbUser = await _userManager.FindByEmailAsync(model.Email);
+
+                if (dbUser != null)
                 {
-                    Mcc = "4816", 
-                    Url = "https://blankfactor.com/",
-                },
-
-                TosAcceptance = new AccountTosAcceptanceOptions
-                {
-                    Date = DateTime.UtcNow,
-                    Ip = "127.0.0.1", 
-                },
-
-                ExternalAccount = new AccountBankAccountOptions
-                {
-                    AccountNumber = "BG80BNBG96611020345678",
-                    Country = "BG",
-                    Currency = "bgn",
-                    AccountHolderType = "individual",
-                },
-
-            };
-            var service = new AccountService();
-            service.Create(options);
+                    dbUser.CustomerId = account.Id;
+                    await _userRepository.UpdateUserInfo(dbUser);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public bool CheckStripeAccount()
@@ -157,7 +176,35 @@ namespace Auction_Marketplace.Services.Implementation
             return false;
         }
 
-        private async Task CustomerCreated(Event stripeEvent)
+        public async Task PayOut()
+        {
+            try
+            {
+                var options = new TransferCreateOptions
+                {
+                    Amount = 100,
+                    Currency = "bgn",
+                    Destination = "acct_1234567890" // Replace with the actual Connected Stripe Account ID
+                };
+
+                var service = new TransferService();
+                var transfer = service.Create(options);
+
+
+                Console.WriteLine($"Transfer ID: {transfer.Id}");
+            }
+            catch (StripeException ex)
+            {
+                Console.WriteLine($"Stripe Exception: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
+       private async Task CustomerCreated(Event stripeEvent)
         {
             var customer = stripeEvent.Data.Object as Customer;
 
@@ -183,6 +230,7 @@ namespace Auction_Marketplace.Services.Implementation
             // Handle payment failure logic
         }
 
+       
     }
  }
 

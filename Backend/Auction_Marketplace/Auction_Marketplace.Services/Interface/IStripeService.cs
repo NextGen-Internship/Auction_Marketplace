@@ -12,7 +12,9 @@ namespace Auction_Marketplace.Services.Interface
 
 		Task HandleWebhookEvent(string json, string stripeSignature);
 
-		Task CreateConnectedUser(User user);
+		Task CreateConnectedUser(StripeFormViewModel model);
+
+		Task PayOut();
 
 		bool CheckStripeAccount();
     }

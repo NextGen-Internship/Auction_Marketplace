@@ -7,6 +7,7 @@ using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Auction_Marketplace.Services.Constants;
+using Auction_Marketplace.Data.Repositories.Interfaces;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -20,6 +21,7 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IS3Service _s3Service;
+        private readonly IUserRepository _userReository;
 
         public AuthenticationService(IUserService userSevice,
                                         ITokenService tokenService,
@@ -28,7 +30,8 @@ namespace Auction_Marketplace.Services.Implementation
                                         UserManager<User> userManager,
                                         SignInManager<User> signInManager,
                                         IConfiguration configuration,
-                                        IS3Service s3Service
+                                        IS3Service s3Service,
+                                        IUserRepository userRepository
                                         )
         {
             _userService = userSevice;
@@ -39,6 +42,7 @@ namespace Auction_Marketplace.Services.Implementation
             _signInManager = signInManager;
             _userManager = userManager;
             _s3Service = s3Service;
+            _userReository = userRepository;
         }
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
@@ -76,6 +80,7 @@ namespace Auction_Marketplace.Services.Implementation
                 var ruesult = await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
                 if (ruesult.Succeeded)
                 {
+
                     var jwtToken = _tokenService.GenerateJwtToken(user);
                     return new Response<string>()
                     {

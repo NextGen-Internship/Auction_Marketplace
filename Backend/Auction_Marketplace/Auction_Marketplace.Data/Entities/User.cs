@@ -16,7 +16,7 @@ namespace Auction_Marketplace.Data.Entities
 
         public string ProfilePicture { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(30)]
         public string? CustomerId { get; set; }
 
         // Implementing IBaseEntity interface
