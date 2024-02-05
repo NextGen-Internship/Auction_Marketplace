@@ -36,15 +36,7 @@ const AuctionsPage: React.FC = ({ }) => {
         email: '',
         userId: 0
     });
-    const [selectedAuctionId, setSelectedAuctionId] = useState<string | null>(null);
-
-
-    const userResponse = async () => {
-        const response: ApiResponseDTO = await userService.fetchUser();
-        const userData = response.data;
-        setUser(userData);
-    }
-
+    const [selectedAuctionId, setSelectedAuctionId] = useState<number | null>(null);
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
@@ -56,10 +48,32 @@ const AuctionsPage: React.FC = ({ }) => {
         }
     };
 
+    const fetchUserProfile = async () => {
+        try {
+            if (token) {
+                const response: ApiResponseDTO = await userService.fetchUser();
+                const userData = response.data;
+                if (response.succeed) {
+                    setUser(userData);
+                }
+            }
+        } catch (error) {
+            console.error('Error during user profile fetch:', error);
+        }
+    };
+
     const handleUpdateAuctionClick = (auctionId: number) => {
-        setShowUpdateAuctionForm(true);
-        setHideAuctionContainer(true);
-      //  setSelectedAuctionId(auctionId)
+        if (user.userId === auctionId) {
+            setSelectedAuctionId(auctionId);
+            setShowUpdateAuctionForm(true);
+            setHideAuctionContainer(true);
+        } else {
+            console.warn('You are not the creator of this auction.');
+        }
+    };
+
+    const handleCheckUserIdForAuction = (auction: AuctionDTO, userId: number): boolean => {
+        return userId === auction.userId;
     };
 
     const handleCloseUpdateForm = () => {
@@ -70,6 +84,7 @@ const AuctionsPage: React.FC = ({ }) => {
 
     useEffect(() => {
         if (token) {
+            fetchUserProfile();
             fetchAuctions();
         }
         if (isTokenExpired()) {
@@ -133,7 +148,7 @@ const AuctionsPage: React.FC = ({ }) => {
                 </button>
             </div>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
-            
+
             {!hideAuctionContainer && (
                 <div className="cause-info-container">
                     {currentAuction.map((auction) => (
@@ -143,10 +158,13 @@ const AuctionsPage: React.FC = ({ }) => {
                             <Link to={`auction/details/${auction.auctionId}`} className="details-button">
                                 Details
                             </Link>
-                            {showUpdateAuctionForm && <UpdateAuctionForm onClose={handleCloseUpdateForm} />}
-                            <Link to={`/update/auction/${auction.auctionId}`} className="update-cause-button">
-                                Update {auction.name}
+
+                            {handleCheckUserIdForAuction(auction, user.userId) &&  (
+                            <Link to={`${auction.auctionId}/update`} className='update-button' onClick={() => handleUpdateAuctionClick(auction.auctionId)} >
+                                Update
                             </Link>
+                            )}
+
                         </div>
                     ))}
                     {renderMiniPages()}

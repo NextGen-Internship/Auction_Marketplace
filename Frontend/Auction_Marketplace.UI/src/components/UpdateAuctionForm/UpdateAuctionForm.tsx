@@ -6,7 +6,7 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 
 interface UpdateAuctionFormProps {
-    auction?: UpdateAuctionDTO;
+    auctionId: string; 
     onClose: () => void;
 }
 

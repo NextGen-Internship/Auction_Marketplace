@@ -58,6 +58,7 @@ const LoginPage: React.FC = () => {
         }
       } catch (error) {
         console.error('Error during login:', error);
+        alert('Check password or username.');
       }
     } else {
       setEmailOrUsernameError('Invalid email format')
