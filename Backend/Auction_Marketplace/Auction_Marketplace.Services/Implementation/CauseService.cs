@@ -34,7 +34,6 @@ namespace Auction_Marketplace.Services.Implementation
         {
             try
             {
-
                 if (cause == null)
                 {
                     return new Response<Cause>
@@ -70,8 +69,7 @@ namespace Auction_Marketplace.Services.Implementation
                     var fileName = String.Format(AWSConstants.UploadCausePictureName, cause.Name);
                     var path = String.Format(AWSConstants.UploadCausePicturePath, cause.Name);
                     newCause.Photo = await _s3Service.UploadFileAsync(cause.Photo, path, fileName);
-
-                }
+                }              
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name))
                 {

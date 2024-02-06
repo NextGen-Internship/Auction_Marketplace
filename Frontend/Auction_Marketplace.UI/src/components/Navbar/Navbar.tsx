@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
-import { getToken } from '../../utils/AuthUtil';
+import { getToken } from '../../utils/GoogleToken';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';

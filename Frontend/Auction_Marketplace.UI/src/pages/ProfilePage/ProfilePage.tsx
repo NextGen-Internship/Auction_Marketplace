@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import "./ProfilePage.css";
 import { FaCheck, FaEdit } from 'react-icons/fa';

@@ -35,21 +35,22 @@ namespace Auction_Marketplace.Services.Implementation
                 ContentType = file.ContentType
             };
 
-            using (var fileTrasferUtility = new TransferUtility(_s3Client))
-            {
-                await fileTrasferUtility.UploadAsync(uploadRequest);
-            }
 
             var expiryUrlRequest = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
                 Key = $"{path}/{fileName}",
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(60)
             };
+
+            using (var fileTrasferUtility = new TransferUtility(_s3Client))
+            {
+                await fileTrasferUtility.UploadAsync(uploadRequest);
+            }
 
             var url = _s3Client.GetPreSignedURL(expiryUrlRequest);
 
-            return url;
+            return url;   
             
         }
 
@@ -83,7 +84,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
             catch (Exception e)
             {
-                throw;
+                throw new Exception($"Error downloading file '{file}' from S3: {e.Message}", e);
             }
         }
     }

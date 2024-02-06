@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../Components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
