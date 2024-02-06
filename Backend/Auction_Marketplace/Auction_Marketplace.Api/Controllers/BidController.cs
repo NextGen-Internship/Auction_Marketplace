@@ -1,7 +1,4 @@
-﻿using System;
-using Auction_Marketplace.Data.Models.Bid;
-using Auction_Marketplace.Services.Implementation;
-using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +17,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost("{id}")]
         [Authorize]
-        public async Task<IActionResult> PlaceBid([FromBody] BidViewModel bid, [FromRoute] int id)
+        public async Task<IActionResult> PlaceBid([FromBody] decimal bid, [FromRoute] int id)
         {
             try
             {

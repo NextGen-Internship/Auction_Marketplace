@@ -1,12 +1,8 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
-using Auction_Marketplace.Data.Models.Bid;
-using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
-using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
 
@@ -18,21 +14,23 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IBidRepository _bidRepository;
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IAuctionRepository _auctionRepository;
 
-        public BidService(ApplicationDbContext dbContext, IBidRepository bidRepository, IUserService userService, IHttpContextAccessor contextAccessor)
+        public BidService(ApplicationDbContext dbContext, IBidRepository bidRepository, IUserService userService, IHttpContextAccessor contextAccessor, IAuctionRepository auctionRepository)
         {
             _dbContext = dbContext;
             _bidRepository = bidRepository;
             _userService = userService;
             _contextAccessor = contextAccessor;
+            _auctionRepository = auctionRepository;
         }
 
-        public async Task<Response<Bid>> PlaceBid(BidViewModel bid, int auctionId)
+        public async Task<Response<Bid>> PlaceBid(decimal bid, int auctionId)
         {
             try
             {
-
-                if (bid == null)
+                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
+                if (bid < auction.StartPrice)
                 {
                     return new Response<Bid>
                     {
@@ -57,10 +55,10 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     UserId = user.Id,
                     AuctionId = auctionId,
-                    Amount = bid.Amount
+                    Amount = bid
                 };
 
-                if (newBid == null || newBid.Amount <= 0)
+                if (newBid == null)
                 {
                     return new Response<Bid>
                     {

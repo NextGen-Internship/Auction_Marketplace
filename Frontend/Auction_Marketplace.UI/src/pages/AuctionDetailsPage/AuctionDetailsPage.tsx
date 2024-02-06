@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar/Navbar';
 import { useParams, Link} from 'react-router-dom';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import BidService from '../../Services/BidService'; 
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import BidDTO from '../../Interfaces/DTOs/BidDTO';
 import './AuctionDetailsPage.css';
 
 const apiService = new ApiService();
@@ -14,7 +15,8 @@ const bidService = new BidService(apiService);
 const AuctionDetailsPage: React.FC = () => {
   const { auctionId } = useParams<{ auctionId: string }>();
   const [auctionDetails, setAuctionDetails] = useState<any>(null);
-  const [bidAmount, setBidAmount] = useState<number>();
+  const [bidAmount, setBidAmount] = useState<number>(0);
+  const token = getToken();
 
   useEffect(() => {
     const fetchAuctionDetails = async () => {
@@ -27,18 +29,46 @@ const AuctionDetailsPage: React.FC = () => {
       }
     };
 
-    fetchAuctionDetails();
-  }, [auctionId]);
+    if (token) {
+      fetchAuctionDetails();
+    }
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, [auctionId, token]);
+
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!auctionDetails) {
     return <div>Loading...</div>;
   }
 
   const handleBidNowClick = async () => {
-    //sth will happen
+    try {
+      const response: ApiResponseDTO = await bidService.placeBid(Number(bidAmount), Number(auctionId)); 
+      if (response.succeed) {
+        console.log('Cbid created successfully:', response.data);
+      } else {
+        console.error('Failed to create bid:', response.message);
+      }
+    } catch (error) {
+      console.error('Error creating bid', error);
+      alert(`Error creating cbid: `);
+    }
   };
 
   return (
+    <>
+    <Navbar showAuthButtons={false} />
     <div className="auction-details-container">
          <Link to={`/auctions`} className="back-auctions-button">
             Back to Auctions
@@ -53,13 +83,14 @@ const AuctionDetailsPage: React.FC = () => {
           type="number"
           id="bidAmount"
           value={bidAmount}
-          onChange={(e) => setBidAmount(Number(e.target.value))}
+           onChange={(e) => setBidAmount(Number(e.target.value))} 
         />
       </div>
       <button className="bid-button" onClick={handleBidNowClick}>
         Bid Now <span role="img" aria-label="Money Bag">💰</span>
       </button>
   </div>
+  </>
   );
 };
 
