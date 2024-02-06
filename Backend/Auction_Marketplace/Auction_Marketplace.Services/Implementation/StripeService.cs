@@ -1,12 +1,16 @@
 ﻿using System.Security.Claims;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using Stripe;
+using Stripe.Checkout;
+using static System.Net.WebRequestMethods;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -29,26 +33,45 @@ namespace Auction_Marketplace.Services.Implementation
             _userRepository = userRepository;
         }
 
-        public PaymentIntent CreateCheckoutSession()
+        public async Task<Session?> CreateCheckoutSession(DonationAmountViewModel model)
         {
+            var domain = _configuration["Domain"];
 
-            var paymentIntentService = new PaymentIntentService();
-            var paymentIntent = paymentIntentService.Create(new PaymentIntentCreateOptions
+            var options = new SessionCreateOptions
             {
-                Amount = 1000,
-                Currency = "bgn",
-
-                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                PaymentMethodTypes = new List<string>
                 {
-                    Enabled = true,
+                    "card",
                 },
-                
-            });
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            Currency = "bgn",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = "Donation"
+                            },
+                            UnitAmount = model.Amount * 100,
+                        },
+                        Quantity = 1
+                    },
+                },
+                Mode = "payment",
+                SuccessUrl = $"{domain}/completion",
+                CancelUrl = $"{domain}/cancel",
+               
+            };
 
-            return paymentIntent;
+            var service = new SessionService();
+
+            var session = await service.CreateAsync(options);
+
+            return session;
 
         }
-
 
         public async Task CreateConnectedUser(StripeFormViewModel model)
         {
@@ -151,26 +174,25 @@ namespace Auction_Marketplace.Services.Implementation
         {
             try
             {
-                var options = new TransferCreateOptions
+
+                var transferOptions = new TransferCreateOptions
                 {
                     Amount = 100,
                     Currency = "bgn",
-                    Destination = "acct_1OgRP3Qq5O9btfnL" // Replace with the actual Connected Stripe Account ID
-                };
+                    Destination = "acct_1OgRxvR3StvO8rJd",
+                    TransferGroup = "transfer_group_" + Guid.NewGuid().ToString(),
+                    Metadata = new Dictionary<string, string> { { "SourceAccountId", "acct_1OgY2LQpQc0YoOzE" } }
+                 };
 
-                var service = new TransferService();
-                var transfer = service.Create(options);
+                 var transferService = new TransferService();
+                 var transfer = transferService.Create(transferOptions);
 
-
-                Console.WriteLine($"Transfer ID: {transfer.Id}");
+                 Console.WriteLine($"Transfer ID: {transfer.Id}");
+                
             }
-            catch (StripeException ex)
+            catch (StripeException stripeException)
             {
-                Console.WriteLine($"Stripe Exception: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine($"Stripe Exception: {stripeException.Message}");
             }
         }
 

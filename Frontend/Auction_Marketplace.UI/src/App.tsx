@@ -11,7 +11,8 @@ import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
 import CausesPage from './pages/CausesPage/CausesPage.tsx';
 import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
-import NameForm from './pages/ProfilePage/StripeInformationPage.tsx';
+import CauseDetailsPage from './pages/CauseDetailsPage/CauseDetailsPage.tsx';
+
 function App() {
   return (
     <div>
@@ -28,9 +29,8 @@ function App() {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/causes" element={<CausesPage />}></Route>
-          <Route path="/causes/details/:causeId" element={<CausesPage />} />
+          <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
-          <Route path='/profile/stripeInfo' element={<NameForm/>}></Route>
         </Routes>
         <Footer />
       </Router>

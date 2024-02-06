@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './DonationForm.css'
+import './DonationForm.css';
 
 interface DonationFormProps {
   onClose: () => void;
@@ -17,12 +17,36 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose }) => {
     setDonationAmount(isNaN(customAmount) ? null : customAmount);
   };
 
-  const handleSubmit = () => {
-    // Handle the submission logic here, e.g., sending the donation amount to the server
-    console.log('Donation Amount:', donationAmount);
-    onClose(); // Close the form after submission
-  };
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    try {
+        const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: donationAmount // Include the entered amount in the request body
+            }),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+
+            const redirectUrl = responseData.returnUrl; // Use the returnUrl from the response
+
+            console.log('Checkout session created successfully');
+
+            window.location.href = redirectUrl;
+        } else {
+            console.error('Error creating checkout session');
+        }
+    } catch (error) {
+        console.error('An error occurred while making the request', error);
+    }
+};
   return (
     <div className="donation-form">
       <h3>Donation Form</h3>
@@ -42,7 +66,9 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose }) => {
           onChange={handleCustomAmountChange}
         />
       </div>
-      <button onClick={handleSubmit}>Submit</button>
+      <form onSubmit={handleSubmit}>
+        <button type="submit" className="btn">Checkout</button>
+      </form>
       <button onClick={onClose}>Close</button>
     </div>
   );

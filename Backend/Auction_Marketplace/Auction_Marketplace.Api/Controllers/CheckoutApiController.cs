@@ -1,6 +1,9 @@
-﻿using Auction_Marketplace.Data.Models.Stripe;
+﻿using Auction_Marketplace.Data.Models.Donation;
+using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
+
 namespace Auction_Marketplace.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -16,11 +19,12 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPost]
         [Route("create-session")]
-        public IActionResult CreateCheckoutSession()
+        public async Task<IActionResult> CreateCheckoutSession(DonationAmountViewModel model)
         {
-            var session = _stripeService.CreateCheckoutSession();
+            var session = await _stripeService.CreateCheckoutSession(model);
 
-            return Ok(new {clientSecret = session.ClientSecret});
+            Console.WriteLine(session.Url);
+            return new OkObjectResult(new { ReturnUrl = session.Url });
         }
 
         [HttpPost]
