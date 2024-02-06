@@ -4,20 +4,20 @@ import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../Components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
-import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
-import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 import UserService from '../../Services/UserService';
+import CauseService from '../../Services/CauseService';
+import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP';
+import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm';
 
 const apiService = new ApiService();
-const auctionService = new AuctionService(apiService);
+const causeService = new CauseService(apiService);
 const userService = new UserService(apiService);
 
-const AuctionPage: React.FC = () => {
+const CausePage: React.FC = () => {
     const token = getToken();
-    const [auction, setAuction] = useState<UpdateAuctionDTO>(); 
+    const [cause, setCause] = useState<UpdateCauseDTO>(); 
     const [user, setUser] = useState<UserDTO>({
         firstName: '',
         lastName: '',
@@ -26,15 +26,15 @@ const AuctionPage: React.FC = () => {
         profilePicture: undefined
     });
 
-    const { auctionId } = useParams<{ auctionId: string }>();
+    const { causeId } = useParams<{ causeId: string }>();
 
-    const fetchAuctionDetails = async () => {
+    const fetchCauseDetails = async () => {
         try {
-            const response: ApiResponseDTO = await auctionService.getAuctionById(Number(auctionId));
-            const auctionData = response.data;
-            setAuction(auctionData);
+            const response: ApiResponseDTO = await causeService.getCauseById(Number(causeId));
+            const causeData = response.data;
+            setCause(causeData);
         } catch (error) {
-            console.error('Error fetching auction details:', error);
+            console.error('Error fetching cause details:', error);
         }
     };
 
@@ -55,12 +55,12 @@ const AuctionPage: React.FC = () => {
     useEffect(() => {
         if (token) {
             fetchUserProfile();
-            fetchAuctionDetails();
+            fetchCauseDetails();
         }
         if (isTokenExpired()) {
             clearToken();
         }
-    }, [token, auctionId]);
+    }, [token, causeId]);
 
     if (!token) {
         return (
@@ -77,15 +77,15 @@ const AuctionPage: React.FC = () => {
         <div>
             <Navbar showAuthButtons={false} />
             <div className="update-auction-container">
-                <h2>Update Auction: {auction?.name}</h2>
-                <UpdateAuctionForm
+                <h2>Update Cause: {cause?.name}</h2>
+                <UpdateCauseForm
                     onClose={close}
-                    auctionId={Number(auctionId)}
-                    initialAuctionData={auction || null}
+                    causeId={Number(causeId)}
+                    initialCauseData={cause || null}
                 />
             </div>
         </div>
     );
 };
 
-export default AuctionPage;
+export default CausePage;

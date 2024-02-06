@@ -117,3 +117,18 @@
     left: 63%;
     transform: translateX(-50%);
 }
+
+.delete-button {
+    position: absolute;
+    bottom: -5px;
+    display: block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    left: 76%;
+    transform: translateX(-50%);
+}

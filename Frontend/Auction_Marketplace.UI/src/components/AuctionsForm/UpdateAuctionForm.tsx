@@ -17,7 +17,7 @@ interface FormData {
     photo: File | null;
 }
 
-const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ auctionId, onClose, initialAuctionData }) => {
+const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialAuctionData }) => {
 
     const [formData, setFormData] = useState<FormData>({
         name: '',

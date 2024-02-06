@@ -1,162 +1,46 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
+import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 
-interface UpdateAuctionFormProps {
+interface DeleteAuctionFormProps {
     onClose: () => void;
     auctionId: number;
-    initialAuctionData: UpdateAuctionDTO | null;
+    initialAuctionData: AuctionDTO | null;
 }
 
-interface FormData {
-    name: string;
-    description: string;
-    isCompleted: boolean;
-    photo: File | null;
-}
+const apiService = new ApiService();
+const auctionService = new AuctionService(apiService);
 
-const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ auctionId, onClose, initialAuctionData }) => {
+const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId, onClose, initialAuctionData }) => {
 
-    const [formData, setFormData] = useState<FormData>({
-        name: '',
-        description: '',
-        isCompleted: false,
-        photo: null
-    });
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const allowedFileTypes = ['image/jpeg', 'image/png'];
-    const apiService = new ApiService();
-    const auctionService = new AuctionService(apiService);
-
-    useEffect(() => {
-        if (initialAuctionData) {
-            setFormData({
-                name: initialAuctionData.name,
-                description: initialAuctionData.description,
-                isCompleted: initialAuctionData.isCompleted,
-                photo: initialAuctionData.photo,
-            });
-        }
-    }, [initialAuctionData]);
-
-
-    const handleClose = () => {
-        onClose();
-    }
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleUpdateAuction = async (e: FormEvent) => {
-        e.preventDefault();
-
+    const handleDelete = async () => {
         try {
-            const updatedAuction = await auctionService.updateAuction(formData);
-            if (updatedAuction.succeed) {
-                console.log('Auction updated:', updatedAuction);
-                onClose();
-            }
-        } catch (error) {
-            console.error('Error updating auction:', error);
-        }
-    };
-
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-
-        if (file) {
-            if (allowedFileTypes.includes(file.type)) {
-                setFormData((prevData) => ({
-                    ...prevData,
-                    photo: file,
-                }));
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                };
-                reader.readAsDataURL(file);
-            } else {
-                setFormData((prevData) => ({
-                    ...prevData,
-                    photo: null,
-                }));
-                alert('Invalid file type. Please upload a JPEG or PNG image.');
-            }
-        } else {
-            setFormData((prevData) => ({
-                ...prevData,
-                photo: null,
-            }));
-        }
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        try {
-            const response: ApiResponseDTO = await auctionService.updateAuction(formData);
-
+            const response: ApiResponseDTO = await auctionService.deleteAuction(auctionId);
             if (response.succeed) {
-                console.log('Auction updated successfully:', response.data);
-                onClose();
+                alert('Succesfully deleted auction {auction.name}');
+                navigate('/auctions');
             } else {
-                console.error('Failed to update auction:', response.message);
+                setErrorMessage(response.message || 'Failed to delete auction.');
             }
         } catch (error) {
-            console.error('Error updating auction:', error);
-            onClose();
-            alert(`Error updating auction: `);
+            console.error('Error deleting auction:', error);
+            setErrorMessage('Failed to delete auction.');
         }
     };
 
     return (
-        <div className="add-cause-form">
-            <div className="close-button" onClick={handleClose}>
-                <span className="close-cross">&#10005;</span>
-            </div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Auction name:
-                </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                />
-
-                <label>
-                    Description
-                </label>
-                <textarea
-                    id="description"
-                    name="description"
-                    placeholder="Description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    required
-                />
-
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                />
-
-                <button type="submit" onClick={handleUpdateAuction}>Submit</button>
-            </form>
+        <div className="delete-auction-form">
+            <p>Are you sure you want to delete this auction?</p>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <button onClick={handleDelete}>Delete</button>
         </div>
     );
-}
+};
 
-export default UpdateAuctionForm;
+export default DeleteAuctionForm;

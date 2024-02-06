@@ -157,7 +157,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<Cause>> UpdateCause(int causeId, CauseViewModel updatedCause)
+        public async Task<Response<Cause>> UpdateCause(int causeId, NewCauseViewModel updatedCause)
         {
             try
             {
@@ -174,9 +174,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 existingCause.Name = updatedCause.Name;
                 existingCause.Description = updatedCause.Description;
-                existingCause.IsCompleted = updatedCause.IsCompleted;
                 existingCause.AmountNeeded = updatedCause.AmountNeeded;
-                existingCause.AmountCurrent = updatedCause.AmountCurrent;
 
                 await _causeRepository.UpdateCause(existingCause);
 

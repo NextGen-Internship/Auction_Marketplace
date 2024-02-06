@@ -66,6 +66,7 @@ class UserService {
 
   async updateUser(data: UserDTO) : Promise<ApiResponseDTO> {
     const formData = new FormData();
+    formData.append('userId', String(data.userId))
     formData.append('firstName', data.firstName);
     formData.append('lastName', data.lastName);
     formData.append('email', data.email);

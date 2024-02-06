@@ -17,6 +17,7 @@ const ProfilePage: React.FC = () => {
     const token = getToken();
 
     const [editMode, setEditMode] = useState(false);
+    const [userId, setUserId] = useState('')
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
@@ -26,6 +27,7 @@ const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
+        userId,
         firstName: '',
         lastName: '',
         email: '',
@@ -73,7 +75,7 @@ const ProfilePage: React.FC = () => {
                     lastName,
                     email,
                     profilePicture,
-                    userId: 0
+                    userId: 0,
                 });
                 const userData = response.data;
                 if (response.succeed) {
