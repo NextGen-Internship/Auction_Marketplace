@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import './DonationForm.css';
 
 interface DonationFormProps {
   onClose: () => void;
+  causeId: number | undefined;
 }
 
-const DonationForm: React.FC<DonationFormProps> = ({ onClose }) => {
+const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
 
   const handleAmountButtonClick = (amount: number) => {
@@ -17,36 +17,37 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose }) => {
     setDonationAmount(isNaN(customAmount) ? null : customAmount);
   };
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     try {
-        const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: donationAmount // Include the entered amount in the request body
-            }),
-        });
+      const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          causeId: causeId,
+          amount: donationAmount
+        }),
+      });
 
-        if (response.ok) {
-            const responseData = await response.json();
+      if (response.ok) {
+        const responseData = await response.json();
 
             const redirectUrl = responseData.returnUrl; // Use the returnUrl from the response
 
             console.log('Checkout session created successfully');
 
             window.location.href = redirectUrl;
-        } else {
-            console.error('Error creating checkout session');
-        }
+      } else {
+        console.error('Error creating checkout session');
+      }
     } catch (error) {
-        console.error('An error occurred while making the request', error);
+      console.error('An error occurred while making the request', error);
     }
-};
+  };
+
   return (
     <div className="donation-form">
       <h3>Donation Form</h3>

@@ -7,10 +7,8 @@ using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
 using Stripe;
 using Stripe.Checkout;
-using static System.Net.WebRequestMethods;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -21,21 +19,26 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserRepository _userRepository;
+        private readonly ICauseRepository _causeRepository;
 
         public StripeService(IConfiguration configuration,
                             UserManager<User> userManager,
                             IHttpContextAccessor contextAccessor,
-                            IUserRepository userRepository)
+                            IUserRepository userRepository,
+                            ICauseRepository causeRepository)
         {
             _configuration = configuration;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
             _userRepository = userRepository;
+            _causeRepository = causeRepository;
         }
 
         public async Task<Session?> CreateCheckoutSession(DonationAmountViewModel model)
         {
             var domain = _configuration["Domain"];
+
+            var user = GetUserByCauseId(model.CauseId);
 
             var options = new SessionCreateOptions
             {
@@ -52,7 +55,7 @@ namespace Auction_Marketplace.Services.Implementation
                             Currency = "bgn",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = "Donation"
+                                Name = "Donation for charity cause"
                             },
                             UnitAmount = model.Amount * 100,
                         },
@@ -62,7 +65,14 @@ namespace Auction_Marketplace.Services.Implementation
                 Mode = "payment",
                 SuccessUrl = $"{domain}/completion",
                 CancelUrl = $"{domain}/cancel",
-               
+                PaymentIntentData = new SessionPaymentIntentDataOptions
+                {
+                    TransferData = new SessionPaymentIntentDataTransferDataOptions
+                    {
+                        Destination = user.Result?.CustomerId // Set this to the ID of the destination account
+                    }
+                }
+
             };
 
             var service = new SessionService();
@@ -226,6 +236,16 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
+        private async Task<User?> GetUserByCauseId(int customerId)
+        {
+            var cause = _causeRepository.FindCauseById(customerId);
+
+            var userId = cause.Result.UserId;
+
+            var user = await _userRepository.GetUserById(userId);
+
+            return user;
+        }
 
         private async Task CustomerCreated(Event stripeEvent)
         {

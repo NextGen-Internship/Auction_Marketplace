@@ -41,9 +41,8 @@ namespace Auction_Marketplace.Api.Controllers
         [Route("stripe-account")]
         public IActionResult CheckStripeAccount()
         {
-            var hasConnectedAccount = _stripeService.CheckStripeAccount();
-
-            return Ok(new { hasConnectedAccount });
+            var succeed = _stripeService.CheckStripeAccount();
+            return Ok(new { succeed });
         }
 
         [HttpPost]
