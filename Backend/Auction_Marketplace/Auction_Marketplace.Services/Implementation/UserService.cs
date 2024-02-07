@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
@@ -39,8 +41,8 @@ namespace Auction_Marketplace.Services.Implementation
             try
             {
                 var email = await _userRepository.GetUserByEmail();
-                var userEmail = await _userRepository.GetByEmailAsync(email);
-                
+                var userEmail = await _userRepository.GetByEmailAsync(email);          
+
                 UserViewModel user = new UserViewModel()
                 {
                     UserId = userEmail.Id,

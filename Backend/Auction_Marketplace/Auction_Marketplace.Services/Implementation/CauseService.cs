@@ -155,7 +155,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<Cause>> UpdateCause(int causeId, NewCauseViewModel updatedCause)
+        public async Task<Response<Cause>> UpdateCause(int causeId, UpdateCauseViewModel updatedCause)
         {
             try
             {
