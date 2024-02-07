@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+<<<<<<< HEAD
 import Navbar from './Components/Navbar/Navbar.tsx';
 import LoginPage from './Pages/LoginPage/LoginPage.tsx';
 import HomePage from './Pages/HomePage/HomePage.tsx';
@@ -11,6 +12,7 @@ import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
 import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
 import AuctionPage from './Pages/AuctionsPage/AuctionPage.tsx'
 import CausePage from './Pages/CausesPage/CausePage.tsx';
+import AuctionDetailsPage from './Pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/home" element={<HomePage />}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/auctions" element={<AuctionsPage />}></Route>
+          <Route path="/auctions/details/:auctionId" element={<AuctionDetailsPage />} />
           <Route path="/causes" element={<CausesPage />}></Route>
           <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
           <Route path="auction/:auctionId" element={<AuctionPage />}/>
