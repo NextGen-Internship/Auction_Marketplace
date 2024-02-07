@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddCauseForm from '../../Components/AddCauseForm/AddCauseForm.tsx';
+import AddCauseForm from '../../components/AddCauseForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
@@ -70,25 +70,61 @@ const CausesPage: React.FC = () => {
   const currentCauses = causes.slice(indexOfFirstCause, indexOfLastCause);
 
   const renderMiniPages = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(causes.length / causesPerPage); i++) {
+  const pageNumbers = [];
+  const totalPages = Math.ceil(causes.length / causesPerPage);
+
+  const maxPageButtons = 3;
+
+  if (totalPages <= maxPageButtons) {
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+  } else {
+    let startPage;
+    let endPage;
+
+    if (currentPage <= Math.ceil(maxPageButtons / 2)) {
+      startPage = 1;
+      endPage = maxPageButtons;
+    } else if (currentPage + Math.floor(maxPageButtons / 2) >= totalPages) {
+      startPage = totalPages - maxPageButtons + 1;
+      endPage = totalPages;
+    } else {
+      startPage = currentPage - Math.floor(maxPageButtons / 2);
+      endPage = currentPage + Math.floor(maxPageButtons / 2);
+    }
+
+    if (startPage > 1) {
+      pageNumbers.push(1, '...');
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
 
-    return (
-      <div className="pagination">
-        {pageNumbers.map((number) => (
-          <button
-            key={number}
-            className={number === currentPage ? 'active' : ''}
-            onClick={() => setCurrentPage(number)}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
-    );
-  };
+    if (endPage < totalPages) {
+      pageNumbers.push('...', totalPages);
+    }
+  }
+
+  return (
+    <div className="pagination">
+      {pageNumbers.map((pageNumber, index) => (
+        <button
+          key={index}
+          className={pageNumber === currentPage ? 'active' : ''}
+          onClick={() => {
+            if (typeof pageNumber === 'number') {
+              setCurrentPage(pageNumber);
+            }
+          }}
+        >
+          {pageNumber}
+        </button>
+      ))}
+    </div>
+  );
+};
 
   return (
     <div>

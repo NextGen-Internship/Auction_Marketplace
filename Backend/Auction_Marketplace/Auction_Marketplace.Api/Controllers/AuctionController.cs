@@ -44,7 +44,7 @@ namespace Auction_Marketplace.Api.Controllers
                     return NotFound();
                 }
 
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {

@@ -8,7 +8,11 @@ namespace Auction_Marketplace.Data.Models.Auction
 
 		public string? Description { get; set; } = string.Empty;
 
-		public IFormFile Photo { get; set; } 
+		public IFormFile Photo { get; set; }
+
+		public decimal StartPrice { get; set; }
+
+		public int ExistingDays { get; set; }
 	}
 }
 

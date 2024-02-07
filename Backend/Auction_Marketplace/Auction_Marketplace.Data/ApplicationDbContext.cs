@@ -10,7 +10,6 @@ namespace Auction_Marketplace.Data
         public DbSet<Auction> Auctions { get; set; }
         public DbSet<Bid> Bids { get; set; }
         public DbSet<Cause> Causes { get; set; }
-        public DbSet<Item> Items { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserPaymentMethod> UserPaymentMethods { get; set; }
@@ -93,12 +92,6 @@ namespace Auction_Marketplace.Data
                .WithMany()
                .HasForeignKey(r => r.EndUserId)
                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Bid>()
-              .HasOne(r => r.Item)
-              .WithMany()
-              .HasForeignKey(r => r.ItemId)
-              .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Bid>()
               .HasOne(r => r.User)
