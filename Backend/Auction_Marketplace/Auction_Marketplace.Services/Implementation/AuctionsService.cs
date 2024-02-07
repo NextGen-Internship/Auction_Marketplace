@@ -65,6 +65,7 @@ namespace Auction_Marketplace.Services.Implementation
                     Name = auction.Name,
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
+                    ExistingDays = auction.ExistingDays,
                     IsCompleted = false,
                 };
 

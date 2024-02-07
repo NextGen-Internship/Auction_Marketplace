@@ -1,4 +1,5 @@
 interface BidDTO {
+  auctionId: number
   amount: number
 }
 

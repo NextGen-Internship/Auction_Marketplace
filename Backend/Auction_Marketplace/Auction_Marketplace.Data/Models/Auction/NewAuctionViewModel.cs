@@ -11,6 +11,8 @@ namespace Auction_Marketplace.Data.Models.Auction
 		public IFormFile Photo { get; set; }
 
 		public decimal StartPrice { get; set; }
+
+		public int ExistingDays { get; set; }
 	}
 }
 

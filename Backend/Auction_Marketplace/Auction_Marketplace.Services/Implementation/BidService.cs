@@ -2,6 +2,7 @@
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
+using Auction_Marketplace.Data.Models.Bid;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -25,12 +26,12 @@ namespace Auction_Marketplace.Services.Implementation
             _auctionRepository = auctionRepository;
         }
 
-        public async Task<Response<Bid>> PlaceBid(decimal bid, int auctionId)
+        public async Task<Response<Bid>> PlaceBid(BidViewModel bid)
         {
             try
             {
-                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
-                if (bid < auction.StartPrice)
+                Auction auction = await _auctionRepository.FindAuctionById(bid.AuctionId);
+                if (bid.Amount < auction.StartPrice)
                 {
                     return new Response<Bid>
                     {
@@ -54,8 +55,8 @@ namespace Auction_Marketplace.Services.Implementation
                 var newBid = new Bid
                 {
                     UserId = user.Id,
-                    AuctionId = auctionId,
-                    Amount = bid
+                    AuctionId = bid.AuctionId,
+                    Amount = bid.Amount
                 };
 
                 if (newBid == null)

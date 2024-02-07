@@ -1,4 +1,5 @@
-﻿using Auction_Marketplace.Services.Interface;
+﻿using Auction_Marketplace.Data.Models.Bid;
+using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,13 @@ namespace Auction_Marketplace.Api.Controllers
             _bidService = bidService;
         }
 
-        [HttpPost("{id}")]
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PlaceBid([FromBody] decimal bid, [FromRoute] int id)
+        public async Task<IActionResult> PlaceBid([FromForm] BidViewModel bid)
         {
             try
             {
-                var response = await _bidService.PlaceBid(bid, id);
+                var response = await _bidService.PlaceBid(bid);
                 return response.Succeed == true ? Ok(response) : BadRequest(response);
             }
             catch (Exception ex)

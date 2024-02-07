@@ -4,6 +4,7 @@ interface CreateAuctionDTO {
     photo: File | null;
     isCompleted: boolean;
     startPrice : number;
+    existingDays: number;
 }
 
 export default CreateAuctionDTO
