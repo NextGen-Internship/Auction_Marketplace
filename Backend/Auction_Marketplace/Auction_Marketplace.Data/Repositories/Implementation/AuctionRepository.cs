@@ -10,12 +10,6 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
         }
 
-        public async Task AddAuction(Auction auction)
-        {
-            await _context.Auctions.AddAsync(auction);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task DeleteAuction(int auctionId)
         {
             var auction = await FindAuctionById(auctionId);

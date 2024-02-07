@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link} from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
+import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
@@ -11,7 +13,7 @@ const CauseDetailsPage: React.FC = () => {
   const [cause, setCause] = useState<CauseDTO | null>(null);
   const [showDonationForm, setShowDonationForm] = useState(false);
   const id = Number(causeId);
-
+   const token = getToken();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,8 +27,24 @@ const CauseDetailsPage: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [causeId]);
+    if (token) {
+      fetchData();
+    }
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, [causeId, token]);
+
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!cause) {
     return <p>Loading...</p>;
@@ -53,6 +71,8 @@ const CauseDetailsPage: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar showAuthButtons={false} />
     <div className="cause-details-container">
       {!showDonationForm && (
         <>
@@ -77,6 +97,7 @@ const CauseDetailsPage: React.FC = () => {
       )}
       {showDonationForm && <DonationForm causeId={id} onClose={handleFormClose} />}
     </div>
+    </>
   );
 };
 

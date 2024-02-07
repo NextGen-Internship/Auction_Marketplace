@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
     <div>
       <Navbar showAuthButtons={false} />
       <div className="header-menu">
-        <h1>Welcome to the Blankfactor Auction/Donation Marketplace</h1>
+        <h1>Welcome to the Blankfactor Marketplace</h1>
         <p>Buy or donate items for a good cause!</p>
        <Carousel {...carouselSettings}>
          {images.map((imageUrl, index) => (
@@ -65,10 +65,6 @@ const HomePage: React.FC = () => {
           ))}
       </Carousel>
         <div className="description">
-        <p>
-          Here you can explore our charity causes and a curated selection of items available for purchase. 
-          It's a meaningful way to contribute to a good cause or find the perfect gift for your loved ones.
-        </p>
       </div>
       </div>
     </div>

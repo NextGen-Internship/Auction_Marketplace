@@ -64,6 +64,8 @@ namespace Auction_Marketplace.Services.Implementation
                     UserId = user.Id,
                     Name = auction.Name,
                     Description = auction.Description,
+                    StartPrice = auction.StartPrice,
+                    ExistingDays = auction.ExistingDays,
                     IsCompleted = false,
                 };
 
@@ -84,7 +86,7 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                await _auctionRepository.AddAuction(newAuction);
+                await _auctionRepository.AddAsync(newAuction);
                 await _auctionRepository.SaveChangesAsync();
 
                 return new Response<Auction>

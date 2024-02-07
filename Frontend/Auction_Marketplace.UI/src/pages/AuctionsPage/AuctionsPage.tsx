@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
-import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
-import UpdateAuctionForm from '../../Components/UpdateAuctionForm/UpdateAuctionForm';
+import AddAuctionForm from '../../components/AddAuctionForm/AddAuctionForm';
+import UpdateAuctionForm from '../../components/UpdateAuctionForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 
@@ -155,8 +155,8 @@ const AuctionsPage: React.FC = ({ }) => {
                         <div key={auction.auctionId} className="cause-info">
                             <h3>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
-                            <Link to={`auction/details/${auction.auctionId}`} className="details-button">
-                                Details
+                            <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
+                               Details
                             </Link>
 
                             {handleCheckUserIdForAuction(auction, user.userId) == false &&  (

@@ -13,6 +13,8 @@ interface FormData {
   description: string;
   isCompleted: boolean;
   photo: File | null;
+  startPrice: number;
+  existingDays: number;
 }
 
 const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
@@ -22,6 +24,8 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
     description: '',
     isCompleted: false,
     photo: null,
+    startPrice: 0,
+    existingDays: 0,
   });
 
   const allowedFileTypes = ['image/jpeg', 'image/png'];
@@ -123,6 +127,35 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           name="photo"
           onChange={handleFileChange}
           accept="image/*"
+        />
+
+        <label>
+           Start Price:
+        </label>
+        <div className="input-with-symbol">
+         <span className="symbol">$</span>
+         <input
+            type="number"
+            id="startPrice"
+            name="startPrice"
+            placeholder="Start Price"
+            value={formData.startPrice}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+      
+        <label>
+          Existing Days:
+        </label>
+        <input
+          type="number"
+          id="existingDays"
+          name="existingDays"
+          placeholder="Existing Days"
+          value={formData.existingDays}
+          onChange={handleInputChange}
+          required
         />
 
         <button type="submit">Submit</button>

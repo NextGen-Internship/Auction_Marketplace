@@ -22,6 +22,7 @@ class AuctionService {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
+        formData.append('existingDays', String(data.existingDays));
         formData.append('isCompleted', String(data.isCompleted));
         if (data.photo) {
             formData.append('photo', data.photo);
