@@ -10,6 +10,7 @@ using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Services.Implementation
@@ -65,8 +66,8 @@ namespace Auction_Marketplace.Services.Implementation
                     Name = auction.Name,
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
-                    ExistingDays = auction.ExistingDays,
                     IsCompleted = false,
+                    EndTime = DateTime.UtcNow.AddDays(auction.ExistingDays)
                 };
 
                 if (auction.Photo != null)

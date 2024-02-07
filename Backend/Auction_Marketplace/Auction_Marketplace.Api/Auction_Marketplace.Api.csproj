@@ -21,6 +21,7 @@
         <PackageReference Include="SendGrid" Version="9.18.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     </ItemGroup>
 
     <ItemGroup>

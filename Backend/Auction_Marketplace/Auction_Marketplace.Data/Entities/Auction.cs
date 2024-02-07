@@ -31,8 +31,7 @@ namespace Auction_Marketplace.Data.Entities
         public decimal FinalPrice { get; set; }
 
         [Required]
-        [DefaultValue(1)]
-        public int ExistingDays { get; set; }
+        public DateTime EndTime { get; set; }
 
         [Required]
         [DefaultValue(false)]

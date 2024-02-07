@@ -5,6 +5,7 @@ interface AuctionDTO {
     name: string;
     photo: string
     description: string;
+    endTime: string;
     isCompleted: boolean;
     createdAt: string;
     updatedAt: string;
