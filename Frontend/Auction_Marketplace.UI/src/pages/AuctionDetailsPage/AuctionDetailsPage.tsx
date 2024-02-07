@@ -6,7 +6,7 @@ import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import BidService from '../../Services/BidService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'; // Import the CountdownTimer component
+import CountdownTimer from '../../components/CountdownTimer/CountdownTimer';
 import './AuctionDetailsPage.css';
 
 const apiService = new ApiService();
@@ -64,26 +64,29 @@ const AuctionDetailsPage: React.FC = () => {
         <h3>{auctionDetails?.name}</h3>
         <img src={auctionDetails?.photo} alt={auctionDetails?.name} />
         <p>{auctionDetails?.description}</p>
-        <p>Left time: </p>
-        <CountdownTimer endTime={auctionDetails?.endTime} /> {/* Add CountdownTimer component here */}
         <p>Start Price: ${auctionDetails?.startPrice}</p>
-        <div>
-          <label htmlFor="bidAmount">Your Bid: </label>
-          <input
-            type="number"
-            id="bidAmount"
-            value={bidAmount || ''}
-            onChange={(e) => setBidAmount(Number(e.target.value))}
-            placeholder="$"
-          />
-        </div>
-        <button className="bid-button" onClick={handleBidNowClick}>
-          Bid Now <span role="img" aria-label="Money Bag">💰</span>
-        </button>
-        {bidSuccess && (
-          <div className="bid-success-note">
-            Successfully placed bid!
-          </div>
+        {auctionDetails?.endTime !== 0 && (
+          <>
+            <p>Left time: {<CountdownTimer endTime={auctionDetails?.endTime} />}</p>
+            <div>
+              <label htmlFor="bidAmount">Your Bid: </label>
+              <input
+                type="number"
+                id="bidAmount"
+                value={bidAmount || ''}
+                onChange={(e) => setBidAmount(Number(e.target.value))}
+                placeholder="$"
+              />
+            </div>
+            <button className="bid-button" onClick={handleBidNowClick}>
+              Bid Now <span role="img" aria-label="Money Bag">💰</span>
+            </button>
+            {bidSuccess && (
+              <div className="bid-success-note">
+                Successfully placed bid!
+              </div>
+            )}
+          </>
         )}
       </div>
     </>

@@ -201,6 +201,65 @@ namespace Auction_Marketplace.Services.Implementation
                 };
             }
         }
+
+        public async Task<Response<string>> CheckWinningBid(int auctionId)
+        {
+            try
+            {
+                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
+
+                if (auction == null || auction.EndTime > DateTime.UtcNow)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "Auction is either not found or has not ended yet."
+                    };
+                }
+
+                List<Bid> bids = await _bidRepository.GetBidsByAuctionId(auctionId);
+
+                if (bids == null || bids.Count == 0)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "No bids found for this auction."
+                    };
+                }
+
+                // Find the highest bid amount
+                decimal highestBidAmount = bids.Max(b => b.Amount);
+
+                // Find the user who made the highest bid
+                Bid winningBid = bids.FirstOrDefault(b => b.Amount == highestBidAmount);
+
+                if (winningBid == null)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "No winning bid found."
+                    };
+                }
+
+                User user = await _userService.GetUserByIdAsync(winningBid.UserId);
+
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Data = $"User {user.Email} made the highest bid of {winningBid.Amount}."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = $"An error occurred while checking the winning bid: {ex.Message}"
+                };
+            }
+        }
     }
 }
 
