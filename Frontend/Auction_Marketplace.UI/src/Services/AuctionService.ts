@@ -8,6 +8,7 @@ class AuctionService {
     private CREATE_AUCTION_ENDPOINT = import.meta.env.VITE_CREATE_AUCTION_ENDPOINT;
     private UPDATE_AUCTION_ENDPOINT = import.meta.env.VITE_UPDATE_AUCTION_ENDPOINT;
     private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
+    private CHECK_WINNING_BID_ENDPOINT = import.meta.env.VITE_CHECK_WINNING_BID_ENDPOINT;
     private apiService: ApiService;
 
     constructor(apiService: ApiService) {
@@ -47,6 +48,10 @@ class AuctionService {
     async getAuctionById(auctioId: number): Promise<ApiResponseDTO> {
         const endpoint = `${this.GET_AUCTION_BY_ID_ENDPOINT}/${auctioId}`;
         return this.apiService.get<ApiResponseDTO>(endpoint);
+    }
+
+    async checkWinningBid(auctionId: number) : Promise<ApiResponseDTO> {
+        return this.apiService.get<ApiResponseDTO>(`${this.CHECK_WINNING_BID_ENDPOINT}/${auctionId}`);
     }
 }
 

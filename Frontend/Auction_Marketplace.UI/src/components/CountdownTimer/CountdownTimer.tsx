@@ -1,6 +1,61 @@
 import React, { useEffect, useState } from 'react';
 
 interface CountdownTimerProps {
+  endTime: string; // Format: "YYYY-MM-DDTHH:MM:SS.MS"
+}
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({ endTime }) => {
+  const calculateTimeLeft = () => {
+     const currentTime = new Date();
+    currentTime.setHours(currentTime.getHours() - 2);       
+    const end = new Date(endTime).getTime();
+    const now = new Date(currentTime).getTime();
+    const difference = end - now;
+    
+    let timeLeft = {};
+
+    if (difference > 0) {
+      const minutes = Math.floor((difference / (1000 * 60)) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      timeLeft = {
+        minutes,
+        seconds
+      };
+    }
+
+    return timeLeft as { minutes: number; seconds: number };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  });
+
+  return (
+    <div>
+      {timeLeft.minutes !== undefined ? (
+        <span>
+          {timeLeft.minutes}m {timeLeft.seconds}s
+        </span>
+      ) : (
+        <span>Auction Ended</span>
+      )}
+    </div>
+  );
+};
+
+export default CountdownTimer;
+
+
+/*import React, { useEffect, useState } from 'react';
+
+interface CountdownTimerProps {
   endTime: string; 
 }
 
@@ -56,4 +111,4 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endTime }) => {
   );
 };
 
-export default CountdownTimer;
+export default CountdownTimer;*/

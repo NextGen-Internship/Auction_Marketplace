@@ -10,5 +10,17 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
            
         }
+
+        public async Task<Auction?> FindAuctionById(int auctionId)
+        {
+            return await this._context.Auctions.FirstOrDefaultAsync(c => c.AuctionId == auctionId);
+        }
+
+        public async Task<List<Bid>> GetBidsByAuctionId(int auctionId)
+        {
+            return await _context.Bids
+                .Where(b => b.AuctionId == auctionId)
+                .ToListAsync();
+        }
     }
 }

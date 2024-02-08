@@ -1,16 +1,13 @@
 ﻿
-using System;
 using System.Security.Claims;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
-using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auction_Marketplace.Services.Implementation
@@ -19,6 +16,7 @@ namespace Auction_Marketplace.Services.Implementation
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IAuctionRepository _auctionRepository;
+        private readonly IBidRepository _bidRepository;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
@@ -26,10 +24,11 @@ namespace Auction_Marketplace.Services.Implementation
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService, IS3Service s3Service)
+            IUserService userService, IS3Service s3Service, IBidRepository bidRepository)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
+            _bidRepository = bidRepository;
             _contextAccessor = contextAccessor;
             _userService = userService;
             _s3Service = s3Service;
@@ -67,7 +66,8 @@ namespace Auction_Marketplace.Services.Implementation
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
                     IsCompleted = false,
-                    EndTime = DateTime.UtcNow.AddDays(auction.ExistingDays)
+                    CreatedAt = DateTime.UtcNow,
+                    EndTime = DateTime.UtcNow.AddMinutes(auction.ExistingDays)
                 };
 
                 if (auction.Photo != null)
@@ -208,7 +208,7 @@ namespace Auction_Marketplace.Services.Implementation
             {
                 Auction auction = await _auctionRepository.FindAuctionById(auctionId);
 
-                if (auction == null || auction.EndTime > DateTime.UtcNow)
+                if (auction == null || auction.EndTime > (DateTime.UtcNow))
                 {
                     return new Response<string>
                     {
@@ -228,10 +228,8 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                // Find the highest bid amount
                 decimal highestBidAmount = bids.Max(b => b.Amount);
 
-                // Find the user who made the highest bid
                 Bid winningBid = bids.FirstOrDefault(b => b.Amount == highestBidAmount);
 
                 if (winningBid == null)
@@ -243,7 +241,7 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
 
-                User user = await _userService.GetUserByIdAsync(winningBid.UserId);
+                User user = await _userService.GetUserById(winningBid.UserId);
 
                 return new Response<string>
                 {

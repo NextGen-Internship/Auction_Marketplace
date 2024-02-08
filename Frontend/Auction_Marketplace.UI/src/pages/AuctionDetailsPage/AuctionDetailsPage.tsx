@@ -18,7 +18,10 @@ const AuctionDetailsPage: React.FC = () => {
   const [auctionDetails, setAuctionDetails] = useState<any>(null);
   const [bidAmount, setBidAmount] = useState<number>();
   const [bidSuccess, setBidSuccess] = useState<boolean>(false);
+  const [winningBidInfo, setWinningBidInfo] = useState<string | null>(null);
+  const [auctionEnded, setAuctionEnded] = useState<boolean>(false);
   const token = getToken();
+
 
   useEffect(() => {
     const fetchAuctionDetails = async () => {
@@ -26,6 +29,7 @@ const AuctionDetailsPage: React.FC = () => {
         const response: ApiResponseDTO = await auctionService.getAuctionById(Number(auctionId));
         const fetchedAuctionDetails = response.data;
         setAuctionDetails(fetchedAuctionDetails);
+        setAuctionEnded(fetchedAuctionDetails?.endTime === 0) 
       } catch (error) {
         throw error;
       }
@@ -38,6 +42,30 @@ const AuctionDetailsPage: React.FC = () => {
       clearToken();
     }
   }, [auctionId, token]);
+
+ 
+  useEffect(() => {
+    const checkEndTime = async () => {
+      const currentTime = new Date();
+      const endTime = new Date(auctionDetails.endTime);
+      endTime.setHours(endTime.getHours() + 2);
+      if (endTime <= currentTime) {
+        try {
+          const response: ApiResponseDTO = await auctionService.checkWinningBid(Number(auctionId));
+          if (response.succeed) {
+            setWinningBidInfo(response.data);
+            setAuctionEnded(true);
+          } else {
+            console.error("Failed to check winning bid:", response.message);
+          }
+        } catch (error) {
+          console.error("Error occurred while checking winning bid:", error);
+        }
+      }
+    };
+
+    checkEndTime();
+  }, [auctionDetails, auctionId]);
 
   const handleBidNowClick = async () => {
     try {
@@ -54,6 +82,13 @@ const AuctionDetailsPage: React.FC = () => {
     }
   };
 
+  const now = new Date().getTime();
+  const currentTime = new Date();
+currentTime.setHours(currentTime.getHours() - 2);
+
+const formattedTime = `${currentTime.getHours()}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
+console.log("Adjusted time:", formattedTime);
+
   return (
     <>
       <Navbar showAuthButtons={false} />
@@ -67,26 +102,37 @@ const AuctionDetailsPage: React.FC = () => {
         <p>Start Price: ${auctionDetails?.startPrice}</p>
         {auctionDetails?.endTime !== 0 && (
           <>
-            <p>Left time: {<CountdownTimer endTime={auctionDetails?.endTime} />}</p>
+          <p>Time left: <CountdownTimer endTime={auctionDetails?.endTime} /></p>
             <div>
-              <label htmlFor="bidAmount">Your Bid: </label>
-              <input
-                type="number"
-                id="bidAmount"
-                value={bidAmount || ''}
-                onChange={(e) => setBidAmount(Number(e.target.value))}
-                placeholder="$"
-              />
+              { !auctionEnded && (
+                <>
+                  <label htmlFor="bidAmount">Your Bid: </label>
+                  <input
+                    type="number"
+                    id="bidAmount"
+                    value={bidAmount || ''}
+                    onChange={(e) => setBidAmount(Number(e.target.value))}
+                    placeholder="$"
+                  />
+                </>
+              )}
             </div>
-            <button className="bid-button" onClick={handleBidNowClick}>
-              Bid Now <span role="img" aria-label="Money Bag">💰</span>
-            </button>
+            { !auctionEnded && (
+              <button className="bid-button" onClick={handleBidNowClick}>
+                Bid Now <span role="img" aria-label="Money Bag">💰</span>
+              </button>
+            )}
             {bidSuccess && (
               <div className="bid-success-note">
                 Successfully placed bid!
               </div>
             )}
           </>
+        )}
+        {auctionEnded && winningBidInfo && (
+          <div className="winning-bid-info">
+            <p>{winningBidInfo}</p>
+          </div>
         )}
       </div>
     </>
