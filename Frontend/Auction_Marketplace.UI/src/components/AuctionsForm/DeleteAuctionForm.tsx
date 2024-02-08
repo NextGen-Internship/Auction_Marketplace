@@ -3,17 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 
 interface DeleteAuctionFormProps {
     auctionId: number;
-    initialAuctionData: AuctionDTO | null;
 }
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
 
-const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId, initialAuctionData }) => {
+const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId }) => {
 
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -22,7 +20,6 @@ const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId, initia
         try {
             const response: ApiResponseDTO = await auctionService.deleteAuction(auctionId);
             if (response.succeed) {
-                alert('Succesfully deleted auction {auction.name}');
                 navigate('/auctions');
             } else {
                 setErrorMessage(response.message || 'Failed to delete auction.');

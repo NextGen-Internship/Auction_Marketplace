@@ -14,6 +14,7 @@ import DeleteAuctionForm from '../../Components/AuctionsForm/DeleteAuctionForm';
 import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
+import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 
 const apiService = new ApiService;
 const auctionService = new AuctionService(apiService);
@@ -24,7 +25,7 @@ const AuctionsPage: React.FC = ({ }) => {
     const navigate = useNavigate();
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);
-    const [showDeleteAuctionForm, setShowDeleteAuctionForm] = useState(false);
+    const [showDeleteAuctionForm] = useState(false);
     const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +39,6 @@ const AuctionsPage: React.FC = ({ }) => {
         profilePicture: undefined
     });
     const [initialAuctionFormData, setInitialAuctionFormData] = useState<FormData>(new FormData());
-
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
@@ -72,7 +72,6 @@ const AuctionsPage: React.FC = ({ }) => {
             if (auction && user.userId === auction.userId) {
                 setSelectedAuctionId(auctionId);
                 setInitialAuctionFormData(auctionData);
-
                 navigate(`/auction/${auctionId}`);
             } else {
                 console.warn('You are not the creator of this auction.');
@@ -91,7 +90,6 @@ const AuctionsPage: React.FC = ({ }) => {
             if (auction && user.userId === auction.userId) {
                 setSelectedAuctionId(auctionId);
                 setInitialAuctionFormData(auctionData);
-
                 navigate("/auctions");
             } else {
                 console.warn('You are not the creator of this auction.');
@@ -183,7 +181,7 @@ const AuctionsPage: React.FC = ({ }) => {
                             <h3>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
                             <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
-                               Details
+                                Details
                             </Link>
 
                             {handleCheckUserIdForAuction(auction, user.userId) && (
@@ -213,7 +211,6 @@ const AuctionsPage: React.FC = ({ }) => {
                                             auctionId={selectedAuctionId || 0}
                                             initialAuctionData={initialAuctionFormData}
                                         />
-
                                     )}
                                 </React.Fragment>
                             )}

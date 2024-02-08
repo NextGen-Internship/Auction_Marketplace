@@ -69,7 +69,7 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCause([FromRoute] int id, UpdateCauseViewModel updatedCause)
+        public async Task<IActionResult> UpdateCause([FromRoute] int id,[FromForm] UpdateCauseViewModel updatedCause)
         {
             try
             {

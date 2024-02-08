@@ -16,7 +16,7 @@ interface FormData {
     amountNeeded: number
 }
 
-const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ onClose, initialCauseData: initialCauseData }) => {
+const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, initialCauseData: initialCauseData }) => {
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -54,7 +54,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ onClose, initialCause
         e.preventDefault();
 
         try {
-            const updatedCause = await causeService.updateCause(formData);
+            const updatedCause = await causeService.updateCause(causeId, formData);
             if (updatedCause.succeed) {
                 console.log('Cause updated:', updatedCause);
                 onClose();
@@ -67,7 +67,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ onClose, initialCause
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response: ApiResponseDTO = await causeService.updateCause(formData);
+            const response: ApiResponseDTO = await causeService.updateCause(causeId, formData);
 
             if (response.succeed) {
                 console.log('Cause updated successfully:', response.data);

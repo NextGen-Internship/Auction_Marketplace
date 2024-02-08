@@ -13,17 +13,17 @@ interface UpdateAuctionFormProps {
 interface FormData {
     name: string;
     description: string;
-    isCompleted: boolean;
     photo: File | null;
+    existingDays: number;
 }
 
-const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialAuctionData }) => {
+const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionId, initialAuctionData }) => {
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
-        isCompleted: false,
-        photo: null
+        photo: null,
+        existingDays: 0
     });
 
     const allowedFileTypes = ['image/jpeg', 'image/png'];
@@ -35,8 +35,8 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialA
             setFormData({
                 name: initialAuctionData.name,
                 description: initialAuctionData.description,
-                isCompleted: initialAuctionData.isCompleted,
                 photo: initialAuctionData.photo,
+                existingDays: initialAuctionData.existingDays
             });
         }
     }, [initialAuctionData]);
@@ -58,7 +58,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialA
         e.preventDefault();
 
         try {
-            const updatedAuction = await auctionService.updateAuction(formData);
+            const updatedAuction = await auctionService.updateAuction(auctionId, formData);
             if (updatedAuction.succeed) {
                 console.log('Auction updated:', updatedAuction);
                 onClose();
@@ -99,7 +99,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialA
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response: ApiResponseDTO = await auctionService.updateAuction(formData);
+            const response: ApiResponseDTO = await auctionService.updateAuction(auctionId, formData);
 
             if (response.succeed) {
                 console.log('Auction updated successfully:', response.data);
@@ -134,7 +134,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialA
                 />
 
                 <label>
-                    Description
+                    Description:
                 </label>
                 <textarea
                     id="description"
@@ -151,6 +151,18 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, initialA
                     name="photo"
                     onChange={handleFileChange}
                     accept="image/*"
+                />
+
+                <label>
+                    Exsisting days:
+                </label>
+                <textarea
+                    id="existingDays"
+                    name="existingDays"
+                    placeholder="exsisting days"
+                    value={formData.existingDays}
+                    onChange={handleInputChange}
+                    required
                 />
 
                 <button type="submit" onClick={handleUpdateAuction}>Submit</button>

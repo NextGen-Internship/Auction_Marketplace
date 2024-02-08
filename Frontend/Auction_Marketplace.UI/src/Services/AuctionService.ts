@@ -32,25 +32,25 @@ class AuctionService {
         return this.apiService.post<ApiResponseDTO>(this.CREATE_AUCTION_ENDPOINT, formData);
     }
 
-    async updateAuction(data: UpdateAuctionDTO): Promise<ApiResponseDTO> {
+    async updateAuction(auctionId: number, data: UpdateAuctionDTO): Promise<ApiResponseDTO> {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
-        formData.append('isCompleted', String(data.isCompleted));
         if (data.photo) {
             formData.append('photo', data.photo);
         }
+        formData.append('existindDays', String(data.existingDays));
 
-        return this.apiService.put<ApiResponseDTO>(this.UPDATE_AUCTION_ENDPOINT, formData);
+        return this.apiService.put<ApiResponseDTO>(`${this.UPDATE_AUCTION_ENDPOINT}${auctionId}`, formData);
     }
-    
+
     async getAuctionById(auctionId: number): Promise<ApiResponseDTO> {
         return this.apiService.get<ApiResponseDTO>(`${this.GET_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
-    }   
-    
+    }
+
     async deleteAuction(auctionId: number): Promise<ApiResponseDTO> {
         return this.apiService.delete<ApiResponseDTO>(`${this.DELETE_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
-    } 
+    }
 }
 
 export default AuctionService;

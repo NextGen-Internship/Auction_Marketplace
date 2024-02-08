@@ -33,17 +33,16 @@ class CauseService {
   }
 
   async getCauseById(causeId: number): Promise<ApiResponseDTO> {
-    const endpoint = `${this.GET_CAUSE_BY_ID_ENDPOINT}/${causeId}`;
-    return this.apiService.get<ApiResponseDTO>(endpoint);
+    return this.apiService.get<ApiResponseDTO>(`${this.GET_CAUSE_BY_ID_ENDPOINT}${causeId}`);
   }
 
-  async updateCause(data: UpdateCauseDTO): Promise<ApiResponseDTO> {
+  async updateCause(causeId: number, data: UpdateCauseDTO): Promise<ApiResponseDTO> {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('description', data.description);
     formData.append('amountNeeded', String(data.amountNeeded));
 
-    return this.apiService.put<ApiResponseDTO>(this.UPDATE_CAUSE_ENDPOINT, formData);
+    return this.apiService.put<ApiResponseDTO>(`${this.UPDATE_CAUSE_ENDPOINT}${causeId}`, formData);
   }
 
   async deleteCause(causeId: number): Promise<ApiResponseDTO> {

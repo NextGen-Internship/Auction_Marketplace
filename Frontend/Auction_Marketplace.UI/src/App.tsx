@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-<<<<<<< HEAD
 import Navbar from './Components/Navbar/Navbar.tsx';
 import LoginPage from './Pages/LoginPage/LoginPage.tsx';
 import HomePage from './Pages/HomePage/HomePage.tsx';
