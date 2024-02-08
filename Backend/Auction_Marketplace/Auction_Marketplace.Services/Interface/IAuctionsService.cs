@@ -5,19 +5,19 @@ using Auction_Marketplace.Services.Abstract;
 
 namespace Auction_Marketplace.Services.Interface
 {
-	public interface IAuctionsService : IService
-    {
-        Task<Response<List<Auction>>> GetAllAuctions();
+        public interface IAuctionsService : IService
+        {
+                Task<Response<List<Auction>>> GetAllAuctions();
 
-        Task<Response<Auction>> GetAuctionById(int auctionId);
+                Task<Response<Auction>> GetAuctionById(int auctionId);
 
-        Task<Response<string>> DeleteAuction(int auctionId);
+                Task<Response<string>> DeleteAuction(int auctionId);
 
-        Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction);
+                Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction);
 
-        Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction);
+                Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction);
 
-        public Task<Response<string>> CheckWinningBid(int auctionId);
-    }
+                public Task<Response<string>> CheckWinningBid(int auctionId);
+        }
 }
 

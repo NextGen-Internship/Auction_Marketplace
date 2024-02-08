@@ -16,7 +16,6 @@ namespace Auction_Marketplace.Services.Interface
 
         Task<Response<Cause>> CreateCause(NewCauseViewModel cause);
 
-        Task<Response<Cause>> UpdateCause(int causeId, CauseViewModel cause);
+        Task<Response<Cause>> UpdateCause(int causeId, UpdateCauseViewModel cause);
     }
 }
-

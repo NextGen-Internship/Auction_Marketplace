@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { getToken } from '../utils/AuthUtil';
+import { getToken } from '../utils/GoogleToken';
 
 class ApiService {
     private baseUrl = import.meta.env.VITE_BASE_URL;

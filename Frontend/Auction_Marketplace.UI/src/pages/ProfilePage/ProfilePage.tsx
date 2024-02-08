@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import "./ProfilePage.css";
 import { FaCheck, FaEdit } from 'react-icons/fa';
@@ -17,6 +17,7 @@ const ProfilePage: React.FC = () => {
     const token = getToken();
 
     const [editMode, setEditMode] = useState(false);
+    const [userId, setUserId] = useState('')
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
@@ -26,6 +27,7 @@ const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
+        userId,
         firstName: '',
         lastName: '',
         email: '',
@@ -73,7 +75,7 @@ const ProfilePage: React.FC = () => {
                     lastName,
                     email,
                     profilePicture,
-                    userId: 0
+                    userId: 0,
                 });
                 const userData = response.data;
                 if (response.succeed) {
@@ -140,19 +142,20 @@ const ProfilePage: React.FC = () => {
                     <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
                     <div className="user-info">
                         <div className="user-avatar">
-                            <img src={user.profilePicture} alt="Profile"
-                                {...editMode && (
-                                    <label className="edit-icon-label" onClick={handleEditPictureClick}>
-                                        <input
-                                            type="file"
-                                            id="profilePicture"
-                                            name="profilePicture"
-                                            onChange={handleProfilePictureChange}
-                                            accept="image/*"
-                                        />
-                                    </label>)}
-                            />
-                            
+                            <img src={user.profilePicture} alt="Profile" />
+                            {editMode && (
+                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
+                                    <input
+                                        type="file"
+                                        id="profilePicture"
+                                        name="profilePicture"
+                                        onChange={handleProfilePictureChange}
+                                        accept="image/*"
+                                    />
+                                </label>
+                            )}
+
+
                             {!editMode && (
                                 <div className="edit-icons">
                                     <FaEdit className="edit-icon" onClick={handleEditClick} />
@@ -174,7 +177,7 @@ const ProfilePage: React.FC = () => {
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         onKeyDown={(e) => {
-                                            if(e.key === 'Enter') {
+                                            if (e.key === 'Enter') {
                                                 handleSaveClick();
                                             }
                                         }}
@@ -197,7 +200,7 @@ const ProfilePage: React.FC = () => {
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         onKeyDown={(e) => {
-                                            if(e.key === 'Enter') {
+                                            if (e.key === 'Enter') {
                                                 handleSaveClick();
                                             }
                                         }}

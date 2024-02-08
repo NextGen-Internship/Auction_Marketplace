@@ -166,7 +166,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<string>> UpdateAuction(int auctionId, AuctionViewModel updatedAuction)
+        public async Task<Response<Auction>> UpdateAuction(int auctionId, UpdateAuctionViewModel updatedAuction)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 if (existingAuction == null)
                 {
-                    return new Response<string>
+                    return new Response<Auction>
                     {
                         Succeed = false,
                         Message = $"Auction with ID {auctionId} not found."
@@ -183,18 +183,29 @@ namespace Auction_Marketplace.Services.Implementation
 
                 existingAuction.Name = updatedAuction.Name;
                 existingAuction.Description = updatedAuction.Description;
-                existingAuction.IsCompleted = updatedAuction.IsCompleted;
+                if (updatedAuction.Photo != null)
+                {
+                    var fileName = String.Format(AWSConstants.UploadCausePictureName, existingAuction.Name);
+                    var path = String.Format(AWSConstants.UploadCausePicturePath, existingAuction.Name);
+                    existingAuction.Photo = await _s3Service.UploadFileAsync(updatedAuction.Photo, path, fileName);
+                }
+
+                existingAuction.Photo = updatedAuction.Photo.ToString();
+                if (existingAuction.ExistingDays < updatedAuction.ExistingDays)
+                {
+                    existingAuction.ExistingDays = updatedAuction.ExistingDays;
+                }
 
                 await _auctionRepository.UpdateAuction(existingAuction);
 
-                return new Response<string>
+                return new Response<Auction>
                 {
                     Succeed = true
                 };
             }
             catch (Exception ex)
             {
-                return new Response<string>
+                return new Response<Auction>
                 {
                     Succeed = false,
                     Message = $"An error occurred while updating the auction. See logs for details: {ex.Message}"

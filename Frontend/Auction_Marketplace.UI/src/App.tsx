@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar.tsx';
-import LoginPage from './pages/LoginPage/LoginPage.tsx';
-import HomePage from './pages/HomePage/HomePage.tsx';
-import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
-import Footer from './components/Footer/Footer.tsx';
-import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
-import AuctionDetailsPage from './pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
-import CausesPage from './pages/CausesPage/CausesPage.tsx';
-import CauseDetailsPage from './pages/CauseDetailsPage/CauseDetailsPage.tsx';
-import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
-import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
+import Navbar from './Components/Navbar/Navbar.tsx';
+import LoginPage from './Pages/LoginPage/LoginPage.tsx';
+import HomePage from './Pages/HomePage/HomePage.tsx';
+import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
+import Footer from './Components/Footer/Footer.tsx';
+import AuctionsPage from './Pages/AuctionsPage/AuctionsPage.tsx';
+import CausesPage from './Pages/CausesPage/CausesPage.tsx';
+import CauseDetailsPage from './Pages/CauseDetailsPage/CauseDetailsPage.tsx';
+import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
+import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
+import AuctionPage from './Pages/AuctionsPage/AuctionPage.tsx'
+import CausePage from './Pages/CausesPage/CausePage.tsx';
+import AuctionDetailsPage from './Pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/auctions/details/:auctionId" element={<AuctionDetailsPage />} />
           <Route path="/causes" element={<CausesPage />}></Route>
           <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
+          <Route path="auction/:auctionId" element={<AuctionPage />}/>
+          <Route path="cause/:causeId" element={<CausePage/>}/>
           <Route path="/aboutUs" element={<AboutUsPage />}></Route>
         </Routes>
         <Footer />
