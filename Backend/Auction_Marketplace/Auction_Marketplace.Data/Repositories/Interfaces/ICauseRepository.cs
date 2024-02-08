@@ -7,6 +7,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
 		public Task AddCause(Cause cause);
 		public Task DeleteCause(int causeId);
 		public Task<Cause?> FindCauseById(int causeId);
-		public Task UpdateCause(Cause exsistingCause);
+		Task<Cause?> FindCauseByUserId(int userId);
+        public Task UpdateCause(Cause exsistingCause);
 	}
 }

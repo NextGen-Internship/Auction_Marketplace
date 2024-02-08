@@ -56,7 +56,6 @@ const HomePage: React.FC = () => {
       <Navbar showAuthButtons={false} />
       <div className="header-menu">
         <h1>Welcome to the Blankfactor Marketplace</h1>
-        <p>Buy or donate items for a good cause!</p>
        <Carousel {...carouselSettings}>
          {images.map((imageUrl, index) => (
            <div key={index}>

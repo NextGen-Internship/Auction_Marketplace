@@ -4,5 +4,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
 {
 	public interface IPaymentRepository : IRepository<Payment>
 	{
-	}
+        Task AddPayment(Payment payment);
+
+    }
 }

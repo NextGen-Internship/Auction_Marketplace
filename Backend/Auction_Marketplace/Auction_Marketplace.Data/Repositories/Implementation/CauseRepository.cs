@@ -33,6 +33,11 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
             return await this._context.Causes.FirstOrDefaultAsync(c => c.CauseId == causeId);
         }
 
+        public async Task<Cause?> FindCauseByUserId(int userId)
+        {
+            return await this._context.Causes.FirstOrDefaultAsync(c => c.UserId == userId);
+        }
+
         public async Task UpdateCause(Cause cause)
         {
             _context.Entry(cause).State = EntityState.Modified;

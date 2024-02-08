@@ -20,18 +20,21 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserRepository _userRepository;
         private readonly ICauseRepository _causeRepository;
+        private readonly IPaymentService _paymentService;
 
         public StripeService(IConfiguration configuration,
                             UserManager<User> userManager,
                             IHttpContextAccessor contextAccessor,
                             IUserRepository userRepository,
-                            ICauseRepository causeRepository)
+                            ICauseRepository causeRepository,
+                            IPaymentService paymentService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
             _userRepository = userRepository;
             _causeRepository = causeRepository;
+            _paymentService = paymentService;
         }
 
         public async Task<Session?> CreateCheckoutSession(DonationAmountViewModel model)
@@ -226,7 +229,7 @@ namespace Auction_Marketplace.Services.Implementation
                         await HandleCheckoutSessionPaymentFailed(stripeEvent);
                         break;
                     default:
-                        Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
                         break;
                 }
             }
@@ -264,7 +267,36 @@ namespace Auction_Marketplace.Services.Implementation
 
         private async Task HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
         {
-            var session = stripeEvent.Data.Object as PaymentIntent;
+            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+
+            var paymentId = paymentIntent.Id;
+            var amount = paymentIntent.Amount;
+            var paymentStatus = paymentIntent.Status;
+            var id = paymentIntent.CustomerId;
+            bool isCompleted;
+
+            if (paymentStatus == "succeeded")
+            {
+                isCompleted = true;
+            }
+            else
+            {
+                isCompleted = false;
+            }
+            var date = DateTime.Now;
+            var endUserCustomerId = paymentIntent.CustomerId;
+            try
+            {
+                
+                 _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
         }
 
         private async Task HandleCheckoutSessionPaymentFailed(Event stripeEvent)
