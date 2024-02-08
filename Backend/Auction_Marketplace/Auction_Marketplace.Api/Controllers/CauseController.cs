@@ -67,12 +67,12 @@ namespace Auction_Marketplace.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCause([FromRoute] int id, CauseViewModel updatedCause)
+        public async Task<IActionResult> UpdateCause([FromRoute] int id,[FromForm] UpdateCauseViewModel updatedCause)
         {
             try
             {
                 var response = await _causeService.UpdateCause(id, updatedCause);
-                return response.Succeed == true ? Ok(response.Data) : BadRequest(response);
+                return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {

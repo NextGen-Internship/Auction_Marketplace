@@ -8,6 +8,7 @@ class AuctionService {
     private CREATE_AUCTION_ENDPOINT = import.meta.env.VITE_CREATE_AUCTION_ENDPOINT;
     private UPDATE_AUCTION_ENDPOINT = import.meta.env.VITE_UPDATE_AUCTION_ENDPOINT;
     private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
+    private DELETE_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_DELETE_AUCTION_BY_ID_ENDPOINT;
     private apiService: ApiService;
 
     constructor(apiService: ApiService) {
@@ -31,21 +32,24 @@ class AuctionService {
         return this.apiService.post<ApiResponseDTO>(this.CREATE_AUCTION_ENDPOINT, formData);
     }
 
-    async updateAuction(data: UpdateAuctionDTO): Promise<ApiResponseDTO> {
+    async updateAuction(auctionId: number, data: UpdateAuctionDTO): Promise<ApiResponseDTO> {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
-        formData.append('isCompleted', String(data.isCompleted));
         if (data.photo) {
             formData.append('photo', data.photo);
         }
+        formData.append('existindDays', String(data.existingDays));
 
-        return this.apiService.put<ApiResponseDTO>(this.UPDATE_AUCTION_ENDPOINT, formData);
+        return this.apiService.put<ApiResponseDTO>(`${this.UPDATE_AUCTION_ENDPOINT}${auctionId}`, formData);
     }
-    
-    async getAuctionById(auctioId: number): Promise<ApiResponseDTO> {
-        const endpoint = `${this.GET_AUCTION_BY_ID_ENDPOINT}/${auctioId}`;
-        return this.apiService.get<ApiResponseDTO>(endpoint);
+
+    async getAuctionById(auctionId: number): Promise<ApiResponseDTO> {
+        return this.apiService.get<ApiResponseDTO>(`${this.GET_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
+    }
+
+    async deleteAuction(auctionId: number): Promise<ApiResponseDTO> {
+        return this.apiService.delete<ApiResponseDTO>(`${this.DELETE_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
     }
 }
 

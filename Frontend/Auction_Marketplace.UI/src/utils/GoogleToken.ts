@@ -18,7 +18,7 @@ export const isTokenExpired = (): boolean => {
   return true; 
 };
 
-const parseToken = (token: string): { exp: number } => {
+export const parseToken = (token: string): any => {
   const payloadBase64 = token.split('.')[1];
   const decodedPayload = atob(payloadBase64);
   return JSON.parse(decodedPayload);

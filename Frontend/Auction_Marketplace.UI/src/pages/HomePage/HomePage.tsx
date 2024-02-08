@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
 import firstPhoto from '/src/assets/5-Reasons-Why-You-Should-Donate-to-Charity.jpg';
@@ -9,7 +9,7 @@ import thirdPhoto from '/src/assets/donate-2.jpg';
 import forthPhoto from '/src/assets/gettyimages-1189942849_900xx2121-1193-0-111.jpg';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
-import Navbar from '../../components/Navbar/Navbar.tsx';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
 
 
 const HomePage: React.FC = () => {

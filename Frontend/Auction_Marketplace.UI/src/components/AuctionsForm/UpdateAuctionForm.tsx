@@ -1,38 +1,50 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../Services/ApiService';
-import '../AddCauseForm/AddCauseForm.css'
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 
 interface UpdateAuctionFormProps {
-    auctionId: string; 
     onClose: () => void;
+    auctionId: number;
+    initialAuctionData: UpdateAuctionDTO | null;
 }
 
 interface FormData {
     name: string;
     description: string;
-    isCompleted: boolean;
     photo: File | null;
+    existingDays: number;
 }
 
-const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
+const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionId, initialAuctionData }) => {
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
-        isCompleted: false,
         photo: null,
+        existingDays: 0
     });
 
     const allowedFileTypes = ['image/jpeg', 'image/png'];
     const apiService = new ApiService();
     const auctionService = new AuctionService(apiService);
 
+    useEffect(() => {
+        if (initialAuctionData) {
+            setFormData({
+                name: initialAuctionData.name,
+                description: initialAuctionData.description,
+                photo: initialAuctionData.photo,
+                existingDays: initialAuctionData.existingDays
+            });
+        }
+    }, [initialAuctionData]);
+
+
     const handleClose = () => {
         onClose();
-    };
+    }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -42,11 +54,15 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
         }));
     };
 
-    const handleUpdateAuction = async () => {
+    const handleUpdateAuction = async (e: FormEvent) => {
+        e.preventDefault();
+
         try {
-            const updatedAuction = await auctionService.updateAuction(formData);
-            console.log('Auction updated:', updatedAuction);
-            onClose();
+            const updatedAuction = await auctionService.updateAuction(auctionId, formData);
+            if (updatedAuction.succeed) {
+                console.log('Auction updated:', updatedAuction);
+                onClose();
+            }
         } catch (error) {
             console.error('Error updating auction:', error);
         }
@@ -83,7 +99,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response: ApiResponseDTO = await auctionService.updateAuction(formData);
+            const response: ApiResponseDTO = await auctionService.updateAuction(auctionId, formData);
 
             if (response.succeed) {
                 console.log('Auction updated successfully:', response.data);
@@ -105,7 +121,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
             </div>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Auction:
+                    Auction name:
                 </label>
                 <input
                     type="text"
@@ -118,7 +134,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
                 />
 
                 <label>
-                    Description
+                    Description:
                 </label>
                 <textarea
                     id="description"
@@ -135,6 +151,18 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose }) => {
                     name="photo"
                     onChange={handleFileChange}
                     accept="image/*"
+                />
+
+                <label>
+                    Exsisting days:
+                </label>
+                <textarea
+                    id="existingDays"
+                    name="existingDays"
+                    placeholder="exsisting days"
+                    value={formData.existingDays}
+                    onChange={handleInputChange}
+                    required
                 />
 
                 <button type="submit" onClick={handleUpdateAuction}>Submit</button>

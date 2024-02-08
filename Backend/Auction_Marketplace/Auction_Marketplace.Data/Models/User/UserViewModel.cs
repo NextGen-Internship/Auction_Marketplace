@@ -4,7 +4,9 @@ namespace Auction_Marketplace.Data.Models.User
 {
 	public class UserViewModel
 	{
-		[Required]
+        public int UserId { get; set; }
+
+        [Required]
 		public string? FirstName { get; set; }
 
         [Required]

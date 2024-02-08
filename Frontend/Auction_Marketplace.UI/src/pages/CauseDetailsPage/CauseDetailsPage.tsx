@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link} from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil';
+import Navbar from '../../Components/Navbar/Navbar';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
 import DonationForm from '../../components/DonationForm/DonationForm.tsx';
+
+declare const navigate: (to: string) => void;
 
 const CauseDetailsPage: React.FC = () => {
   const { causeId } = useParams<{ causeId: string | undefined }>();
