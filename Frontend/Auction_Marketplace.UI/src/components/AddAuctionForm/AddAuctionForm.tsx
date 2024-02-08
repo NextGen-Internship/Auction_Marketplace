@@ -1,8 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import ApiService from "../../Services/ApiService";
-import '../AddCauseForm/AddCauseForm.css';
+import '../CausesForm/AddCauseForm.css';
 import AuctionService from "../../Services/AuctionService";
 import ApiResponseDTO from "../../Interfaces/DTOs/ApiResponseDTO";
+import { useNavigate } from 'react-router-dom';
 
 interface AddAuctionFormProps {
   onClose: () => void;
@@ -19,6 +20,7 @@ interface FormData {
 
 const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
@@ -80,6 +82,7 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
       if (response.succeed) {
         console.log('Auction created successfully:', response.data);
         onClose();
+        navigate('/auctions');
       } else {
         console.error('Failed to create auction:', response.message);
       }

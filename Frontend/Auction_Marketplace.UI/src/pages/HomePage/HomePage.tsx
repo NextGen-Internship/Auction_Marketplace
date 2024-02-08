@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
-import { clearToken, getToken, isTokenExpired } from '../../utils/AuthUtil.ts';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
 import firstPhoto from '/src/assets/5-Reasons-Why-You-Should-Donate-to-Charity.jpg';

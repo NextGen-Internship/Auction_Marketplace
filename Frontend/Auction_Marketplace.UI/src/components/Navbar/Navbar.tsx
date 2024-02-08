@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
 import logo from "../../assets/Marketplace.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
-import { getToken } from '../../utils/AuthUtil';
+import { getToken } from '../../utils/GoogleToken';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
@@ -56,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
     <nav className="navbar">
       <div className="nav-container">
         <div className="logo-container">
-          <Link to="/">
+          <Link to="/home">
             <img src={logo} alt="Logo" className="logo" />
           </Link>
         </div>

@@ -2,7 +2,7 @@ interface UpdateAuctionDTO {
     name: string;
     description: string;
     photo: File | null;
-    isCompleted: boolean;
+    existingDays: number;
 }
 
 export default UpdateAuctionDTO

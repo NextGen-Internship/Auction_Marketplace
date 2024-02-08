@@ -37,13 +37,11 @@ namespace Auction_Marketplace.Services.Implementation
 
            // GenerateUserRoles(user, claims);
 
-
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-
             };
 
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);

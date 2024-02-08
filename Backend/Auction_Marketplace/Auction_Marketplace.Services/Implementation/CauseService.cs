@@ -34,7 +34,6 @@ namespace Auction_Marketplace.Services.Implementation
         {
             try
             {
-
                 if (cause == null)
                 {
                     return new Response<Cause>
@@ -70,8 +69,7 @@ namespace Auction_Marketplace.Services.Implementation
                     var fileName = String.Format(AWSConstants.UploadCausePictureName, cause.Name);
                     var path = String.Format(AWSConstants.UploadCausePicturePath, cause.Name);
                     newCause.Photo = await _s3Service.UploadFileAsync(cause.Photo, path, fileName);
-
-                }
+                }              
 
                 if (newCause == null || string.IsNullOrEmpty(newCause.Name))
                 {
@@ -157,7 +155,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<Response<Cause>> UpdateCause(int causeId, CauseViewModel updatedCause)
+        public async Task<Response<Cause>> UpdateCause(int causeId, UpdateCauseViewModel updatedCause)
         {
             try
             {
@@ -174,9 +172,7 @@ namespace Auction_Marketplace.Services.Implementation
 
                 existingCause.Name = updatedCause.Name;
                 existingCause.Description = updatedCause.Description;
-                existingCause.IsCompleted = updatedCause.IsCompleted;
                 existingCause.AmountNeeded = updatedCause.AmountNeeded;
-                existingCause.AmountCurrent = updatedCause.AmountCurrent;
 
                 await _causeRepository.UpdateCause(existingCause);
 
