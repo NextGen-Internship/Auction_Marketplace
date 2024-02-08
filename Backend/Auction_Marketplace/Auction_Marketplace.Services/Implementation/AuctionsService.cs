@@ -133,6 +133,7 @@ namespace Auction_Marketplace.Services.Implementation
         {
             try
             {
+
                 List<Auction> auctions = await _dbContext.Auctions.ToListAsync();
                 return new Response<List<Auction>>
                 {

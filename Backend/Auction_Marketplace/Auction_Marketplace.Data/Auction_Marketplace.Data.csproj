@@ -33,6 +33,7 @@
     <None Remove="Repositories\Implementation\" />
     <None Remove="Models\Donation\" />
     <None Remove="Models\Auction\" />
+    <None Remove="Models\Stripe\" />
     <None Remove="Models\User\" />
     <None Remove="Models\Bid\" />
   </ItemGroup>
@@ -47,6 +48,7 @@
     <Folder Include="Repositories\Implementation\" />
     <Folder Include="Models\Donation\" />
     <Folder Include="Models\Auction\" />
+    <Folder Include="Models\Stripe\" />
     <Folder Include="Models\User\" />
     <Folder Include="Models\Bid\" />
   </ItemGroup>

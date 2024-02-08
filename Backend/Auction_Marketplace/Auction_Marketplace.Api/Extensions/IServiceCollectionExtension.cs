@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text;
-using Amazon.Runtime;
 using Amazon.S3;
 using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
@@ -11,7 +10,6 @@ using Auction_Marketplace.Services.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.Extensions.DependencyInjection

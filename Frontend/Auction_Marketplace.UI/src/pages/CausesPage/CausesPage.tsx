@@ -1,23 +1,30 @@
+
+import '../../Components/TokenExp/TokenExpContainer.css';
+import './CausesPage.css';
+import AddStripeForm from '../../components/AddStripeForm/AddStripeForm.tsx';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddCauseForm from '../../Components/CausesForm/AddCauseForm.tsx';
 import React, { useState, useEffect } from 'react';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
+import StripeService from '../../Services/StripeService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import UserDTO from '../../Interfaces/DTOs/UserDTO.ts';
-import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm.tsx';
 import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP.ts';
 import UserService from '../../Services/UserService.ts';
+import AddCauseForm from '../../components/CausesForm/AddCauseForm.tsx';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm.tsx';
+
 
 const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
+  const [showAddStrypeForm, setShowAddStrypeForm] = useState(false);
   const [causes, setCauses] = useState<CreateCauseDTO[]>([]);
   const [hideCausesContainer, setHideCausesContainer] = useState(false);
   const [selectedCauseId, setSelectedCauseId] = useState<number | null>(null);
@@ -125,13 +132,25 @@ const CausesPage: React.FC = () => {
     );
   }
 
-  const handleAddCauseClick = () => {
-    setShowAddCauseForm(true);
-    setHideCausesContainer(true);
+  const handleAddCauseClick = async () => {
+    try {
+      const apiService = new ApiService();
+      const stripeService = new StripeService(apiService);
+      const shouldOpenAddStrypeForm = false//await stripeService.StripeUserExists();
+      if (shouldOpenAddStrypeForm) {
+        setShowAddCauseForm(true);
+      } else {
+        setShowAddStrypeForm(true);
+      }
+      setHideCausesContainer(true);
+    } catch (error) {
+      console.error('Error checking condition:', error);
+    }
   };
 
   const handleCloseForm = () => {
     setShowAddCauseForm(false);
+    setShowAddStrypeForm(false);
     setHideCausesContainer(false);
   };
 
@@ -208,7 +227,7 @@ const CausesPage: React.FC = () => {
       </button>
 
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
-
+      {showAddStrypeForm && <AddStripeForm onClose={handleCloseForm} />}
       {!hideCausesContainer && (
         <div className="cause-info-container">
           {currentCauses.map((cause) => (

@@ -16,18 +16,19 @@ namespace Auction_Marketplace.Services.Implementation
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICauseRepository _causeRepository;
+        private readonly IStripeService _stripeService;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service, IHttpContextAccessor contextAccessor)
-        {
+        public CauseService(ApplicationDbContext dbContext, ICauseRepository causeRepository, IUserService userService, IS3Service s3Service, IHttpContextAccessor contextAccessor, IStripeService stripeService)
+		{
             _dbContext = dbContext;
             _causeRepository = causeRepository;
             _userService = userService;
             _s3Service = s3Service;
             _contextAccessor = contextAccessor;
-
+            _stripeService = stripeService;
         }
 
         public async Task<Response<Cause>> CreateCause(NewCauseViewModel cause)
@@ -82,6 +83,8 @@ namespace Auction_Marketplace.Services.Implementation
 
                 await _causeRepository.AddAsync(newCause);
                 await _causeRepository.SaveChangesAsync();
+
+                //await _stripeService.PayOut();
 
                 return new Response<Cause>
                 {

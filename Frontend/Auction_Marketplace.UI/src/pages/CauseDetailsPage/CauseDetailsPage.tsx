@@ -6,7 +6,7 @@ import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
-import DonationForm from '../../Components/DonationForm/DonationForm.tsx'; 
+import DonationForm from '../../components/DonationForm/DonationForm.tsx';
 
 declare const navigate: (to: string) => void;
 
@@ -14,16 +14,14 @@ const CauseDetailsPage: React.FC = () => {
   const { causeId } = useParams<{ causeId: string | undefined }>();
   const [cause, setCause] = useState<CauseDTO | null>(null);
   const [showDonationForm, setShowDonationForm] = useState(false);
+  const id = Number(causeId);
    const token = getToken();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apiService = new ApiService();
         const causeService = new CauseService(apiService);
-        const causeResponse = await causeService.getCauseById(Number(causeId));
-        console.log('Cause Response:', causeResponse);
-
+        const causeResponse = await causeService.getCauseById(id);
         const fetchedCause: CauseDTO = causeResponse.data;
         setCause(fetchedCause);
       } catch (error) {
@@ -55,18 +53,18 @@ const CauseDetailsPage: React.FC = () => {
   }
 
   function getLineColor(amountCurrent: number, amountNeeded: number): string {
-  const progressRatio = amountCurrent / amountNeeded;
+    const progressRatio = amountCurrent / amountNeeded;
 
-     if (progressRatio <= 0.25) {
-       return 'short-line red-line';
-     } else if (progressRatio <= 0.5) {
-       return 'half-line yellow-line';
-     } else {
-       return 'full-line green-line';
-     }
+    if (progressRatio <= 0.25) {
+      return 'short-line red-line';
+    } else if (progressRatio <= 0.5) {
+      return 'half-line yellow-line';
+    } else {
+      return 'full-line green-line';
+    }
   }
 
-   const handleDonateClick = () => {
+  const handleDonateClick = () => {
     setShowDonationForm(true);
   };
 
@@ -99,7 +97,7 @@ const CauseDetailsPage: React.FC = () => {
           <button className="donate-button" onClick={handleDonateClick}>Donate</button>
         </>
       )}
-      {showDonationForm && <DonationForm onClose={handleFormClose} />}
+      {showDonationForm && <DonationForm causeId={id} onClose={handleFormClose} />}
     </div>
     </>
   );

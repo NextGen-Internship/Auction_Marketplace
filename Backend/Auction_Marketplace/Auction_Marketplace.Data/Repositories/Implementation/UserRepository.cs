@@ -32,6 +32,11 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
             return await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
         }
 
+        public async Task<User> GetUserByCustomerId(string customerId)
+        {
+            return await _context.Users.Where(u => u.CustomerId == customerId).FirstOrDefaultAsync();
+        }
+
         public async Task UpdateUserInfo(User user)
         {
             _context.Entry(user).State = EntityState.Modified;
@@ -42,5 +47,6 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
         {
             return _httpContext.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         }
+
     }
 }

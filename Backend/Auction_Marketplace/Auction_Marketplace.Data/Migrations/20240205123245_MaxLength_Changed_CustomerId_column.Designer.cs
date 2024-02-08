@@ -4,6 +4,7 @@ using Auction_Marketplace.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionMarketplace.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240205123245_MaxLength_Changed_CustomerId_column")]
+    partial class MaxLengthChangedCustomerIdcolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +44,6 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("ExistingDays")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(18, 2)");
-
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
@@ -54,13 +51,6 @@ namespace AuctionMarketplace.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("StartPrice")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -95,6 +85,9 @@ namespace AuctionMarketplace.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -104,6 +97,8 @@ namespace AuctionMarketplace.Data.Migrations
                     b.HasKey("BidId");
 
                     b.HasIndex("AuctionId");
+
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("UserId");
 
@@ -158,6 +153,56 @@ namespace AuctionMarketplace.Data.Migrations
                     b.ToTable("Causes", (string)null);
                 });
 
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Item", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
+
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<decimal>("FinalPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("StartPrice")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ItemId");
+
+                    b.HasIndex("AuctionId");
+
+                    b.ToTable("Items", (string)null);
+                });
+
             modelBuilder.Entity("Auction_Marketplace.Data.Entities.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
@@ -195,9 +240,8 @@ namespace AuctionMarketplace.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("StripePaymentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -602,6 +646,12 @@ namespace AuctionMarketplace.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Auction_Marketplace.Data.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Auction_Marketplace.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -609,6 +659,8 @@ namespace AuctionMarketplace.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Auction");
+
+                    b.Navigation("Item");
 
                     b.Navigation("User");
                 });
@@ -622,6 +674,17 @@ namespace AuctionMarketplace.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Auction_Marketplace.Data.Entities.Item", b =>
+                {
+                    b.HasOne("Auction_Marketplace.Data.Entities.Auction", "Auction")
+                        .WithMany()
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
                 });
 
             modelBuilder.Entity("Auction_Marketplace.Data.Entities.Payment", b =>

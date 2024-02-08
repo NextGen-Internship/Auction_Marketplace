@@ -1,8 +1,8 @@
-﻿using Auction_Marketplace.Services.Interface;
-using Microsoft.AspNetCore.Http;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Auction_Marketplace.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -72,7 +72,7 @@ namespace Auction_Marketplace.Services.Implementation
 
             try
             {
-                GetObjectRequest getObjectRequest = new GetObjectRequest
+                var getObjectRequest = new Amazon.S3.Model.GetObjectRequest
                 {
                     BucketName = _configuration["AWS:BUCKET_NAME"],
                     Key = file

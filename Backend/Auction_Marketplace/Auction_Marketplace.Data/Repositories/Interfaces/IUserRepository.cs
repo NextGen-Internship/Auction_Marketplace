@@ -9,6 +9,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
         public Task<Response<List<User>>> GetAllUsers();
         public Task<User> GetUserById(int userId);
         public Task UpdateUserInfo(User existingUser);
+        Task<User> GetUserByCustomerId(string customerId);
         public Task<string> GetUserByEmail();
     }
 }

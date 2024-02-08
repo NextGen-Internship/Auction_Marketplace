@@ -5,7 +5,6 @@ class ApiService {
     private baseUrl = import.meta.env.VITE_BASE_URL;
 
     private async handleResponse(response: any) {
-        console.log(response);
         if (!response.data.succeed) {
             throw new Error(response.data.errorMessage);
         }

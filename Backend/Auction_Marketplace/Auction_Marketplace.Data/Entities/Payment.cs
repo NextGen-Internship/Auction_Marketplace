@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Auction_Marketplace.Data.Enums;
 using Auction_Marketplace.Data.Entities.Abstract;
 
 namespace Auction_Marketplace.Data.Entities
@@ -32,14 +31,14 @@ namespace Auction_Marketplace.Data.Entities
         public UserPaymentMethod UserPaymentMethod { get; set; }
 
         [Required]
-        public PaymentFor Type { get; set; }
-
-        [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
+
+        public string StripePaymentId { get; set; }
+
 
         [DefaultValue(false)]
         public bool IsCompleted{ get; set; }
