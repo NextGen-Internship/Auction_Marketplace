@@ -23,7 +23,6 @@ namespace Auction_Marketplace.Api.Controllers
         {
             var session = await _stripeService.CreateCheckoutSession(model);
 
-            Console.WriteLine(session.Url);
             return new OkObjectResult(new { ReturnUrl = session.Url });
         }
 
@@ -55,17 +54,17 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
 
-        [HttpPost]
-        [Route("webhook")]
-        public async Task<IActionResult> Webhook()
-        {
-            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            var stripeSignature = Request.Headers["Stripe-Signature"];
+        //[HttpPost]
+        //[Route("webhook")]
+        //public async Task<IActionResult> Webhook()
+        //{
+        //    var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+        //    var stripeSignature = Request.Headers["Stripe-Signature"];
 
-            await _stripeService.HandleWebhookEvent(json, stripeSignature);
+        //    await _stripeService.HandleWebhookEvent(json, stripeSignature);
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }
 

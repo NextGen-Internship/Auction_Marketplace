@@ -13,16 +13,6 @@
   z-index: 1000;
 }
 
-<<<<<<< HEAD
-.add-cause-container {
-  background-color: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-=======
->>>>>>> 122ba4831c08215528c5da717433e55c21d5c98c
 .add-cause-button:hover {
   background-color: #0056b3;
   box-shadow: 0 10px 6px 2px rgba(0, 0, 0, 0.2);
@@ -99,7 +89,6 @@
 }
 
 .update-cause-button {
-<<<<<<< HEAD
   position: absolute;
   display: block;
   bottom: 10px;
@@ -112,48 +101,34 @@
   cursor: pointer;
   left: 66%;
   transform: translateX(-50%);
-=======
-    position: absolute;
-    display: block;
-    bottom: 10px;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    cursor: pointer;
-    left: 66%;
-    transform: translateX(-50%);
 }
 
 .update-button {
-    position: absolute;
-    bottom: -5px;
-    display: block;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    cursor: pointer;
-    left: 63%;
-    transform: translateX(-50%);
+  position: absolute;
+  bottom: -5px;
+  display: block;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  left: 63%;
+  transform: translateX(-50%);
 }
 
 .delete-button {
-    position: absolute;
-    bottom: -5px;
-    display: block;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    cursor: pointer;
-    left: 76%;
-    transform: translateX(-50%);
->>>>>>> 122ba4831c08215528c5da717433e55c21d5c98c
+  position: absolute;
+  bottom: -5px;
+  display: block;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  left: 76%;
+  transform: translateX(-50%);
 }

@@ -20,6 +20,7 @@ import AddCauseForm from '../../components/CausesForm/AddCauseForm.tsx';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
 import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm.tsx';
 
+
 const CausesPage: React.FC = () => {
   const token = getToken();
   const [showAddCauseForm, setShowAddCauseForm] = useState(false);
@@ -135,7 +136,7 @@ const CausesPage: React.FC = () => {
     try {
       const apiService = new ApiService();
       const stripeService = new StripeService(apiService);
-      const shouldOpenAddStrypeForm = true//await stripeService.StripeUserExists();
+      const shouldOpenAddStrypeForm = false//await stripeService.StripeUserExists();
       if (shouldOpenAddStrypeForm) {
         setShowAddCauseForm(true);
       } else {

@@ -82,10 +82,13 @@ namespace Auction_Marketplace.Services.Implementation
 
             var session = await service.CreateAsync(options);
 
+            await AddMoneyToCause(model);
+
             return session;
 
         }
 
+        
         public async Task CreateConnectedUser(StripeFormViewModel model)
         {
             DateTime dob;
@@ -209,35 +212,35 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task HandleWebhookEvent(string json, string stripeSignature)
-        {
-            try
-            {
-                var stripeEvent = EventUtility.ConstructEvent(json,
-                    stripeSignature,
-                    _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
+        //public async Task HandleWebhookEvent(string json, string stripeSignature)
+        //{
+        //    try
+        //    {
+        //        var stripeEvent = EventUtility.ConstructEvent(json,
+        //            stripeSignature,
+        //            _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
 
-                switch (stripeEvent.Type)
-                {
-                    case Events.CustomerCreated:
-                        await CustomerCreated(stripeEvent);
-                        break;
-                    case Events.CheckoutSessionAsyncPaymentSucceeded:
-                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-                        break;
-                    case Events.CheckoutSessionAsyncPaymentFailed:
-                        await HandleCheckoutSessionPaymentFailed(stripeEvent);
-                        break;
-                    default:
-                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-                        break;
-                }
-            }
-            catch (StripeException e)
-            {
-                throw e;
-            }
-        }
+        //        switch (stripeEvent.Type)
+        //        {
+        //            case Events.CustomerCreated:
+        //                await CustomerCreated(stripeEvent);
+        //                break;
+        //            case Events.CheckoutSessionAsyncPaymentSucceeded:
+        //                await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+        //                break;
+        //            case Events.CheckoutSessionAsyncPaymentFailed:
+        //                await HandleCheckoutSessionPaymentFailed(stripeEvent);
+        //                break;
+        //            default:
+        //                await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+        //                break;
+        //        }
+        //    }
+        //    catch (StripeException e)
+        //    {
+        //        throw e;
+        //    }
+        //}
 
         private async Task<User?> GetUserByCauseId(int customerId)
         {
@@ -265,47 +268,54 @@ namespace Auction_Marketplace.Services.Implementation
            
         }
 
-        private async Task HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
+        //private async Task HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
+        //{
+        //    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+
+        //    var paymentId = paymentIntent.Id;
+        //    var amount = paymentIntent.Amount;
+        //    var paymentStatus = paymentIntent.Status;
+        //    var id = paymentIntent.CustomerId;
+        //    bool isCompleted;
+
+        //    if (paymentStatus == "succeeded")
+        //    {
+        //        isCompleted = true;
+        //    }
+        //    else
+        //    {
+        //        isCompleted = false;
+        //    }
+        //    var date = DateTime.Now;
+        //    var endUserCustomerId = paymentIntent.CustomerId;
+        //    try
+        //    {
+
+        //         _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+
+        //}
+
+        //private async Task HandleCheckoutSessionPaymentFailed(Event stripeEvent)
+        //{
+        //    var session = stripeEvent.Data.Object as PaymentIntent;
+        //    // Handle payment failure logic
+        //}
+
+        private async Task AddMoneyToCause(DonationAmountViewModel model)
         {
-            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-
-
-            var paymentId = paymentIntent.Id;
-            var amount = paymentIntent.Amount;
-            var paymentStatus = paymentIntent.Status;
-            var id = paymentIntent.CustomerId;
-            bool isCompleted;
-
-            if (paymentStatus == "succeeded")
-            {
-                isCompleted = true;
-            }
-            else
-            {
-                isCompleted = false;
-            }
-            var date = DateTime.Now;
-            var endUserCustomerId = paymentIntent.CustomerId;
-            try
-            {
-                
-                 _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-
+            var cause = await _causeRepository.FindCauseById(model.CauseId);
+            cause.AmountCurrent += (long)model.Amount;
+            await _causeRepository.UpdateCause(cause);
         }
 
-        private async Task HandleCheckoutSessionPaymentFailed(Event stripeEvent)
-        {
-            var session = stripeEvent.Data.Object as PaymentIntent;
-            // Handle payment failure logic
-        }
 
-       
     }
- }
+}
 
