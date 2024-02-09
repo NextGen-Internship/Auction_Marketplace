@@ -136,8 +136,8 @@ const CausesPage: React.FC = () => {
     try {
       const apiService = new ApiService();
       const stripeService = new StripeService(apiService);
-      const shouldOpenAddStrypeForm = false//await stripeService.StripeUserExists();
-      if (shouldOpenAddStrypeForm) {
+      const {hasStripeAccount} = await stripeService.StripeUserExists();
+      if (hasStripeAccount) {
         setShowAddCauseForm(true);
       } else {
         setShowAddStrypeForm(true);
@@ -232,7 +232,7 @@ const CausesPage: React.FC = () => {
         <div className="cause-info-container">
           {currentCauses.map((cause) => (
             <div key={cause.causeId} className="cause-info">
-              <h3>{cause.name}</h3>
+              <h3 className='header'>{cause.name}</h3>
               <img src={cause.photo} alt={cause.name} />
               <Link to={`/causes/details/${cause.causeId}`} className="details-button">
                 Details

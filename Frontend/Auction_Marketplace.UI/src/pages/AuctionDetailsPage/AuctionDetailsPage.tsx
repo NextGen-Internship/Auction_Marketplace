@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import { useParams, Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import ApiService from '../../Services/ApiService';
@@ -60,7 +60,7 @@ const AuctionDetailsPage: React.FC = () => {
         <Link to={`/auctions`} className="back-auctions-button">
           Back to Auctions
         </Link>
-        <h3>{auctionDetails?.name}</h3>
+        <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
         <img src={auctionDetails?.photo} alt={auctionDetails?.name} />
         <p>{auctionDetails?.description}</p>
         <p>Start Price: ${auctionDetails?.startPrice}</p>

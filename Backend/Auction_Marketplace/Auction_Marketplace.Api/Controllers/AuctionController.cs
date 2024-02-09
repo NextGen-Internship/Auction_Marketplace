@@ -74,7 +74,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _auctionsService.UpdateAuction(id, updatedAuction);
-                return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {

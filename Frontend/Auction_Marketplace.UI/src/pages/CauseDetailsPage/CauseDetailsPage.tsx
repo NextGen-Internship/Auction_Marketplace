@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link} from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
-import DonationForm from '../../Components/DonationForm/DonationForm.tsx';
+import DonationForm from '../../components/DonationForm/DonationForm.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 
 declare const navigate: (to: string) => void;
 
@@ -81,8 +81,8 @@ const CauseDetailsPage: React.FC = () => {
           <Link to={`/causes`} className="back-causes-button">
             Back to Causes
           </Link>
-          <h2>{cause.name}</h2>
-          <p>{cause.description}</p>
+          <h2 className='head'>{cause.name}</h2>
+          <p className='description'>{cause.description}</p>
           <img src={cause.photo} alt={cause.name} className="cause-details-image" />
           <div className="amount-details">
             <div className="amount-line">

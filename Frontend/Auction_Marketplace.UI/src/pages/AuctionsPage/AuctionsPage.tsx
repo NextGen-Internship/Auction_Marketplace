@@ -9,8 +9,8 @@ import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
-import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
-import DeleteAuctionForm from '../../Components/AuctionsForm/DeleteAuctionForm';
+import AddAuctionForm from '../../components/AddAuctionForm/AddAuctionForm';
+import DeleteAuctionForm from '../../components/AuctionsForm/DeleteAuctionForm';
 import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
@@ -181,7 +181,7 @@ const AuctionsPage: React.FC = ({ }) => {
                 <div className="cause-info-container">
                     {currentAuction.map((auction) => (
                         <div key={auction.auctionId} className="cause-info">
-                            <h3>{auction.name}</h3>
+                            <h3 className='head-auction'>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
                             <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
                                 Details
