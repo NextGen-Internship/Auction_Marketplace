@@ -190,7 +190,6 @@ namespace Auction_Marketplace.Services.Implementation
                     existingAuction.Photo = await _s3Service.UploadFileAsync(updatedAuction.Photo, path, fileName);
                 }
 
-                existingAuction.Photo = updatedAuction.Photo.ToString();
                 if (existingAuction.ExistingDays < updatedAuction.ExistingDays)
                 {
                     existingAuction.ExistingDays = updatedAuction.ExistingDays;

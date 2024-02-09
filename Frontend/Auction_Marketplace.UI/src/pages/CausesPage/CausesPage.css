@@ -29,9 +29,14 @@
   margin-right: auto;
 }
 
+.header{
+  font-size: 30px;
+  margin-top: 15px;
+}
+
 .cause-info {
-  width: fit-content;
-  height: fit-content;
+  width: 700px;
+  height: 330px;
   max-height: 20%;
   box-sizing: border-box;
   background-color: #f9f9f9;
@@ -50,7 +55,7 @@
 .cause-info h3 {
   overflow: hidden;
   margin-bottom: 20px;
-  color: #007bff;
+  color: #597896;
 }
 
 .cause-info img {

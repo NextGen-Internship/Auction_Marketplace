@@ -6,12 +6,13 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 
 interface DeleteAuctionFormProps {
     auctionId: number;
+    initialAuctionData: FormData;
 }
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
 
-const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId }) => {
+const DeleteAuctionForm: React.FC<DeleteAuctionFormProps> = ({ auctionId, initialAuctionData}) => {
 
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>('');

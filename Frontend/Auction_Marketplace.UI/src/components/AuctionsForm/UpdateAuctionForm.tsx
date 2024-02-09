@@ -3,6 +3,8 @@ import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
+import { useNavigate } from 'react-router-dom';
+
 
 interface UpdateAuctionFormProps {
     onClose: () => void;
@@ -29,6 +31,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
     const allowedFileTypes = ['image/jpeg', 'image/png'];
     const apiService = new ApiService();
     const auctionService = new AuctionService(apiService);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (initialAuctionData) {
@@ -44,6 +47,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
 
     const handleClose = () => {
         onClose();
+        window.history.back();
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -59,10 +63,9 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
 
         try {
             const updatedAuction = await auctionService.updateAuction(auctionId, formData);
-            if (updatedAuction.succeed) {
-                console.log('Auction updated:', updatedAuction);
-                onClose();
-            }
+            navigate('/auctions');
+            handleClose;
+            
         } catch (error) {
             console.error('Error updating auction:', error);
         }
@@ -103,10 +106,12 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
 
             if (response.succeed) {
                 console.log('Auction updated successfully:', response.data);
-                onClose();
+               
             } else {
                 console.error('Failed to update auction:', response.message);
             }
+             onClose(); 
+             navigate("/auctions");
         } catch (error) {
             console.error('Error updating auction:', error);
             onClose();
@@ -119,7 +124,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
             <div className="close-button" onClick={handleClose}>
                 <span className="close-cross">&#10005;</span>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <label>
                     Auction name:
                 </label>

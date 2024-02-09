@@ -4,6 +4,7 @@ import Completion from './pages/StripePage/Completion.tsx';
 import AuctionDetailsPage from './pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
 import CausePage from './pages/CausesPage/CausePage.tsx';
 import AuctionPage from './pages/AuctionsPage/AuctionPage.tsx';
+import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
 import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
 import HomePage from './pages/HomePage/HomePage.tsx';
@@ -28,7 +29,7 @@ function App() {
           <Route path="/payment" element={<Payment/>}></Route>
           <Route path="/completion" element={<Completion/>}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
-          <Route path="/auctions" element={<AuctionPage />}></Route>
+          <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/auctions/details/:auctionId" element={<AuctionDetailsPage />} />
           <Route path="/causes" element={<CausesPage />}></Route>
           <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />

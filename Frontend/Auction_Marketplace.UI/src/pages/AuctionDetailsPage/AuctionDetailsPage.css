@@ -22,6 +22,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.head-auction-name{
+    margin: 15px;
+    font-size: 30px
+}
+
 .auction-details-container img {
     max-width: 100%;
     height: auto;
