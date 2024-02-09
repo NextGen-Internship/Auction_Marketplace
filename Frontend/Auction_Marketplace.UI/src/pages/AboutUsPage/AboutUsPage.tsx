@@ -43,7 +43,7 @@ const AboutUsPage: React.FC = () => {
         <p>
           Immerse yourself in a unique shopping experience by participating in our auctions. Our diverse catalog includes a variety of items from historical artifacts and art to exclusive collector's items. With every purchase, become part of the larger story of Auction Marketplace.
         </p>
-        <h2>Causey page</h2>
+        <h2>Cause page</h2>
         <p>
           We believe in the power of community and value socially responsible activity. Visit our causes page and discover projects and organizations you can donate to with every successful transaction. With your help, we support various public and charitable initiatives and create a better future for everyone.
         </p>
