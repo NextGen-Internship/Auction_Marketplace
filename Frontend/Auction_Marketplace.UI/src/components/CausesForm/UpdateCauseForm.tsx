@@ -42,6 +42,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
 
     const handleClose = () => {
         onClose();
+        window.history.back();
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
