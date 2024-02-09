@@ -3,6 +3,7 @@ import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP';
 import CauseService from '../../Services/CauseService';
+import { useNavigate } from 'react-router-dom';
 
 interface UpdateCauseFormProps {
     onClose: () => void;
@@ -24,6 +25,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
         amountNeeded: 0
     });
 
+    const navigate = useNavigate();
     const apiService = new ApiService();
     const causeService = new CauseService(apiService);
 
@@ -55,10 +57,9 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
 
         try {
             const updatedCause = await causeService.updateCause(causeId, formData);
-            if (updatedCause.succeed) {
-                console.log('Cause updated:', updatedCause);
-                onClose();
-            }
+            navigate('/causes');
+            onClose()
+
         } catch (error) {
             console.error('Error updating cause:', error);
         }
