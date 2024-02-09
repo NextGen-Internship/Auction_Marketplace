@@ -72,7 +72,7 @@ namespace Auction_Marketplace.Api.Controllers
             try
             {
                 var response = await _causeService.UpdateCause(id, updatedCause);
-                return response.Succeed == true ? Ok(response.Message) : BadRequest(response.Message);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
