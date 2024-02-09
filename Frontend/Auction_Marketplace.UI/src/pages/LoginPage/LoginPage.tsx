@@ -6,7 +6,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../Components/Navbar/Navbar';
 
 const apiService = new ApiService;
 const userService = new UserService(apiService);

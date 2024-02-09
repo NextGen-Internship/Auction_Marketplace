@@ -13,12 +13,11 @@ import CausesPage from './pages/CausesPage/CausesPage.tsx';
 import CauseDetailsPage from './pages/CauseDetailsPage/CauseDetailsPage.tsx';
 import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
 import Footer from './components/Footer/Footer.tsx';
-import Navbar from './Components/Navbar/Navbar.tsx';
+import Navbar from './components/Navbar/Navbar.tsx';
 
 function App() {
   return (
     <div>
-      <img src="/Users/Teoslava.Yordanova/Downloads/%2FHidden_Resources%2FUsers%2Fwsedrf@abv.bg%2FProfilePicture%2Fwsedrf@abv.bg%2FProfilePicture" alt="" />
       <Router>
         <Navbar showAuthButtons={true} />
         <Routes>

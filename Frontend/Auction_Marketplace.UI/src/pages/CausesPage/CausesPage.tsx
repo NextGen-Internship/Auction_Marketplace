@@ -1,7 +1,7 @@
 
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddStripeForm from '../../components/AddStripeForm/AddStripeForm.tsx';
+import AddStripeForm from '../../Components/AddStripeForm/AddStripeForm.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
@@ -16,7 +16,7 @@ import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import UserDTO from '../../Interfaces/DTOs/UserDTO.ts';
 import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP.ts';
 import UserService from '../../Services/UserService.ts';
-import AddCauseForm from '../../components/CausesForm/AddCauseForm.tsx';
+import AddCauseForm from '../../Components/CausesForm/AddCauseForm.tsx';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
 import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm.tsx';
 
@@ -110,8 +110,8 @@ const CausesPage: React.FC = () => {
         const response: ApiResponseDTO = await causeService.deleteCause(causeId);
 
         if (response.succeed) {
-            alert('Succesfully deleted cause')
-            navigate('/auctions');
+            alert('Succesfully deleted cause');
+            navigate('/causes');
         } else {
             console.warn('You are not the creator of this cause.');
         }

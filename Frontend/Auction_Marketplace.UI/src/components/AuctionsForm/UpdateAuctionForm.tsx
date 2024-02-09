@@ -2,14 +2,12 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 import { useNavigate } from 'react-router-dom';
-
 
 interface UpdateAuctionFormProps {
     onClose: () => void;
     auctionId: number;
-    initialAuctionData: UpdateAuctionDTO | null;
+    initialAuctionData: FormData;
 }
 
 interface FormData {

@@ -14,7 +14,6 @@ import DeleteAuctionForm from '../../components/AuctionsForm/DeleteAuctionForm';
 import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
-import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 
 const apiService = new ApiService;
 const auctionService = new AuctionService(apiService);
@@ -86,6 +85,10 @@ const AuctionsPage: React.FC = ({ }) => {
             const response: ApiResponseDTO = await auctionService.deleteAuction(auctionId);
             const auctionData = response.data;
 
+            if (response.succeed) {
+                alert('Succesfully deleted cause');
+            }
+            
             const auction = auctions.find((auction) => auction.auctionId === auctionId);
             if (auction && user.userId === auction.userId) {
                 setSelectedAuctionId(auctionId);
