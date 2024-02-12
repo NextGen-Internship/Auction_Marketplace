@@ -16,6 +16,8 @@ namespace Auction_Marketplace.Services.Interface
         Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction);
 
         Task<Response<Auction>> UpdateAuction(int auctionId, UpdateAuctionViewModel updatedAuction);
+
+        public Task<Response<string>> CheckFinalBid(int auctionId);
     }
 }
 

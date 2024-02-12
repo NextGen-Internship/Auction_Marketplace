@@ -18,6 +18,7 @@ namespace Auction_Marketplace.Services.Implementation
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IAuctionRepository _auctionRepository;
+        private readonly IBidRepository _bidRepository;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
@@ -25,10 +26,11 @@ namespace Auction_Marketplace.Services.Implementation
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService, IS3Service s3Service)
+            IUserService userService, IS3Service s3Service, IBidRepository bidRepository)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
+            _bidRepository = bidRepository;
             _contextAccessor = contextAccessor;
             _userService = userService;
             _s3Service = s3Service;
@@ -208,6 +210,63 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     Succeed = false,
                     Message = $"An error occurred while updating the auction. See logs for details: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<Response<string>> CheckFinalBid(int auctionId)
+        {
+            try
+            {
+                Auction auction = await _auctionRepository.FindAuctionById(auctionId);
+
+                if (auction == null)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "Auction is not found."
+                    };
+                }
+
+                List<Bid> bids = await _bidRepository.GetBidsByAuctionId(auctionId);
+
+                if (bids == null || bids.Count == 0)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "No bids found for this auction."
+                    };
+                }
+
+                decimal highestBidAmount = bids.Max(b => b.Amount);
+
+                Bid finalBid = bids.FirstOrDefault(b => b.Amount == highestBidAmount);
+
+                if (finalBid == null)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = "Non bid found."
+                    };
+                }
+
+                User user = await _userService.GetUserById(finalBid.UserId);
+
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Data = $"User {user.Email} made the final bid of {finalBid.Amount} BGN"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = $"An error occurred while checking the finalbid: {ex.Message}"
                 };
             }
         }

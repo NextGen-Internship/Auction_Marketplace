@@ -211,7 +211,7 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             />
           </div>
 
-          <button type="submit" className="formbold-btn" onClick={onClose}>
+          <button type="submit" className="formbold-btn" onSubmit={handleSubmit}>
             Submit
           </button>
         </form>
