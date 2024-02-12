@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getToken, isTokenExpired } from '../../utils/GoogleToken';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import { RefreshToken } from '../../utils/RefreshToken';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../Components/Navbar/Navbar';
@@ -9,8 +9,8 @@ import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
-import AddAuctionForm from '../../components/AddAuctionForm/AddAuctionForm';
-import DeleteAuctionForm from '../../components/AuctionsForm/DeleteAuctionForm';
+import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
+import DeleteAuctionForm from '../../Components/AuctionsForm/DeleteAuctionForm';
 import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
@@ -38,6 +38,34 @@ const AuctionsPage: React.FC = ({ }) => {
         profilePicture: undefined
     });
     const [initialAuctionFormData, setInitialAuctionFormData] = useState<FormData>(new FormData());
+  
+    useEffect(() => {
+      const saveTokenOnUnload = () => {
+        const token = getToken();
+        if (token) {
+          localStorage.setItem('token', token);
+        }
+      };
+      window.addEventListener('beforeunload', saveTokenOnUnload);
+      return () => {
+        window.removeEventListener('beforeunload', saveTokenOnUnload);
+      };
+    }, []);
+  
+    useEffect(() => {
+      const persistedToken = localStorage.getItem('token');
+      if (persistedToken) {
+        sessionStorage.setItem('token', persistedToken);
+        navigate('/auctions');
+      }
+    }, []);
+  
+    useEffect(() => {
+      if (isTokenExpired()) {
+        clearToken();
+      }
+    }, []);
+
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();

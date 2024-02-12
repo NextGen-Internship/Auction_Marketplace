@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
@@ -7,8 +7,29 @@ import '../HomePage/HomePage.css';
 import './AboutUsPage.css';
 
 const AboutUsPage: React.FC = () => {
-
   const token = getToken();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const saveTokenOnUnload = () => {
+      const token = getToken();
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+    };
+    window.addEventListener('beforeunload', saveTokenOnUnload);
+    return () => {
+      window.removeEventListener('beforeunload', saveTokenOnUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const persistedToken = localStorage.getItem('token');
+    if (persistedToken) {
+      sessionStorage.setItem('token', persistedToken);
+      navigate('/aboutUs');
+    }
+  }, []);
 
   useEffect(() => {
     if (isTokenExpired()) {
