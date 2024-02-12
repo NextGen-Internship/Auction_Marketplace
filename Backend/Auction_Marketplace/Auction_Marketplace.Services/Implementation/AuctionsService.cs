@@ -65,7 +65,7 @@ namespace Auction_Marketplace.Services.Implementation
                     Name = auction.Name,
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
-                    ExistingDays = auction.ExistingDays,
+                    EndDate = DateTime.Now.AddMinutes(auction.ExistingDays),
                     IsCompleted = false,
                 };
 
@@ -190,9 +190,9 @@ namespace Auction_Marketplace.Services.Implementation
                     existingAuction.Photo = await _s3Service.UploadFileAsync(updatedAuction.Photo, path, fileName);
                 }
 
-                if (existingAuction.ExistingDays < updatedAuction.ExistingDays)
+                if (existingAuction.EndDate < existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays))
                 {
-                    existingAuction.ExistingDays = updatedAuction.ExistingDays;
+                    existingAuction.EndDate = existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays);
                 }
 
                 await _auctionRepository.UpdateAuction(existingAuction);
