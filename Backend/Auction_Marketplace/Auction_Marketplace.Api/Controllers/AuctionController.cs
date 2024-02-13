@@ -96,6 +96,20 @@ namespace Auction_Marketplace.Api.Controllers
                 return StatusCode(500, $"{ex.Message}");
             }
         }
+
+        [HttpGet("check-final-bid/{auctionId}")]
+        public async Task<IActionResult> CheckFinalBid([FromRoute] int auctionId)
+        {
+            try
+            {
+                var response = await _auctionsService.CheckFinalBid(auctionId);
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
+        }
     }
 }
 

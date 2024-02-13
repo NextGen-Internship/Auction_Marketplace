@@ -31,13 +31,41 @@ namespace Auction_Marketplace.Services.Implementation
             try
             {
                 Auction auction = await _auctionRepository.FindAuctionById(bid.AuctionId);
-                if (bid.Amount < auction.StartPrice)
+
+                if (auction == null)
                 {
                     return new Response<Bid>
                     {
                         Succeed = false,
-                        Message = "Invalid bid data."
+                        Message = "Auction is not found."
                     };
+                }
+
+                List<Bid> bids = await _bidRepository.GetBidsByAuctionId(bid.AuctionId);
+
+                if (bids == null || bids.Count == 0)
+                {
+                    if (bid.Amount <= auction.StartPrice)
+                    {
+                        return new Response<Bid>
+                        {
+                            Succeed = false,
+                            Message = "Invalid bid data."
+                        };
+                    }
+                }
+                else
+                {
+                    decimal highestBidAmount = bids.Max(b => b.Amount);
+                    if (bid.Amount <= highestBidAmount)
+                    {
+                        return new Response<Bid>
+                        {
+                            Succeed = false,
+                            Message = "Invalid bid data."
+                        };
+                    }
+
                 }
 
                 var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
@@ -50,7 +78,6 @@ namespace Auction_Marketplace.Services.Implementation
                     };
                 }
                 var user = await _userService.GetByEmailAsync(email);
-
 
                 var newBid = new Bid
                 {

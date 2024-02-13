@@ -8,6 +8,7 @@ class AuctionService {
     private CREATE_AUCTION_ENDPOINT = import.meta.env.VITE_CREATE_AUCTION_ENDPOINT;
     private UPDATE_AUCTION_ENDPOINT = import.meta.env.VITE_UPDATE_AUCTION_ENDPOINT;
     private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
+    private CHECK_FINAL_BID_ENDPOINT = import.meta.env.VITE_CHECK_FINAL_BID_ENDPOINT;
     private DELETE_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_DELETE_AUCTION_BY_ID_ENDPOINT;
     private apiService: ApiService;
 
@@ -23,6 +24,7 @@ class AuctionService {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
+        formData.append('startPrice', String(data.startPrice))
         formData.append('existingDays', String(data.existingDays));
         formData.append('isCompleted', String(data.isCompleted));
         if (data.photo) {
@@ -50,6 +52,10 @@ class AuctionService {
 
     async deleteAuction(auctionId: number): Promise<ApiResponseDTO> {
         return this.apiService.delete<ApiResponseDTO>(`${this.DELETE_AUCTION_BY_ID_ENDPOINT}${auctionId}`);
+    }
+
+      async checkFinalBid(auctionId: number) : Promise<ApiResponseDTO> {
+        return this.apiService.get<ApiResponseDTO>(`${this.CHECK_FINAL_BID_ENDPOINT}/${auctionId}`);
     }
 }
 
