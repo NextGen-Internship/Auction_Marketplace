@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import { useParams, Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import ApiService from '../../Services/ApiService';
@@ -67,7 +67,7 @@ const AuctionDetailsPage: React.FC = () => {
 
   return (
     <>
-      <Navbar showAuthButtons={false} />
+       <Navbar showAuthButtons={false} />
       <div className="auction-details-container">
         <Link to={`/auctions`} className="back-auctions-button">
           Back to Auctions
@@ -82,24 +82,28 @@ const AuctionDetailsPage: React.FC = () => {
         {finalBid && (
           <p>{finalBid}</p>
         )}
-        <div>
-          <label htmlFor="bidAmount">Your Bid: </label>
-          <input
-            type="number"
-            id="bidAmount"
-            value={bidAmount || ''}
-            onChange={(e) => setBidAmount(Number(e.target.value))}
-            placeholder="BGN"
-          />
-        </div>
-        <button className="bid-button" onClick={handleBidNowClick}>
-          Bid Now <span role="img" aria-label="Money Bag">💰</span>
-        </button>
-        {bidSuccess && (
-          <div className="bid-success-note">
-            Successfully placed bid!
-          </div>
-        )}
+        {!auctionDetails || !auctionDetails.endDate || new Date(auctionDetails.endDate) > new Date() ? (
+          <>
+            <div>
+              <label htmlFor="bidAmount">Your Bid: </label>
+              <input
+                type="number"
+                id="bidAmount"
+                value={bidAmount || ''}
+                onChange={(e) => setBidAmount(Number(e.target.value))}
+                placeholder="BGN"
+              />
+            </div>
+            <button className="bid-button" onClick={handleBidNowClick}>
+              Bid Now <span role="img" aria-label="Money Bag">💰</span>
+            </button>
+            {bidSuccess && (
+              <div className="bid-success-note">
+                Successfully placed bid!
+              </div>
+            )}
+          </>
+        ) : null}
       </div>
     </>
   );

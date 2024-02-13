@@ -13,7 +13,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [endDate]); // Add endDate as a dependency here
+  }, [endDate]); 
 
   function calculateTimeLeft() {
     const difference = endDate.getTime() - new Date().getTime();
