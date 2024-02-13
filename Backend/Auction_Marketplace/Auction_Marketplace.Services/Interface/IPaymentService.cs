@@ -6,7 +6,7 @@ namespace Auction_Marketplace.Services.Interface
 {
     public interface IPaymentService: IService
     {
-       // void CreatePayment(string paymentId, decimal amount, DateTime date, bool isCompleted, string endUserCustomerId );
+        void CreatePayment(string paymentId, decimal amount, DateTime date, bool isCompleted, string endUserCustomerId );
     }
 }
 

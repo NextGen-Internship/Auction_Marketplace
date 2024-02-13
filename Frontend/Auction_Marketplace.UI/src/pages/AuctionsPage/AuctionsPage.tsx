@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getToken, isTokenExpired } from '../../utils/GoogleToken';
 import { RefreshToken } from '../../utils/RefreshToken';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
@@ -11,7 +11,7 @@ import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 import AddAuctionForm from '../../components/AddAuctionForm/AddAuctionForm';
 import DeleteAuctionForm from '../../components/AuctionsForm/DeleteAuctionForm';
-import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
+import UpdateAuctionForm from '../../components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 

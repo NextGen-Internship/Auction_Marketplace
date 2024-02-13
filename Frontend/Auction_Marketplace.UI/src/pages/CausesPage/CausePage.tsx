@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import Navbar from '../../Components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import ApiService from '../../Services/ApiService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 import UserService from '../../Services/UserService';
 import CauseService from '../../Services/CauseService';
 import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP';
-import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm';
+import Navbar from '../../components/Navbar/Navbar';
+import UpdateCauseForm from '../../components/CausesForm/UpdateCauseForm';
 
 const apiService = new ApiService();
 const causeService = new CauseService(apiService);

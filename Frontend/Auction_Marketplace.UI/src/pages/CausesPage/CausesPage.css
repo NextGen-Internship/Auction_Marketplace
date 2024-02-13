@@ -1,139 +1,141 @@
-.add-cause-button {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
+/* CausesPage.css */
+
+/* Container styles */
+.cause-info-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Cause card styles */
+.cause-info {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styles */
+.header {
+  font-size: 18px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Image styles */
+.cause-info img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+
+/* Update and delete button styles */
+.update-button,
+.delete-button,
+.details-button{
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 0;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.3s ease;
   background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
+}
+
+
+/* Add cause button styles */
+.add-cause-button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 40px;
+  background-color: #007bff;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  z-index: 1000;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
 }
 
 .add-cause-button:hover {
   background-color: #0056b3;
-  box-shadow: 0 10px 6px 2px rgba(0, 0, 0, 0.2);
 }
 
-.cause-info-container {
+/* Pagination styles */
+.pagination {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  margin-top: 10%;
-  max-width: 660px;
-  margin-left: auto;
-  margin-right: auto;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.header{
-  font-size: 30px;
-  margin-top: 15px;
+.pagination button {
+  margin: 0 5px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
-.cause-info {
-  width: 700px;
-  height: 330px;
-  max-height: 20%;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination button:hover {
+  background-color: #f5f5f5;
+  color: #007bff;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 992px) {
+  .cause-info-container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .cause-info img {
+    height: 150px;
+  }
+}
+
+/* Search bar container styles */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+}
+
+/* Search bar input styles */
+.search-bar-input {
+  width: 300px;
   padding: 10px;
-  position: relative;
-  overflow: hidden;
-  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
-.cause-info:hover {
-  box-shadow: 20px 20px 26px 10px rgba(0, 0, 0, 0.2);
-}
-
-.cause-info h3 {
-  overflow: hidden;
-  margin-bottom: 20px;
-  color: #597896;
-}
-
-.cause-info img {
-  width: 45%;
-  height: auto;
-  float: left;
-  margin-left: 5px;
-  margin-bottom: 40px;
-  border-radius: 5px;
-}
-
-.details-button {
-  position: absolute;
-  bottom: 10px;
-  display: block;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
+/* Search bar button styles */
+.search-bar-button {
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White color */
+  border: none;
+  border-radius: 0 8px 8px 0;
   cursor: pointer;
-  left: 50%;
-  transform: translateX(-50%);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
-.details-button:hover {
-  background-color: #577bf1;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-}
-
-.header-buttons {
-  max-width: 1200px;
-  margin: 0px auto;
-  height: 32px;
-}
-
-.update-cause-button {
-  position: absolute;
-  display: block;
-  bottom: 10px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  left: 66%;
-  transform: translateX(-50%);
-}
-
-.update-button {
-  position: absolute;
-  bottom: -5px;
-  display: block;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  left: 63%;
-  transform: translateX(-50%);
-}
-
-.delete-button {
-  position: absolute;
-  bottom: -5px;
-  display: block;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  left: 76%;
-  transform: translateX(-50%);
+.search-bar-button:hover {
+  background-color: #0056b3; /* Darker blue color */
 }
