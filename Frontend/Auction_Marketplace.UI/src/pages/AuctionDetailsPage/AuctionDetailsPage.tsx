@@ -7,6 +7,7 @@ import AuctionService from '../../Services/AuctionService';
 import BidService from '../../Services/BidService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import './AuctionDetailsPage.css';
+import CountdownTimer from '../../components/CountdownTimer/CountdownTimer';'../../components/CountdownTimer/CountdownTimer.tsx';
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
@@ -103,6 +104,7 @@ const AuctionDetailsPage: React.FC = () => {
         )}
           </div>
         </div>
+
       </div>
     </div>
   </>
