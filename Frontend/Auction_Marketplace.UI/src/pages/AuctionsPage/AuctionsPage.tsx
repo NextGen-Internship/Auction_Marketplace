@@ -38,32 +38,32 @@ const AuctionsPage: React.FC = ({ }) => {
         profilePicture: undefined
     });
     const [initialAuctionFormData, setInitialAuctionFormData] = useState<FormData>(new FormData());
-  
+
     useEffect(() => {
-      const saveTokenOnUnload = () => {
-        const token = getToken();
-        if (token) {
-          localStorage.setItem('token', token);
+        const saveTokenOnUnload = () => {
+            const token = getToken();
+            if (token) {
+                localStorage.setItem('token', token);
+            }
+        };
+        window.addEventListener('beforeunload', saveTokenOnUnload);
+        return () => {
+            window.removeEventListener('beforeunload', saveTokenOnUnload);
+        };
+    }, []);
+
+    useEffect(() => {
+        const persistedToken = localStorage.getItem('token');
+        if (persistedToken) {
+            sessionStorage.setItem('token', persistedToken);
+            navigate('/auctions');
         }
-      };
-      window.addEventListener('beforeunload', saveTokenOnUnload);
-      return () => {
-        window.removeEventListener('beforeunload', saveTokenOnUnload);
-      };
     }, []);
-  
+
     useEffect(() => {
-      const persistedToken = localStorage.getItem('token');
-      if (persistedToken) {
-        sessionStorage.setItem('token', persistedToken);
-        navigate('/auctions');
-      }
-    }, []);
-  
-    useEffect(() => {
-      if (isTokenExpired()) {
-        clearToken();
-      }
+        if (isTokenExpired()) {
+            clearToken();
+        }
     }, []);
 
     const fetchAuctions = async () => {
@@ -112,11 +112,8 @@ const AuctionsPage: React.FC = ({ }) => {
         try {
             const response: ApiResponseDTO = await auctionService.deleteAuction(auctionId);
             const auctionData = response.data;
+            location.reload();
 
-            if (response.succeed) {
-                alert('Succesfully deleted cause');
-            }
-            
             const auction = auctions.find((auction) => auction.auctionId === auctionId);
             if (auction && user.userId === auction.userId) {
                 setSelectedAuctionId(auctionId);

@@ -39,11 +39,14 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       // Handle the response as needed
       const result = await response.json();
       console.log(result);
+      onClose();
       navigate('/causes');
+      location.reload();
     } catch (error) {
       console.error('Error:', error);
       alert("Invalid stipe data.");
       navigate('/causes');
+      location.reload();
     }
   };
 
