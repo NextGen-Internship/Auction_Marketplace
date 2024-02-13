@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import '../../Components/BodyContent.css'
@@ -7,6 +7,7 @@ import UserService from '../../Services/UserService';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import Navbar from '../../components/Navbar/Navbar';
+import { getToken, setToken } from '../../utils/GoogleToken';
 
 const apiService = new ApiService;
 const userService = new UserService(apiService);
@@ -17,7 +18,34 @@ const LoginPage: React.FC = () => {
   const [emailOrUsernameError, setEmailOrUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const navigate = useNavigate();
-  localStorage.clear();
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      navigate('/home');
+    }
+  }, []);
+
+  useEffect(() => {
+    const saveTokenOnUnload = () => {
+      const token = getToken();
+      if (token) {
+        sessionStorage.setItem('token', token);
+      }
+    };
+    window.addEventListener('beforeunload', saveTokenOnUnload);
+    return () => {
+      window.removeEventListener('beforeunload', saveTokenOnUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const persistedToken = sessionStorage.getItem('token');
+    if (persistedToken) {
+      setToken(persistedToken);
+      navigate('/home');
+    }
+  }, []);
 
   const validateEmailOrUsername = (input: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,7 +79,7 @@ const LoginPage: React.FC = () => {
         });
         console.log('Login response:', loginResponse);
         if (loginResponse.succeed) {
-          localStorage.setItem('token', loginResponse.data);
+          sessionStorage.setItem('token', loginResponse.data);
           navigate('/home');
         } else {
           console.error('Authentication failed:', loginResponse.message);
@@ -74,7 +102,7 @@ const LoginPage: React.FC = () => {
       const loginResponse = await userService.loginUserWithGoogle({ googleToken: credentialResponse.credential });
       if (loginResponse.succeed) {
         console.log('Authentication successful');
-        localStorage.setItem('token', loginResponse.data);
+        sessionStorage.setItem('token', loginResponse.data);
         navigate('/home');
       }
     } catch (error) {

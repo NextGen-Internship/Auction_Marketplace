@@ -34,6 +34,27 @@ const ProfilePage: React.FC = () => {
         profilePicture: ''
     });
 
+    useEffect(() => {
+        const saveTokenOnUnload = () => {
+          const token = getToken();
+          if (token) {
+            localStorage.setItem('token', token);
+          }
+        };
+        window.addEventListener('beforeunload', saveTokenOnUnload);
+        return () => {
+          window.removeEventListener('beforeunload', saveTokenOnUnload);
+        };
+      }, []);
+    
+      useEffect(() => {
+        const persistedToken = localStorage.getItem('token');
+        if (persistedToken) {
+          sessionStorage.setItem('token', persistedToken);
+          navigate('/auctions');
+        }
+      }, []);
+
     const fetchUserProfile = async () => {
         try {
             if (token) {

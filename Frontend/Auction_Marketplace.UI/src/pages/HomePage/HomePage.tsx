@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
@@ -15,13 +15,35 @@ import Footer from '../../components/Footer/Footer.tsx';
 
 const HomePage: React.FC = () => {
   const token = getToken();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const saveTokenOnUnload = () => {
+      const token = getToken();
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+    };
+    window.addEventListener('beforeunload', saveTokenOnUnload);
+    return () => {
+      window.removeEventListener('beforeunload', saveTokenOnUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const persistedToken = localStorage.getItem('token');
+    if (persistedToken) {
+      sessionStorage.setItem('token', persistedToken);
+      navigate('/home');
+    }
+  }, []);
 
   useEffect(() => {
     if (isTokenExpired()) {
       clearToken();
     }
   }, []);
-  
+
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -49,8 +71,6 @@ const HomePage: React.FC = () => {
     stopOnHover: false,
     dynamicHeight: false,
   };
-
-
 
   return (
     <div>

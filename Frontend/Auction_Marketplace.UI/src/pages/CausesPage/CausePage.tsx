@@ -25,9 +25,7 @@ const CausePage: React.FC = () => {
         userId: 0,
         profilePicture: undefined
     });
-
-    const { causeId } = useParams<{ causeId: string }>();
-
+    const { causeId } = useParams<{ causeId: string }>();  
     const fetchCauseDetails = async () => {
         try {
             const response: ApiResponseDTO = await causeService.getCauseById(Number(causeId));

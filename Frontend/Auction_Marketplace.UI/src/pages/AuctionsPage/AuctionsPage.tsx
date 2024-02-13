@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getToken, isTokenExpired } from '../../utils/GoogleToken';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import { RefreshToken } from '../../utils/RefreshToken';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import Navbar from '../../components/Navbar/Navbar';
@@ -38,6 +38,34 @@ const AuctionsPage: React.FC = ({ }) => {
         profilePicture: undefined
     });
     const [initialAuctionFormData, setInitialAuctionFormData] = useState<FormData>(new FormData());
+  
+    useEffect(() => {
+      const saveTokenOnUnload = () => {
+        const token = getToken();
+        if (token) {
+          localStorage.setItem('token', token);
+        }
+      };
+      window.addEventListener('beforeunload', saveTokenOnUnload);
+      return () => {
+        window.removeEventListener('beforeunload', saveTokenOnUnload);
+      };
+    }, []);
+  
+    useEffect(() => {
+      const persistedToken = localStorage.getItem('token');
+      if (persistedToken) {
+        sessionStorage.setItem('token', persistedToken);
+        navigate('/auctions');
+      }
+    }, []);
+  
+    useEffect(() => {
+      if (isTokenExpired()) {
+        clearToken();
+      }
+    }, []);
+
     const fetchAuctions = async () => {
         try {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
