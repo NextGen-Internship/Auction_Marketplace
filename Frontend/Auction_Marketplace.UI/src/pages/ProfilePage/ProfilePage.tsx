@@ -51,7 +51,7 @@ const ProfilePage: React.FC = () => {
         const persistedToken = localStorage.getItem('token');
         if (persistedToken) {
           sessionStorage.setItem('token', persistedToken);
-          navigate('/auctions');
+          navigate('/profile');
         }
       }, []);
 

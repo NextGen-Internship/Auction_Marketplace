@@ -30,6 +30,8 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
     existingDays: 0,
   });
 
+  const [photoError, setPhotoError] = useState<string>('');
+  const [submitted, setSubmitted] = useState<boolean>(false);
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
   const auctionService = new AuctionService(apiService);
@@ -71,11 +73,18 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
         ...prevData,
         photo: null,
       }));
+      setSubmitted(false);
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
+
+    if (!formData.photo) {
+      setPhotoError('Please upload a photo.');
+      return;
+    }
     try {
       const response: ApiResponseDTO = await auctionService.createAuction(formData);
 
@@ -90,6 +99,24 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
       console.error('Error creating auction:', error);
       onClose();
       alert(`Error creating auction: `);
+    }
+  };
+
+  const handleAddAuction = async (e: FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    if (!formData.photo) {
+      setPhotoError('Please upload a photo.');
+      return;
+    }
+    try {
+      const updatedCause = await auctionService.createAuction(formData);
+      onClose()
+      navigate('/auctions');
+      location.reload();
+    } catch (error) {
+      console.error('Error updating cause:', error);
     }
   };
 
@@ -131,13 +158,15 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
+        {submitted && !formData.photo && <p style={{ color: 'red' }}>Please upload a photo.</p>}
+
 
         <label>
-           Start Price:
+          Start Price:
         </label>
         <div className="input-with-symbol">
-         <span className="symbol">$</span>
-         <input
+          <span className="symbol">$</span>
+          <input
             type="number"
             id="startPrice"
             name="startPrice"
@@ -147,7 +176,7 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
             required
           />
         </div>
-      
+
         <label>
           Existing Days:
         </label>
@@ -161,7 +190,7 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           required
         />
 
-        <button type="submit">Submit</button>
+        <button type="submit" onClick={handleAddAuction}>Submit</button>
       </form>
     </div>
   );
