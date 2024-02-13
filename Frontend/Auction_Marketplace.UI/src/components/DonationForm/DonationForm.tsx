@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './DonationForm.css';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
+import { Link } from 'react-router-dom';
 
 interface DonationFormProps {
   onClose: () => void;
@@ -7,6 +9,26 @@ interface DonationFormProps {
 }
 
 const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
+  
+  const token = getToken();
+
+  useEffect(() => {
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, []);
+  
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
+
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
 
   const handleAmountButtonClick = (amount: number) => {
@@ -48,28 +70,33 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
   };
 
   return (
-    <div className="donation-form">
-      <h3>Donation Form</h3>
-      <div className="donation-buttons">
-        <button onClick={() => handleAmountButtonClick(10)}>10</button>
-        <button onClick={() => handleAmountButtonClick(20)}>20</button>
-        <button onClick={() => handleAmountButtonClick(50)}>50</button>
-        <button onClick={() => handleAmountButtonClick(100)}>100</button>
-        <button onClick={() => handleAmountButtonClick(150)}>150</button>
-        <button onClick={() => handleAmountButtonClick(200)}>200</button>
+    <div className="donation-form-container">
+      <div className="donation-form">
+        <h3>Make a Donation</h3>
+        <div className="donation-amount-buttons">
+          <button onClick={() => handleAmountButtonClick(10)}>10</button>
+          <button onClick={() => handleAmountButtonClick(20)}>20</button>
+          <button onClick={() => handleAmountButtonClick(50)}>50</button>
+          <button onClick={() => handleAmountButtonClick(100)}>100</button>
+          <button onClick={() => handleAmountButtonClick(150)}>150</button>
+          <button onClick={() => handleAmountButtonClick(200)}>200</button>
+        </div>
+        <div className="custom-amount-input">
+          <input
+          className='money'
+            type="number"
+            placeholder="Enter custom amount"
+            value={donationAmount !== null ? donationAmount : ''}
+            onChange={handleCustomAmountChange}
+          />
+        </div>
+        <div className='buttons'>
+        <form onSubmit={handleSubmit}>
+          <button type="submit" className="btn">Checkout</button>
+        </form>
+        <button className='close-btn' onClick={onClose}>Close</button>
       </div>
-      <div className="custom-amount-input">
-        <input
-          type="number"
-          placeholder="Enter custom amount"
-          value={donationAmount !== null ? donationAmount : ''}
-          onChange={handleCustomAmountChange}
-        />
-      </div>
-      <form onSubmit={handleSubmit}>
-        <button type="submit" className="btn">Checkout</button>
-      </form>
-      <button onClick={onClose}>Close</button>
+        </div>
     </div>
   );
 };

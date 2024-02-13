@@ -1,9 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
 import "./CheckoutForm.css"
+import { clearToken, getToken, isTokenExpired } from "../../utils/GoogleToken";
+import { Link } from "react-router-dom";
 
 export default function CheckForm(){
+  const token = getToken();
+
+  useEffect(() => {
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, []);
+  
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
 
   const stripe = useStripe();
   const elements = useElements();
