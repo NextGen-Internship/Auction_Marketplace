@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../Components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar';
 import { useParams, Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import ApiService from '../../Services/ApiService';
@@ -17,6 +17,7 @@ const AuctionDetailsPage: React.FC = () => {
   const [auctionDetails, setAuctionDetails] = useState<any>(null);
   const [bidAmount, setBidAmount] = useState<number>();
   const [bidSuccess, setBidSuccess] = useState<boolean>(false); 
+  const [finalBid, setFinalBid] = useState<string | null>(null);
   const token = getToken();
 
   useEffect(() => {
@@ -25,6 +26,11 @@ const AuctionDetailsPage: React.FC = () => {
         const response: ApiResponseDTO = await auctionService.getAuctionById(Number(auctionId));
         const fetchedAuctionDetails = response.data;
         setAuctionDetails(fetchedAuctionDetails);
+
+         const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+        if (finalBidResponse.succeed) {
+          setFinalBid(finalBidResponse.data);
+        }
       } catch (error) {
         throw error;
       }
@@ -45,6 +51,11 @@ const AuctionDetailsPage: React.FC = () => {
       if (response.succeed) {
         setBidSuccess(true); 
         setBidAmount(undefined); 
+
+         const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+        if (finalBidResponse.succeed) {
+          setFinalBid(finalBidResponse.data);
+        }
       } else {
         throw response.message;
       }
@@ -60,6 +71,13 @@ const AuctionDetailsPage: React.FC = () => {
       <div className="auction-content">
         <div className="auction-photo">
           <img src={auctionDetails?.photo} alt={auctionDetails?.name} />
+        <p>{auctionDetails?.description}</p>
+        {auctionDetails && auctionDetails.startPrice && (
+          <p>Start Price: {auctionDetails.startPrice}.00 BGN</p>
+        )}
+        {finalBid && (
+          <p>{finalBid}</p>
+        )}
         </div>
         <div className="auction-details">
           <div className="header">
