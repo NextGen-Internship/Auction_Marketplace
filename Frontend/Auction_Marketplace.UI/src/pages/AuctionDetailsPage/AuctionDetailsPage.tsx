@@ -70,14 +70,8 @@ const AuctionDetailsPage: React.FC = () => {
     <div className="auction-details-container">
       <div className="auction-content">
         <div className="auction-photo">
-          <img src={auctionDetails?.photo} alt={auctionDetails?.name} />
-        <p>{auctionDetails?.description}</p>
-        {auctionDetails && auctionDetails.startPrice && (
-          <p>Start Price: {auctionDetails.startPrice}.00 BGN</p>
-        )}
-        {finalBid && (
-          <p>{finalBid}</p>
-        )}
+          <img src={auctionDetails?.photo} />
+        
         </div>
         <div className="auction-details">
           <div className="header">
@@ -101,11 +95,12 @@ const AuctionDetailsPage: React.FC = () => {
             <Link to={`/auctions`} className="back-auctions-button">
               Back to Auctions
             </Link>
-            {bidSuccess && (
-              <div className="bid-success-note">
-                Successfully placed bid!
-              </div>
-            )}
+            
+          </div>
+          <div className='user-container'>
+          {finalBid && (
+          <p>{finalBid}</p>
+        )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using Auction_Marketplace.Data.Entities;
+using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -27,16 +28,16 @@ namespace Auction_Marketplace.Services.Implementation
 
 
 
-        public void CreatePayment(string paymentId, decimal amount, DateTime date, bool isCompleted, string endUserCustomerId)
+        public void CreatePayment(PaymentViewModel model)
         {
 
             var payment = new Payment()
             {
                 UserPaymentMethodId = 0,
-                Amount = amount / 100,
-                Date = date,
-                IsCompleted = isCompleted,
-                StripePaymentId = paymentId,
+                Amount = model.Amount / 100,
+                Date = model.Date,
+                IsCompleted = model.IsCompleted,
+                StripePaymentId = model.StripePaymentId,
             };
 
 
@@ -49,7 +50,7 @@ namespace Auction_Marketplace.Services.Implementation
 
 
 
-            var endUser = _userRepository.GetUserByCustomerId(endUserCustomerId);
+            var endUser = _userRepository.GetUserByCustomerId(model.EndUserId) ;
             var endUserId = endUser.Result.Id;
 
 

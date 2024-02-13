@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Payment from './pages/StripePage/Payment.tsx';
 import Completion from './pages/StripePage/Completion.tsx';
-import AuctionDetailsPage from './Pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
-import CausePage from './Pages/CausesPage/CausePage.tsx';
-import AuctionPage from './Pages/AuctionsPage/AuctionPage.tsx';
-import AuctionsPage from './Pages/AuctionsPage/AuctionsPage.tsx';
-import LoginPage from './Pages/LoginPage/LoginPage.tsx';
-import RegisterPage from './Pages/RegisterPage/RegisterPage.tsx';
-import HomePage from './Pages/HomePage/HomePage.tsx';
-import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
-import CausesPage from './Pages/CausesPage/CausesPage.tsx';
-import CauseDetailsPage from './Pages/CauseDetailsPage/CauseDetailsPage.tsx';
-import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
-import Footer from './Components/Footer/Footer.tsx';
-import Navbar from './Components/Navbar/Navbar.tsx';
+import AuctionDetailsPage from './pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
+import CausePage from './pages/CausesPage/CausePage.tsx';
+import AuctionPage from './pages/AuctionsPage/AuctionPage.tsx';
+import AuctionsPage from './pages/AuctionsPage/AuctionsPage.tsx';
+import LoginPage from './pages/LoginPage/LoginPage.tsx';
+import RegisterPage from './pages/RegisterPage/RegisterPage.tsx';
+import HomePage from './pages/HomePage/HomePage.tsx';
+import ProfilePage from './pages/ProfilePage/ProfilePage.tsx';
+import CausesPage from './pages/CausesPage/CausesPage.tsx';
+import CauseDetailsPage from './pages/CauseDetailsPage/CauseDetailsPage.tsx';
+import AboutUsPage from './pages/AboutUsPage/AboutUsPage.tsx';
+import Footer from './components/Footer/Footer.tsx';
+import Navbar from './components/Navbar/Navbar.tsx';
 
 function App() {
   return (

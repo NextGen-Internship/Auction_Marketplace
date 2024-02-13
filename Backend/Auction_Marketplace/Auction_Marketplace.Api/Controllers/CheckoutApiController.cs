@@ -2,6 +2,7 @@
 using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Auction_Marketplace.Api.Controllers
 {
@@ -53,6 +54,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
 
+
         [HttpPost]
         [Route("webhook")]
         public async Task<IActionResult> Webhook()
@@ -60,9 +62,12 @@ namespace Auction_Marketplace.Api.Controllers
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             var stripeSignature = Request.Headers["Stripe-Signature"];
 
-            await _stripeService.HandleWebhookEvent(json, stripeSignature);
+            var payment = await _stripeService.HandleWebhookEvent(json, stripeSignature);
 
-            return Ok();
+            _stripeService.Payment(payment);
+
+
+            return Ok(payment);
         }
     }
 }
