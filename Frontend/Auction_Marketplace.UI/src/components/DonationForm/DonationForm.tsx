@@ -36,10 +36,8 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
       if (response.ok) {
         const responseData = await response.json();
 
-            const redirectUrl = responseData.returnUrl; // Use the returnUrl from the response
-
+            const redirectUrl = responseData.returnUrl; 
             console.log('Checkout session created successfully');
-
             window.location.href = redirectUrl;
       } else {
         console.error('Error creating checkout session');

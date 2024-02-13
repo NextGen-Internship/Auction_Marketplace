@@ -58,9 +58,8 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
 
         try {
             const updatedCause = await causeService.updateCause(causeId, formData);
-            navigate('/causes');
             onClose()
-
+            navigate('/causes');
         } catch (error) {
             console.error('Error updating cause:', error);
         }

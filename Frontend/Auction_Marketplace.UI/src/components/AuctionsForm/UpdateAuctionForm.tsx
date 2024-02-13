@@ -25,7 +25,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
         photo: null,
         existingDays: 0
     });
-
+    ;
     const allowedFileTypes = ['image/jpeg', 'image/png'];
     const apiService = new ApiService();
     const auctionService = new AuctionService(apiService);
@@ -36,7 +36,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
             setFormData({
                 name: initialAuctionData.name,
                 description: initialAuctionData.description,
-                photo: initialAuctionData.photo,
+                photo: null,
                 existingDays: initialAuctionData.existingDays
             });
         }
@@ -59,15 +59,21 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
     const handleUpdateAuction = async (e: FormEvent) => {
         e.preventDefault();
 
-        try {
-            const updatedAuction = await auctionService.updateAuction(auctionId, formData);
-            navigate('/auctions');
-            handleClose;
-            
-        } catch (error) {
-            console.error('Error updating auction:', error);
+        if (!formData.photo) {
+            alert('Please upload a photo.');
+            location.reload();
         }
-    };
+        else {
+            try {
+                const updatedAuction = await auctionService.updateAuction(auctionId, formData);
+                navigate('/auctions');
+                handleClose;
+
+            } catch (error) {
+                console.error('Error updating auction:', error);
+            }
+        };
+    }
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -82,6 +88,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                 reader.onloadend = () => {
                 };
                 reader.readAsDataURL(file);
+
             } else {
                 setFormData((prevData) => ({
                     ...prevData,
@@ -94,26 +101,6 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                 ...prevData,
                 photo: null,
             }));
-        }
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        try {
-            const response: ApiResponseDTO = await auctionService.updateAuction(auctionId, formData);
-
-            if (response.succeed) {
-                console.log('Auction updated successfully:', response.data);
-               
-            } else {
-                console.error('Failed to update auction:', response.message);
-            }
-             onClose(); 
-             navigate("/auctions");
-        } catch (error) {
-            console.error('Error updating auction:', error);
-            onClose();
-            alert(`Error updating auction: `);
         }
     };
 

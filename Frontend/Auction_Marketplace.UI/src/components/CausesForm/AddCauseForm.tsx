@@ -3,6 +3,7 @@ import './AddCauseForm.css';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseService from '../../Services/CauseService';
+import { useNavigate } from 'react-router-dom';
 
 interface AddCauseFormProps {
   onClose: () => void;
@@ -23,9 +24,13 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
     amountNeeded: 0,
   });
 
+  const [photoError, setPhotoError] = useState<string>('');
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
-  const causesService = new CauseService(apiService);
+  const causeService = new CauseService(apiService);
 
   const handleClose = () => {
     onClose();
@@ -70,14 +75,20 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         ...prevData,
         photo: null,
       }));
+      setSubmitted(false);
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
 
+    if (!formData.photo) {
+      setPhotoError('Please upload a photo.');
+      return;
+    }
     try {
-      const response: ApiResponseDTO = await causesService.createCause(formData);
+      const response: ApiResponseDTO = await causeService.createCause(formData);
 
       if (response.succeed) {
         console.log('Cause created successfully:', response.data);
@@ -88,6 +99,25 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
     } catch (error) {
       console.error('Error creating cause:', error);
       alert(`Error creating cause: `);
+    }
+  };
+
+  const handleAddCause = async (e: FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    if (!formData.photo) {
+      setPhotoError('Please upload a photo.');
+      return;
+    }
+
+    try {
+      const createCause = await causeService.createCause(formData);
+      onClose()
+      navigate('/causes');
+      location.reload();
+    } catch (error) {
+      console.error('Error updating cause:', error);
     }
   };
 
@@ -123,6 +153,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
+        {submitted && !formData.photo && <p style={{ color: 'red' }}>Please upload a photo.</p>}
 
         <input
           type="number"
@@ -133,7 +164,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleInputChange}
           required
         />
-        <button type="submit">Submit</button>
+        <button type="submit" onClick={handleAddCause}>Submit</button>
       </form>
     </div>
   );
