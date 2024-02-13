@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Payment from './Pages/StripePage/Payment.tsx';
-import Completion from './Pages/StripePage/Completion.tsx';
+import Payment from './pages/StripePage/Payment.tsx';
+import Completion from './pages/StripePage/Completion.tsx';
 import AuctionDetailsPage from './Pages/AuctionDetailsPage/AuctionDetailsPage.tsx';
 import CausePage from './Pages/CausesPage/CausePage.tsx';
 import AuctionPage from './Pages/AuctionsPage/AuctionPage.tsx';
