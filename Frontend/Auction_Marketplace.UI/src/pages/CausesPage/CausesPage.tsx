@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+
+import '../../Components/TokenExp/TokenExpContainer.css';
 import './CausesPage.css';
-import AddStripeForm from '../../components/AddStripeForm/AddStripeForm.tsx';
-import UserService from '../../Services/UserService.ts';
+import AddStripeForm from '../../Components/AddStripeForm/AddStripeForm.tsx';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
+import '../../Components/TokenExp/TokenExpContainer.css';
+import './CausesPage.css';
+import React, { useState, useEffect } from 'react';
+import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import StripeService from '../../Services/StripeService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import CreateCauseDTO from '../../Interfaces/DTOs/CauseDTO';
-import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP.ts';
-import Navbar from '../../components/Navbar/Navbar.tsx';
-import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import UserDTO from '../../Interfaces/DTOs/UserDTO.ts';
-import CauseService from '../../Services/CauseService.ts';
-import UpdateCauseForm from '../../components/CausesForm/UpdateCauseForm.tsx';
-import AddCauseForm from '../../components/CausesForm/AddCauseForm.tsx';
+import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP.ts';
+import UserService from '../../Services/UserService.ts';
+import AddCauseForm from '../../Components/CausesForm/AddCauseForm.tsx';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
+import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm.tsx';
+
 
 const CausesPage: React.FC = () => {
   const token = getToken();
@@ -126,8 +131,7 @@ const CausesPage: React.FC = () => {
         const response: ApiResponseDTO = await causeService.deleteCause(causeId);
 
         if (response.succeed) {
-            alert('Succesfully deleted cause');
-            navigate('/causes');
+            location.reload();
         } else {
             console.warn('You are not the creator of this cause.');
         }
@@ -238,21 +242,9 @@ const CausesPage: React.FC = () => {
   return (
     <div>
       <Navbar showAuthButtons={false} />
-      <div className="search-bar-container">
-  <input
-    type="text"
-    placeholder="Search..."
-    className="search-bar-input"
-    // Add onChange event handler to handle search functionality
-    //onChange={(e) => handleSearch(e.target.value)}
-  />
-  <button className="search-bar-button">Search</button>
-</div>
-
       <button className="add-cause-button" onClick={handleAddCauseClick}>
         Add Your Cause
       </button>
-   
 
       {showAddCauseForm && <AddCauseForm onClose={handleCloseForm} />}
       {showAddStrypeForm && <AddStripeForm onClose={handleCloseForm} />}

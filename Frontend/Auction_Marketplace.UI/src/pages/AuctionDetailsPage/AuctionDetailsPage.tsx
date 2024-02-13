@@ -72,7 +72,6 @@ const AuctionDetailsPage: React.FC = () => {
       <div className="auction-content">
         <div className="auction-photo">
           <img src={auctionDetails?.photo} />
-        
         </div>
         <div className="auction-details">
           <div className="header">
@@ -80,6 +79,8 @@ const AuctionDetailsPage: React.FC = () => {
           </div>
           <p className="description">{auctionDetails?.description}</p>
           <p className="start-price">Start Price: ${auctionDetails?.startPrice}</p>
+          <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /> </p>
+          {!auctionDetails || !auctionDetails.endDate || new Date(auctionDetails.endDate) > new Date() ? (
           <div className="bid-section">
             <label htmlFor="bidAmount">Your Bid: </label>
             <input
@@ -98,18 +99,19 @@ const AuctionDetailsPage: React.FC = () => {
             </Link>
             
           </div>
+          ) : null}
           <div className='user-container'>
           {finalBid && (
           <p>{finalBid}</p>
         )}
           </div>
         </div>
-
       </div>
     </div>
   </>
   
   );
 };
+
 
 export default AuctionDetailsPage;
