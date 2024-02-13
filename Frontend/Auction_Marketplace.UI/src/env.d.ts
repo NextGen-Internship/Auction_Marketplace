@@ -20,6 +20,7 @@ interface ImportMetaEnv {
     readonly VITE_UPDATE_CAUSE_BY_ID_ENDPOINT: string
     readonly VITE_DELETE_CAUSE_BY_ID_ENDPOINT: string
     readonly VITE_PLACE_BID_ENDPOINT: string
+    readonly VITE_CHECK_FINAL_BID_ENDPOINT: string
 }
 
 interface ImportMeta {

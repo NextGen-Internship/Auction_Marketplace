@@ -18,6 +18,7 @@ const AuctionDetailsPage: React.FC = () => {
   const [auctionDetails, setAuctionDetails] = useState<any>(null);
   const [bidAmount, setBidAmount] = useState<number>();
   const [bidSuccess, setBidSuccess] = useState<boolean>(false); 
+  const [finalBid, setFinalBid] = useState<string | null>(null);
   const token = getToken();
 
   useEffect(() => {
@@ -26,6 +27,11 @@ const AuctionDetailsPage: React.FC = () => {
         const response: ApiResponseDTO = await auctionService.getAuctionById(Number(auctionId));
         const fetchedAuctionDetails = response.data;
         setAuctionDetails(fetchedAuctionDetails);
+
+         const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+        if (finalBidResponse.succeed) {
+          setFinalBid(finalBidResponse.data);
+        }
       } catch (error) {
         throw error;
       }
@@ -46,6 +52,11 @@ const AuctionDetailsPage: React.FC = () => {
       if (response.succeed) {
         setBidSuccess(true); 
         setBidAmount(undefined); 
+
+         const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+        if (finalBidResponse.succeed) {
+          setFinalBid(finalBidResponse.data);
+        }
       } else {
         throw response.message;
       }
@@ -64,8 +75,13 @@ const AuctionDetailsPage: React.FC = () => {
         <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
         <img src={auctionDetails?.photo} alt={auctionDetails?.name} />
         <p>{auctionDetails?.description}</p>
-        <p>Start Price: ${auctionDetails?.startPrice}</p>
         <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /> </p>
+        {auctionDetails && auctionDetails.startPrice && (
+          <p>Start Price: {auctionDetails.startPrice}.00 BGN</p>
+        )}
+        {finalBid && (
+          <p>{finalBid}</p>
+        )}
         <div>
           <label htmlFor="bidAmount">Your Bid: </label>
           <input
@@ -73,7 +89,7 @@ const AuctionDetailsPage: React.FC = () => {
             id="bidAmount"
             value={bidAmount || ''}
             onChange={(e) => setBidAmount(Number(e.target.value))}
-            placeholder="$"
+            placeholder="BGN"
           />
         </div>
         <button className="bid-button" onClick={handleBidNowClick}>
