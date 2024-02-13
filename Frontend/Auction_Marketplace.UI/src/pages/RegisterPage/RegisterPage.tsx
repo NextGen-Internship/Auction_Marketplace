@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../LoginPage/LoginPage.css';
 import './ProfilePictureRegister.css';
@@ -6,6 +6,7 @@ import './RegisterPage.css';
 import ApiService from '../../Services/ApiService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO'; 
 import UserService from '../../Services/UserService';
+import { getToken, setToken } from '../../utils/GoogleToken';
 
 const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -21,9 +22,36 @@ const RegisterPage: React.FC = () => {
   const allowedFileTypes = ['image/jpeg', 'image/png'];
   const apiService = new ApiService();
   const userService = new UserService(apiService);
-
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      navigate('/home');
+    }
+  }, []);
+
+  useEffect(() => {
+    const saveTokenOnUnload = () => {
+      const token = getToken();
+      if (token) {
+        sessionStorage.setItem('token', token);
+      }
+    };
+    window.addEventListener('beforeunload', saveTokenOnUnload);
+    return () => {
+      window.removeEventListener('beforeunload', saveTokenOnUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const persistedToken = sessionStorage.getItem('token');
+    if (persistedToken) {
+      setToken(persistedToken);
+      navigate('/home');
+    }
+  }, []);
+  
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
 

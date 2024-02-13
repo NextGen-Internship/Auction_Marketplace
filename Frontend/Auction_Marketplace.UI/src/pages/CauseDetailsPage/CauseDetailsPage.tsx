@@ -5,8 +5,8 @@ import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
-import DonationForm from '../../components/DonationForm/DonationForm.tsx';
-import Navbar from '../../components/Navbar/Navbar.tsx';
+import DonationForm from '../../Components/DonationForm/DonationForm.tsx';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
 
 declare const navigate: (to: string) => void;
 

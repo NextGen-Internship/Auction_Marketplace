@@ -45,6 +45,27 @@ const CausesPage: React.FC = () => {
   const userService = new UserService(apiService);
 
   useEffect(() => {
+    const saveTokenOnUnload = () => {
+      const token = getToken();
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+    };
+    window.addEventListener('beforeunload', saveTokenOnUnload);
+    return () => {
+      window.removeEventListener('beforeunload', saveTokenOnUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const persistedToken = localStorage.getItem('token');
+    if (persistedToken) {
+      sessionStorage.setItem('token', persistedToken);
+      navigate('/causes');
+    }
+  }, []);
+
+  useEffect(() => {
     if (token) {
       fetchUserProfile();
       fetchData();

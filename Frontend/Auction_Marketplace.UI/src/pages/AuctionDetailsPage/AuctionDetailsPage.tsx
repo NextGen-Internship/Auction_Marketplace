@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../Components/Navbar/Navbar';
 import { useParams, Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import ApiService from '../../Services/ApiService';

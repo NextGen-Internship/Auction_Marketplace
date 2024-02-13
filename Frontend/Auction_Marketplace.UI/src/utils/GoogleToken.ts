@@ -1,9 +1,13 @@
 export const getToken = (): string | null => {
-  return localStorage.getItem('token');
+  return sessionStorage.getItem('token');
+};
+
+export const setToken = (token: string): void => {
+  sessionStorage.setItem('token', token);
 };
 
 export const clearToken = (): void => {
-  localStorage.removeItem('token');
+  sessionStorage.removeItem('token');
 };
 
 export const isTokenExpired = (): boolean => {
