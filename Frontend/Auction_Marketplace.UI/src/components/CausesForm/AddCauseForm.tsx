@@ -127,6 +127,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         <span className="close-cross">&#10005;</span>
       </div>
       <form onSubmit={handleSubmit}>
+        <div className='lable-update-auction'>
+          <h2>Create cause</h2>
+        </div>
         <input
           type="text"
           id="name"

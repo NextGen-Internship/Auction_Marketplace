@@ -1,9 +1,9 @@
 .add-cause-button {
   position: fixed;
-  top: 80px;
-  left: 50%;
+  top: 100px;
+  left: 6%;
   transform: translateX(-50%);
-  background-color: #007bff;
+  background-color: #52a1f5;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -14,34 +14,30 @@
 }
 
 .add-cause-button:hover {
-  background-color: #0056b3;
-  box-shadow: 0 10px 6px 2px rgba(0, 0, 0, 0.2);
+  background-color: #7b7bd0;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+}
+
+.buttons-body-container {
+  margin:20px;
+  background-color: #52a1f5;
 }
 
 .cause-info-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 20px;
-  margin-top: 10%;
-  max-width: 660px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.header{
-  font-size: 30px;
-  margin-top: 15px;
+  padding: 0px;
+  margin-top: -18%;
 }
 
 .cause-info {
-  width: 700px;
+  width: 300px;
   height: 330px;
   max-height: 20%;
   box-sizing: border-box;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  margin-bottom: 20px;
+  margin:48px;
   padding: 10px;
   position: relative;
   overflow: hidden;
@@ -52,60 +48,30 @@
   box-shadow: 20px 20px 26px 10px rgba(0, 0, 0, 0.2);
 }
 
-.cause-info h3 {
-  overflow: hidden;
-  margin-bottom: 20px;
-  color: #597896;
-}
-
 .cause-info img {
-  width: 45%;
+  width: 100%;
   height: auto;
   float: left;
-  margin-left: 5px;
-  margin-bottom: 40px;
   border-radius: 5px;
 }
 
 .details-button {
   position: absolute;
-  bottom: 10px;
+  bottom: 11px;
   display: block;
-  padding: 8px 12px;
+  padding: 7px 12px;
   background-color: #007bff;
   color: white;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 6%;
 }
 
 .details-button:hover {
   background-color: #577bf1;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-}
-
-.header-buttons {
-  max-width: 1200px;
-  margin: 0px auto;
-  height: 32px;
-}
-
-.update-cause-button {
-  position: absolute;
-  display: block;
-  bottom: 10px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  left: 66%;
-  transform: translateX(-50%);
 }
 
 .update-button {
@@ -119,8 +85,7 @@
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  left: 63%;
-  transform: translateX(-50%);
+  left: 40%;
 }
 
 .delete-button {
@@ -134,6 +99,9 @@
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  left: 76%;
-  transform: translateX(-50%);
+  left: 74%;
+}
+
+.pagination {
+  margin-left: 50%;
 }

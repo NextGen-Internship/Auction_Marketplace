@@ -1,7 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import { useNavigate } from 'react-router-dom';
 
 interface UpdateAuctionFormProps {
@@ -110,6 +109,9 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                 <span className="close-cross">&#10005;</span>
             </div>
             <form>
+                <div className='lable-update-auction'>
+                    <h2>Update: {formData?.name}</h2>
+                </div>
                 <label>
                     Auction name:
                 </label>

@@ -1,7 +1,7 @@
 .product-section {
     margin-top: 80px;
     padding: 40px 20px;
-    background-color: #f8f9fa; /* Light gray background */
+    background-color: #f8f9fa; 
   }
   
   .product-section h2 {
@@ -17,7 +17,7 @@
   }
   
   .product {
-    width: calc(27% - 40px); /* Adjust the width as needed */
+    width: calc(27% - 40px); 
     margin: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -70,10 +70,7 @@
     background-color: #0056b3;
   }
   
-
-  
   .search-bar {
-    /* Add your search-bar styles */
     display: flex;
     align-items: center;
   }

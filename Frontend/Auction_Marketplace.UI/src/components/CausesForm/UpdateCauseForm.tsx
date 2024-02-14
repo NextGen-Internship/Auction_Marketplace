@@ -89,6 +89,9 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
                 <span className="close-cross">&#10005;</span>
             </div>
             <form onSubmit={handleSubmit}>
+                <div className='lable-update-auction'>
+                    <h2>Update: {formData?.name}</h2>
+                </div>
                 <label>
                     Cause name:
                 </label>

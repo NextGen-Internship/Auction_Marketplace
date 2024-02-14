@@ -9,9 +9,9 @@ import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
 import '../CausesPage/CausesPage.css';
 import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
-import AddAuctionForm from '../../components/AddAuctionForm/AddAuctionForm';
-import DeleteAuctionForm from '../../components/AuctionsForm/DeleteAuctionForm';
-import UpdateAuctionForm from '../../components/AuctionsForm/UpdateAuctionForm';
+import AddAuctionForm from '../../Components/AddAuctionForm/AddAuctionForm';
+import DeleteAuctionForm from '../../Components/AuctionsForm/DeleteAuctionForm';
+import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 
@@ -29,7 +29,7 @@ const AuctionsPage: React.FC = ({ }) => {
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedAuctionId, setSelectedAuctionId] = useState<number | null>(null);
-    const auctionsPerPage = 3;
+    const auctionsPerPage = 8;
     const [user, setUser] = useState<UserDTO>({
         firstName: '',
         lastName: '',
@@ -173,19 +173,55 @@ const AuctionsPage: React.FC = ({ }) => {
 
     const renderMiniPages = () => {
         const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(auctions.length / auctionsPerPage); i++) {
-            pageNumbers.push(i);
+        const totalPages = Math.ceil(auctions.length / auctionsPerPage);
+
+        const maxPageButtons = 3;
+
+        if (totalPages <= maxPageButtons) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            let startPage;
+            let endPage;
+
+            if (currentPage <= Math.ceil(maxPageButtons / 2)) {
+                startPage = 1;
+                endPage = maxPageButtons;
+            } else if (currentPage + Math.floor(maxPageButtons / 2) >= totalPages) {
+                startPage = totalPages - maxPageButtons + 1;
+                endPage = totalPages;
+            } else {
+                startPage = currentPage - Math.floor(maxPageButtons / 2);
+                endPage = currentPage + Math.floor(maxPageButtons / 2);
+            }
+
+            if (startPage > 1) {
+                pageNumbers.push(1, '...');
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbers.push(i);
+            }
+
+            if (endPage < totalPages) {
+                pageNumbers.push('...', totalPages);
+            }
         }
 
         return (
             <div className="pagination">
-                {pageNumbers.map((number) => (
+                {pageNumbers.map((pageNumber, index) => (
                     <button
-                        key={number}
-                        className={number === currentPage ? 'active' : ''}
-                        onClick={() => setCurrentPage(number)}
+                        key={index}
+                        className={pageNumber === currentPage ? 'active' : ''}
+                        onClick={() => {
+                            if (typeof pageNumber === 'number') {
+                                setCurrentPage(pageNumber);
+                            }
+                        }}
                     >
-                        {number}
+                        {pageNumber}
                     </button>
                 ))}
             </div>
@@ -196,17 +232,18 @@ const AuctionsPage: React.FC = ({ }) => {
         <div>
             <Navbar showAuthButtons={false} />
             <div className="add-cause-container">
-                <button className="add-cause-button" onClick={handleAddAuctionClick}>
-                    Add Auction
-                </button>
+                {!showNewAuctionForm && (
+                    <button className="add-cause-button" onClick={handleAddAuctionClick}>
+                        Add Auction
+                    </button>
+                )}
             </div>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
-
             {!hideAuctionContainer && (
                 <div className="cause-info-container">
                     {currentAuction.map((auction) => (
                         <div key={auction.auctionId} className="cause-info">
-                            <h3 className='head-auction'>{auction.name}</h3>
+                            <h3 className='header-cause'>{auction.name}</h3>
                             <img src={auction.photo} alt={auction.name} />
                             <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
                                 Details
@@ -244,9 +281,9 @@ const AuctionsPage: React.FC = ({ }) => {
                             )}
                         </div>
                     ))}
-                    {renderMiniPages()}
                 </div>
             )}
+            {renderMiniPages()}
         </div>
     );
 };
