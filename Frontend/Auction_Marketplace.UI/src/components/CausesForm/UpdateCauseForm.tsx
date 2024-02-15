@@ -90,7 +90,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
             </div>
             <form onSubmit={handleSubmit}>
                 <div className='lable-update-auction'>
-                    <h2>Update: {formData?.name}</h2>
+                    <h2 className='create-cause-header' >Update: {formData?.name}</h2>
                 </div>
                 <label>
                     Cause name:
@@ -129,7 +129,7 @@ const UpdateCauseForm: React.FC<UpdateCauseFormProps> = ({ causeId, onClose, ini
                     required
                 />
 
-                <button type="submit" onClick={handleUpdateCause}>Submit</button>
+                <button type="submit" className='submit-button-cause' onClick={handleUpdateCause}>Submit</button>
             </form>
         </div>
     );

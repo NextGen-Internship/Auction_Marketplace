@@ -36,24 +36,24 @@ const ProfilePage: React.FC = () => {
 
     useEffect(() => {
         const saveTokenOnUnload = () => {
-          const token = getToken();
-          if (token) {
-            localStorage.setItem('token', token);
-          }
+            const token = getToken();
+            if (token) {
+                localStorage.setItem('token', token);
+            }
         };
         window.addEventListener('beforeunload', saveTokenOnUnload);
         return () => {
-          window.removeEventListener('beforeunload', saveTokenOnUnload);
+            window.removeEventListener('beforeunload', saveTokenOnUnload);
         };
-      }, []);
-    
-      useEffect(() => {
+    }, []);
+
+    useEffect(() => {
         const persistedToken = localStorage.getItem('token');
         if (persistedToken) {
-          sessionStorage.setItem('token', persistedToken);
-          navigate('/profile');
+            sessionStorage.setItem('token', persistedToken);
+            navigate('/profile');
         }
-      }, []);
+    }, []);
 
     const fetchUserProfile = async () => {
         try {
@@ -164,18 +164,6 @@ const ProfilePage: React.FC = () => {
                     <div className="user-info">
                         <div className="user-avatar">
                             <img src={user.profilePicture} alt="Profile" />
-                            {editMode && (
-                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
-                                    <input
-                                        type="file"
-                                        id="profilePicture"
-                                        name="profilePicture"
-                                        onChange={handleProfilePictureChange}
-                                        accept="image/*"
-                                    />
-                                </label>
-                            )}
-
 
                             {!editMode && (
                                 <div className="edit-icons">
@@ -187,6 +175,18 @@ const ProfilePage: React.FC = () => {
                                 <div className="edit-icons">
                                     <FaCheck className="save-icon" onClick={handleSaveClick} />
                                 </div>
+
+                            )}
+                            {editMode && (
+                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
+                                    <input
+                                        type="file"
+                                        id="profilePicture"
+                                        name="profilePicture"
+                                        onChange={handleProfilePictureChange}
+                                        accept="image/*"
+                                    />
+                                </label>
                             )}
                         </div>
                         <div className="user-details">
@@ -194,6 +194,7 @@ const ProfilePage: React.FC = () => {
                                 <label>First name:</label>
                                 {editMode ? (
                                     <input
+                                        className='input-user-names'
                                         type="text"
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
@@ -217,6 +218,7 @@ const ProfilePage: React.FC = () => {
                                 <label>Last name:</label>
                                 {editMode ? (
                                     <input
+                                        className='input-user-names'
                                         type="text"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}

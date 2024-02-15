@@ -7,6 +7,7 @@ export const RefreshToken = (): void => {
         try {
             const refreshedToken = extendTokenExpiration(token);
             localStorage.setItem('token', refreshedToken);
+            sessionStorage.setItem('token', refreshedToken);
         } catch (error) {
             console.error('Error refreshing token:', error);
             clearToken();

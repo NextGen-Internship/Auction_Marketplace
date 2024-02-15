@@ -28,8 +28,9 @@ const AuctionsPage: React.FC = ({ }) => {
     const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const [selectedAuctionId, setSelectedAuctionId] = useState<number | null>(null);
-    const auctionsPerPage = 8;
+    const auctionsPerPage = 6;
     const [user, setUser] = useState<UserDTO>({
         firstName: '',
         lastName: '',
@@ -71,8 +72,10 @@ const AuctionsPage: React.FC = ({ }) => {
             const response: ApiResponseDTO = await auctionService.fetchAuctions();
             const fetchAuctions: AuctionDTO[] = response.data || [];
             setAuctions(fetchAuctions);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching auctions:', error);
+            setLoading(false);
         }
     };
 
@@ -172,62 +175,65 @@ const AuctionsPage: React.FC = ({ }) => {
     const currentAuction = auctions.slice(indexOfFirstAuction, indexOfLastAuction);
 
     const renderMiniPages = () => {
-        const pageNumbers = [];
-        const totalPages = Math.ceil(auctions.length / auctionsPerPage);
+        if (!showNewAuctionForm) {
+            const pageNumbers = [];
+            const totalPages = Math.ceil(auctions.length / auctionsPerPage);
 
-        const maxPageButtons = 3;
+            const maxPageButtons = 3;
 
-        if (totalPages <= maxPageButtons) {
-            for (let i = 1; i <= totalPages; i++) {
-                pageNumbers.push(i);
-            }
-        } else {
-            let startPage;
-            let endPage;
-
-            if (currentPage <= Math.ceil(maxPageButtons / 2)) {
-                startPage = 1;
-                endPage = maxPageButtons;
-            } else if (currentPage + Math.floor(maxPageButtons / 2) >= totalPages) {
-                startPage = totalPages - maxPageButtons + 1;
-                endPage = totalPages;
+            if (totalPages <= maxPageButtons) {
+                for (let i = 1; i <= totalPages; i++) {
+                    pageNumbers.push(i);
+                }
             } else {
-                startPage = currentPage - Math.floor(maxPageButtons / 2);
-                endPage = currentPage + Math.floor(maxPageButtons / 2);
+                let startPage;
+                let endPage;
+
+                if (currentPage <= Math.ceil(maxPageButtons / 2)) {
+                    startPage = 1;
+                    endPage = maxPageButtons;
+                } else if (currentPage + Math.floor(maxPageButtons / 2) >= totalPages) {
+                    startPage = totalPages - maxPageButtons + 1;
+                    endPage = totalPages;
+                } else {
+                    startPage = currentPage - Math.floor(maxPageButtons / 2);
+                    endPage = currentPage + Math.floor(maxPageButtons / 2);
+                }
+
+                if (startPage > 1) {
+                    pageNumbers.push(1, '...');
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    pageNumbers.push(i);
+                }
+
+                if (endPage < totalPages) {
+                    pageNumbers.push('...', totalPages);
+                }
             }
 
-            if (startPage > 1) {
-                pageNumbers.push(1, '...');
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                pageNumbers.push(i);
-            }
-
-            if (endPage < totalPages) {
-                pageNumbers.push('...', totalPages);
-            }
+            return (
+                <div className="pagination">
+                    {pageNumbers.map((pageNumber, index) => (
+                        <button
+                            key={index}
+                            className={pageNumber === currentPage ? 'active' : ''}
+                            onClick={() => {
+                                if (typeof pageNumber === 'number') {
+                                    setCurrentPage(pageNumber);
+                                }
+                            }}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                </div>
+            );
+        } else {
+            return null;
         }
-
-        return (
-            <div className="pagination">
-                {pageNumbers.map((pageNumber, index) => (
-                    <button
-                        key={index}
-                        className={pageNumber === currentPage ? 'active' : ''}
-                        onClick={() => {
-                            if (typeof pageNumber === 'number') {
-                                setCurrentPage(pageNumber);
-                            }
-                        }}
-                    >
-                        {pageNumber}
-                    </button>
-                ))}
-            </div>
-        );
     };
-
     return (
         <div>
             <Navbar showAuthButtons={false} />
@@ -241,46 +247,50 @@ const AuctionsPage: React.FC = ({ }) => {
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
             {!hideAuctionContainer && (
                 <div className="cause-info-container">
-                    {currentAuction.map((auction) => (
-                        <div key={auction.auctionId} className="cause-info">
-                            <h3 className='header-cause'>{auction.name}</h3>
-                            <img src={auction.photo} alt={auction.name} />
-                            <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
-                                Details
-                            </Link>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        currentAuction.map((auction) => (
+                            <div key={auction.auctionId} className="cause-info">
+                                <h3 className='header-cause'>{auction.name}</h3>
+                                <img src={auction.photo} alt={auction.name} />
+                                <Link to={`/auctions/details/${auction.auctionId}`} className="details-button">
+                                    Details
+                                </Link>
 
-                            {handleCheckUserIdForAuction(auction, user.userId) && (
-                                <React.Fragment key={auction.auctionId}>
-                                    <button className='update-button' onClick={() =>
-                                        handleUpdateAuctionClick(auction.auctionId)} >
-                                        Update
-                                    </button>
-                                    {showUpdateAuctionForm && (
-                                        <UpdateAuctionForm
-                                            auctionId={selectedAuctionId || 0}
-                                            initialAuctionData={initialAuctionFormData}
-                                            onClose={handleCloseUpdateForm}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            )}
+                                {handleCheckUserIdForAuction(auction, user.userId) && (
+                                    <React.Fragment key={auction.auctionId}>
+                                        <button className='update-button' onClick={() =>
+                                            handleUpdateAuctionClick(auction.auctionId)} >
+                                            Update
+                                        </button>
+                                        {showUpdateAuctionForm && (
+                                            <UpdateAuctionForm
+                                                auctionId={selectedAuctionId || 0}
+                                                initialAuctionData={initialAuctionFormData}
+                                                onClose={handleCloseUpdateForm}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                )}
 
-                            {handleCheckUserIdForAuction(auction, user.userId) && (
-                                <React.Fragment key={auction.auctionId}>
-                                    <button className='delete-button' onClick={() =>
-                                        handleDeleteAuction(auction.auctionId)} >
-                                        Delete
-                                    </button>
-                                    {showDeleteAuctionForm && (
-                                        <DeleteAuctionForm
-                                            auctionId={selectedAuctionId || 0}
-                                            initialAuctionData={initialAuctionFormData}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            )}
-                        </div>
-                    ))}
+                                {handleCheckUserIdForAuction(auction, user.userId) && (
+                                    <React.Fragment key={auction.auctionId}>
+                                        <button className='delete-button' onClick={() =>
+                                            handleDeleteAuction(auction.auctionId)} >
+                                            Delete
+                                        </button>
+                                        {showDeleteAuctionForm && (
+                                            <DeleteAuctionForm
+                                                auctionId={selectedAuctionId || 0}
+                                                initialAuctionData={initialAuctionFormData}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                )}
+                            </div>
+                        ))
+                    )}
                 </div>
             )}
             {renderMiniPages()}

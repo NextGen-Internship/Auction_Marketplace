@@ -74,17 +74,16 @@ const AuctionDetailsPage: React.FC = () => {
           <img src={auctionDetails?.photo} />
         </div>
         <div className="auction-details">
-          <div className="header">
+          <div className="header-auction-detail">
             <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
           </div>
           <p className="description">{auctionDetails?.description}</p>
-          <p className="start-price">Start Price: ${auctionDetails?.startPrice}</p>
+          <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
           <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /> </p>
           {!auctionDetails || !auctionDetails.endDate || new Date(auctionDetails.endDate) > new Date() ? (
           <div className="bid-section">
             <label htmlFor="bidAmount">Your Bid: </label>
-            <input
-              type="number"
+            <input className='input-bid'
               id="bidAmount"
               value={bidAmount || ''}
               onChange={(e) => setBidAmount(Number(e.target.value))}

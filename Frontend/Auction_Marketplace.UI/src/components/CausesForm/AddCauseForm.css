@@ -24,12 +24,44 @@ button {
     border-radius: 3px;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
+.submit-button-cause {
+    background-color: #89ccd7;
+    margin-top: 2%;
+    margin-bottom: 0%;
 }
 
-button:hover {
-    background-color: #0056b3;
+.create-cause-header {
+    margin-top: 4%;
+    margin-bottom: 2%;
+}
+
+.label-create-auction {
+    margin-top: 4%
+}
+
+.textarea-description-create-cause {
+    margin-bottom: -1%;
+}
+
+.input-start-price {
+    margin-left: 14%;
+}
+
+.symbol {
+    margin-right: -11%;
+}
+
+.input-exsisting-minutes {
+    margin-left: 0%;
+}
+
+.update-header {
+    margin-bottom: 4%;
+    margin-top: 4%;
+}
+
+.please-upload-photo-p {
+    color: red;
+    margin-top: 0%;
+    margin-bottom: 4%;
 }

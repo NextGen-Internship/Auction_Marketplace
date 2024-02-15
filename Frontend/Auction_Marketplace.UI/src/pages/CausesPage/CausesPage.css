@@ -1,9 +1,10 @@
 .add-cause-button {
+  font-family: "Lucida Console", "Courier New", monospace;
   position: fixed;
   top: 100px;
-  left: 6%;
+  left: 8%;
   transform: translateX(-50%);
-  background-color: #52a1f5;
+  background-color: #91c0f2;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -19,29 +20,28 @@
 }
 
 .buttons-body-container {
-  margin:20px;
+  margin: 20px;
   background-color: #52a1f5;
 }
 
 .cause-info-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
   align-items: center;
   padding: 0px;
-  margin-top: -18%;
+  margin-top: -1%;
 }
 
 .cause-info {
-  width: 300px;
-  height: 330px;
-  max-height: 20%;
+  width: 320px;
+  height: 320px;
   box-sizing: border-box;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  margin:48px;
+  margin: 24px;
   padding: 10px;
   position: relative;
-  overflow: hidden;
-  align-items: center;
+  top: 28%;
 }
 
 .cause-info:hover {
@@ -56,11 +56,12 @@
 }
 
 .details-button {
+  font-family: "Lucida Console", "Courier New", monospace;
   position: absolute;
   bottom: 11px;
   display: block;
   padding: 7px 12px;
-  background-color: #007bff;
+  background-color: #91c0f2;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -75,33 +76,49 @@
 }
 
 .update-button {
+  font-family: "Lucida Console", "Courier New", monospace;
   position: absolute;
   bottom: -5px;
   display: block;
   padding: 8px 12px;
-  background-color: #007bff;
+  background-color: #5a748f;
   color: white;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  left: 40%;
+  left: 42%;
 }
 
 .delete-button {
+  font-family: "Lucida Console", "Courier New", monospace;
   position: absolute;
   bottom: -5px;
   display: block;
   padding: 8px 12px;
-  background-color: #007bff;
+  background-color: #5a748f;
   color: white;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  left: 74%;
+  left: 73%;
 }
 
 .pagination {
   margin-left: 50%;
+  margin-top: 12%;
+}
+
+.pagination button:hover {
+  background-color: #96acc4;
+}
+
+.header-cause {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 2px;
+  font-family: "Lucida Console", "Courier New", monospace;
 }
