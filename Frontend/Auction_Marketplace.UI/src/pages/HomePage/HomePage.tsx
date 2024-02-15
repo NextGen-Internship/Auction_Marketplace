@@ -10,8 +10,7 @@ import forthPhoto from '/src/assets/gettyimages-1189942849_900xx2121-1193-0-111.
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 import Navbar from '../../components/Navbar/Navbar.tsx';
-import Footer from '../../components/Footer/Footer.tsx';
-
+import Footer from '../../Components/Footer/Footer.tsx';
 
 const HomePage: React.FC = () => {
   const token = getToken();
@@ -79,12 +78,10 @@ const HomePage: React.FC = () => {
       <div className="top-bar">
         <div className="logo">Blankfactor Marketplace</div>
         <div className="search-bar">
-          {/* Add your search bar component here */}
           <input type="text" placeholder="Search..." />
           <button>Search</button>
         </div>
         <div className="user-menu">
-          {/* Add user menu items or profile icon */}
           <div className="profile-icon">Profile</div>
         </div>
       </div>
@@ -98,19 +95,16 @@ const HomePage: React.FC = () => {
       <div className="product-section">
         <h2>Auction Products</h2>
         <div className="product-list">
-          {/* Product 1 */}
           <div className="product">
             <img src='https://artstreet.in/cdn/shop/products/71S_lfuAyYL_700x700.jpg?v=1680764254' alt="Product 1" />
             <h3>Painting from Picasso</h3>
             <p>Guernica shows the tragedies of war and the suffering it inflicts upon individuals, particularly innocent civilians. This work has gained a monumental status, becoming a perpetual reminder of the tragedies of war, an anti-war symbol, and an embodiment of peace.</p>
           </div>
-          {/* Product 2 */}
           <div className="product">
             <img src='https://tincknellcountrystore.co.uk/images/cats/1737.jpg' alt="Product 2" />
             <h3>Truck Toy</h3>
             <p>It’s time to take out the trash with DRIVEN by Battat’s Dump Truck! This toy truck is part of the Standard Series and it is packed with cool features to keep you entertained for hours! There are working sounds so you can honk the horn and rev the engine. You can also switch on the multiple lights to see the path ahead and let others know you’re on the road! Fill your truck up and tilt the garbage out using the movable dumper. </p>
           </div>
-          {/* Product 3 */}
           <div className="product">
             <img src='https://bandpassdesign.com/cdn/shop/products/standard_dresden_gaming_set_straight_copy_1.jpg?v=1631024763' alt="Product 3" />
             <h3>Game Dining Table</h3>

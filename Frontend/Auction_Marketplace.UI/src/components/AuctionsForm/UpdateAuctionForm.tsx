@@ -1,7 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import { useNavigate } from 'react-router-dom';
 
 interface UpdateAuctionFormProps {
@@ -25,11 +24,13 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
         photo: null,
         existingDays: 0
     });
-    ;
+
     const allowedFileTypes = ['image/jpeg', 'image/png'];
     const apiService = new ApiService();
     const auctionService = new AuctionService(apiService);
     const navigate = useNavigate();
+    const [photoError, setPhotoError] = useState<string>('');
+    const [submitted, setSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
         if (initialAuctionData) {
@@ -58,10 +59,11 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
 
     const handleUpdateAuction = async (e: FormEvent) => {
         e.preventDefault();
+        setSubmitted(true);
 
         if (!formData.photo) {
-            alert('Please upload a photo.');
-            location.reload();
+            setPhotoError('Please upload a photo.');
+            return;
         }
         else {
             try {
@@ -110,6 +112,9 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                 <span className="close-cross">&#10005;</span>
             </div>
             <form>
+                <div className='lable-update-auction'>
+                    <h2 className='update-header'>Update: {formData?.name}</h2>
+                </div>
                 <label>
                     Auction name:
                 </label>
@@ -142,6 +147,10 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     onChange={handleFileChange}
                     accept="image/*"
                 />
+                {submitted && !formData.photo &&
+                    <p className='please-upload-photo-p'>
+                        Please upload a photo.
+                    </p>}
 
                 <label>
                     Exsisting days:
@@ -155,7 +164,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     required
                 />
 
-                <button type="submit" onClick={handleUpdateAuction}>Submit</button>
+                <button type="submit" className='submit-button-cause' onClick={handleUpdateAuction}>Submit</button>
             </form>
         </div>
     );

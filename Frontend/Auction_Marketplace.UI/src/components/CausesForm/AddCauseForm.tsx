@@ -26,6 +26,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
   const [photoError, setPhotoError] = useState<string>('');
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [hideButtonAddCause, setHideButtonAddCause] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const allowedFileTypes = ['image/jpeg', 'image/png'];
@@ -127,6 +128,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         <span className="close-cross">&#10005;</span>
       </div>
       <form onSubmit={handleSubmit}>
+        <div className='lable-update-auction'>
+          <h2 className='create-cause-header'>Create cause</h2>
+        </div>
         <input
           type="text"
           id="name"
@@ -153,10 +157,13 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
-        {submitted && !formData.photo && <p style={{ color: 'red' }}>Please upload a photo.</p>}
+        {submitted && !formData.photo &&
+          <p className='please-upload-photo-p'>
+            Please upload a photo.
+          </p>}
 
         <input
-          type="number"
+          className='input-amount-needed'
           id="amountNeeded"
           name="amountNeeded"
           placeholder="Money Needed"
@@ -164,7 +171,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleInputChange}
           required
         />
-        <button type="submit" onClick={handleAddCause}>Submit</button>
+        <button type="submit" className='submit-button-cause' onClick={handleAddCause}>Submit</button>
       </form>
     </div>
   );

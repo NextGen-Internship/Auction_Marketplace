@@ -6,7 +6,7 @@ import ApiService from '../../Services/ApiService';
 import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
 import DonationForm from '../../Components/DonationForm/DonationForm.tsx';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 
 declare const navigate: (to: string) => void;
 
@@ -78,17 +78,17 @@ const CauseDetailsPage: React.FC = () => {
     <div className="cause-details-container">
       {!showDonationForm && (
         <>
-          <h2 className='headd'>{cause.name}</h2>
+          <h2 className='head'>{cause.name}</h2>
           <p className='description-cause'>{cause.description}</p>
           <img src={cause.photo} alt={cause.name} className="cause-details-image" />
           <div className="amount-details">
             <div className="amount-line">
               <div className="line full-line"></div>
-              <span className="money-amount">${cause.amountNeeded}</span>
+              <span className="money-amount">BGN {cause.amountNeeded}</span>
             </div>
             <div className="amount-line">
               <div className={`line ${getLineColor(cause.amountCurrent, cause.amountNeeded)}`}></div>
-              <span className="money-amount">${cause.amountCurrent}</span>
+              <span className="money-amount">BGN {cause.amountCurrent}</span>
             </div>
           </div>
           <button className="donate-button" onClick={handleDonateClick}>Donate</button>
