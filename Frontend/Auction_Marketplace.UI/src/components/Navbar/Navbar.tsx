@@ -13,6 +13,7 @@ const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const token = getToken();
+  localStorage.clear();
 
   localStorage.clear();
   const navigate = useNavigate();
@@ -75,9 +76,6 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
           <Link to="/aboutUs" className="nav-item">
             About us
           </Link>
-          <Link to="/heart" className="heart-page-link" style={ {textDecoration: 'none' }}>
-            {"\u2764"}
-          </Link>
         </div>
         {showAuthButtons && (
           <>
@@ -93,6 +91,9 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
         )}
         {!showAuthButtons && !isLogOutPage && (
           <div className="nav-links-user">
+             <Link to="/heart" className="heart-page-link" style={ {textDecoration: 'none' }}>
+            {"\u2764"}
+            </Link>
             <Link to="/profile">
               <div className="profile-picture-container">
                 <img
