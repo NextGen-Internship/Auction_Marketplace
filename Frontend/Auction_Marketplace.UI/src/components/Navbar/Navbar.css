@@ -40,6 +40,10 @@
   border: 2px solid transparent; 
 }
 
+.heart-page-link{
+  color: rgb(241, 104, 150);
+}
+
 .nav-item:hover {
   color: blue; 
 }
