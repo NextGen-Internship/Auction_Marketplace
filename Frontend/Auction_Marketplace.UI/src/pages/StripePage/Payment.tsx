@@ -2,8 +2,29 @@ import {useEffect, useState } from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckForm from "./CheckoutForm";
+import { Link } from "react-router-dom";
+import { clearToken, getToken, isTokenExpired } from "../../utils/GoogleToken";
 
 function Payment() {
+  const token = getToken();
+
+  useEffect(() => {
+    if (isTokenExpired()) {
+      clearToken();
+    }
+  }, []);
+  
+  if (!token) {
+    return (
+      <div className='token-exp-container'>
+        <div className='token-exp-content'>
+          <p>Please log in to access this page.</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </div>
+    );
+  }
+
   const [stripePromise, setStripePromise] = useState<Stripe | null>(null);
   const [clientSecret, setClientSecret] = useState("");
 

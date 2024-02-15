@@ -21,7 +21,6 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IS3Service _s3Service;
-        private readonly IUserRepository _userReository;
 
         public AuthenticationService(IUserService userSevice,
                                         ITokenService tokenService,
@@ -30,9 +29,7 @@ namespace Auction_Marketplace.Services.Implementation
                                         UserManager<User> userManager,
                                         SignInManager<User> signInManager,
                                         IConfiguration configuration,
-                                        IS3Service s3Service,
-                                        IUserRepository userRepository
-                                        )
+                                        IS3Service s3Service )
         {
             _userService = userSevice;
             _emailService = emailService;
@@ -42,7 +39,6 @@ namespace Auction_Marketplace.Services.Implementation
             _signInManager = signInManager;
             _userManager = userManager;
             _s3Service = s3Service;
-            _userReository = userRepository;
         }
         public async Task<Response<string>> Register(RegisterViewModel registerUser)
         {
@@ -133,7 +129,7 @@ namespace Auction_Marketplace.Services.Implementation
 
             // ToDO:Seed roles
             //await _userManager.AddToRoleAsync(user, "User");
-            //Creates the JWT
+
             var token = _tokenService.GenerateJwtToken(user);
             await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.FirstName},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
             var isCreated = await _userManager.CreateAsync(user, registerUser.Password);
@@ -142,6 +138,8 @@ namespace Auction_Marketplace.Services.Implementation
             {
                 return null;
             }
+
+
 
             return token;
         }

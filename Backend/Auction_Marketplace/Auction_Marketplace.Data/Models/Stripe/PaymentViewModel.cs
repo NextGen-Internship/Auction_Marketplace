@@ -4,13 +4,11 @@ namespace Auction_Marketplace.Data.Models.Donation
 {
 	public class PaymentViewModel
 	{
-		public int UserId { get; set; }
+		public string StripePaymentId { get; set; }
 
-		public int EndUserId { get; set; }
+		public string EndUserId { get; set; }
 
 		public PaymentFor Type { get; set; }
-
-		public int MethodId { get; set; }
 
 		public bool IsCompleted { get; set; }
 

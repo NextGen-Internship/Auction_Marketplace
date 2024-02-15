@@ -7,7 +7,7 @@ import { FaCheck, FaEdit } from 'react-icons/fa';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
 import UserService from '../../Services/UserService.ts';
 import ApiService from '../../Services/ApiService.ts';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 
 const apiService = new ApiService;
 const userService = new UserService(apiService);
@@ -51,7 +51,7 @@ const ProfilePage: React.FC = () => {
         const persistedToken = localStorage.getItem('token');
         if (persistedToken) {
           sessionStorage.setItem('token', persistedToken);
-          navigate('/auctions');
+          navigate('/profile');
         }
       }, []);
 

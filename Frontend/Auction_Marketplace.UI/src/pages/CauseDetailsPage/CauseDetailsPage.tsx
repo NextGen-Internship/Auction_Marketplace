@@ -78,11 +78,8 @@ const CauseDetailsPage: React.FC = () => {
     <div className="cause-details-container">
       {!showDonationForm && (
         <>
-          <Link to={`/causes`} className="back-causes-button">
-            Back to Causes
-          </Link>
-          <h2 className='head'>{cause.name}</h2>
-          <p className='description'>{cause.description}</p>
+          <h2 className='headd'>{cause.name}</h2>
+          <p className='description-cause'>{cause.description}</p>
           <img src={cause.photo} alt={cause.name} className="cause-details-image" />
           <div className="amount-details">
             <div className="amount-line">
@@ -95,6 +92,10 @@ const CauseDetailsPage: React.FC = () => {
             </div>
           </div>
           <button className="donate-button" onClick={handleDonateClick}>Donate</button>
+
+          <Link to={`/causes`} className="back-causes-button">
+            Back to Causes
+          </Link>
         </>
       )}
       {showDonationForm && <DonationForm causeId={id} onClose={handleFormClose} />}

@@ -47,6 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
 
   const handleLogout = async () => {
     localStorage.clear();
+    sessionStorage.clear();
     navigate('/login');
   };
 

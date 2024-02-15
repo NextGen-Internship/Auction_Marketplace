@@ -7,6 +7,7 @@ using Auction_Marketplace.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 
@@ -21,13 +22,15 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IUserRepository _userRepository;
         private readonly ICauseRepository _causeRepository;
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
 
         public StripeService(IConfiguration configuration,
                             UserManager<User> userManager,
                             IHttpContextAccessor contextAccessor,
                             IUserRepository userRepository,
                             ICauseRepository causeRepository,
-                            IPaymentService paymentService)
+                            IPaymentService paymentService,
+                            IUserService userService)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -35,6 +38,7 @@ namespace Auction_Marketplace.Services.Implementation
             _userRepository = userRepository;
             _causeRepository = causeRepository;
             _paymentService = paymentService;
+            _userService = userService;
         }
 
         public async Task<Session?> CreateCheckoutSession(DonationAmountViewModel model)
@@ -212,35 +216,25 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        //public async Task HandleWebhookEvent(string json, string stripeSignature)
-        //{
-        //    try
-        //    {
-        //        var stripeEvent = EventUtility.ConstructEvent(json,
-        //            stripeSignature,
-        //            _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
+        public async Task<PaymentViewModel> HandleWebhookEvent(string json, string stripeSignature)
+        {
+            try
+            {
+                var stripeEvent = EventUtility.ConstructEvent(json,
+                    stripeSignature,
+                    _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
 
-        //        switch (stripeEvent.Type)
-        //        {
-        //            case Events.CustomerCreated:
-        //                await CustomerCreated(stripeEvent);
-        //                break;
-        //            case Events.CheckoutSessionAsyncPaymentSucceeded:
-        //                await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-        //                break;
-        //            case Events.CheckoutSessionAsyncPaymentFailed:
-        //                await HandleCheckoutSessionPaymentFailed(stripeEvent);
-        //                break;
-        //            default:
-        //                await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-        //                break;
-        //        }
-        //    }
-        //    catch (StripeException e)
-        //    {
-        //        throw e;
-        //    }
-        //}
+                switch (stripeEvent.Type)
+                {
+                    default:
+                        return await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+                }
+            }
+            catch (StripeException e)
+            {
+                throw e;
+            }
+        }
 
         private async Task<User?> GetUserByCauseId(int customerId)
         {
@@ -265,49 +259,49 @@ namespace Auction_Marketplace.Services.Implementation
                 await _userManager.UpdateAsync(dbUser);
                 Console.WriteLine("Created customer id");
             }
-           
+
         }
 
-        //private async Task HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
-        //{
-        //    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+        private async Task <PaymentViewModel> HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
+        {
+            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+            var paymentId = paymentIntent.Id;
+            var amount = paymentIntent.Amount;
+            var paymentStatus = paymentIntent.Status;
+            bool isCompleted = paymentStatus == "succeeded";
+            var date = DateTime.Now;
+            var endUserCustomerId = paymentIntent.CustomerId;
+
+            var paymentInfo = new PaymentViewModel
+            {
+                StripePaymentId = paymentId,
+                Amount = amount,
+                Date = date,
+                IsCompleted = isCompleted,
+                EndUserId = endUserCustomerId // should it be string?
+            };
+
+            try
+            {
+        
+                // _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return paymentInfo;
 
 
-        //    var paymentId = paymentIntent.Id;
-        //    var amount = paymentIntent.Amount;
-        //    var paymentStatus = paymentIntent.Status;
-        //    var id = paymentIntent.CustomerId;
-        //    bool isCompleted;
 
-        //    if (paymentStatus == "succeeded")
-        //    {
-        //        isCompleted = true;
-        //    }
-        //    else
-        //    {
-        //        isCompleted = false;
-        //    }
-        //    var date = DateTime.Now;
-        //    var endUserCustomerId = paymentIntent.CustomerId;
-        //    try
-        //    {
+        }
 
-        //         _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-
-        //}
-
-        //private async Task HandleCheckoutSessionPaymentFailed(Event stripeEvent)
-        //{
-        //    var session = stripeEvent.Data.Object as PaymentIntent;
-        //    // Handle payment failure logic
-        //}
-
+        public void Payment(PaymentViewModel model)
+        {
+            _paymentService.CreatePayment(model);
+        }
         private async Task AddMoneyToCause(DonationAmountViewModel model)
         {
             var cause = await _causeRepository.FindCauseById(model.CauseId);

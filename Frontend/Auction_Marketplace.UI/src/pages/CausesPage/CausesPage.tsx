@@ -131,8 +131,7 @@ const CausesPage: React.FC = () => {
         const response: ApiResponseDTO = await causeService.deleteCause(causeId);
 
         if (response.succeed) {
-            alert('Succesfully deleted cause');
-            navigate('/causes');
+            location.reload();
         } else {
             console.warn('You are not the creator of this cause.');
         }

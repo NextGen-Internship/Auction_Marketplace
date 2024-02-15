@@ -18,20 +18,21 @@
     margin-top: 15px;
 }
 
-.head{
+.headd{
     margin-top: 30px;
     font-size: 35px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .head-auction{
-    font-size: 40px;
+    font-size: 50px;
     margin: 10px;
 }
 
-.description{
+.description-cause{
     font-size: 20px;
-    margin-bottom: 20px;
+    margin: 20px;
 }
 
 .line {
@@ -63,8 +64,6 @@
 }
 
 .back-causes-button {
-    top: 80px;
-    left: 25%;
     transform: translateX(-50%);
     background-color: #007bff;
     color: white;
@@ -73,14 +72,13 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    z-index: 1000;
 }
 
 .donate-button {
     display: block;
     margin-top: 20px;
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #145930;
     color: #fff;
     text-decoration: none;
     border: none;
@@ -90,7 +88,7 @@
 }
 
 .donate-button:hover {
-    background-color: #0056b3;
+    background-color: #23462f;
 }
 
 .donate-button::before {
