@@ -9,7 +9,7 @@ import UserService from '../../Services/UserService';
 import CauseService from '../../Services/CauseService';
 import UpdateCauseDTO from '../../Interfaces/DTOs/UpdateCauseDTP';
 import Navbar from '../../components/Navbar/Navbar';
-import UpdateCauseForm from '../../components/CausesForm/UpdateCauseForm';
+import UpdateCauseForm from '../../Components/CausesForm/UpdateCauseForm';
 
 const apiService = new ApiService();
 const causeService = new CauseService(apiService);
@@ -74,14 +74,13 @@ const CausePage: React.FC = () => {
     return (
         <div>
             <Navbar showAuthButtons={false} />
-            <div className="update-auction-container">
-                <h2>Update Cause: {cause?.name}</h2>
+            <form className="update-auction-container">
                 <UpdateCauseForm
                     onClose={close}
                     causeId={Number(causeId)}
                     initialCauseData={cause || null}
                 />
-            </div>
+            </form>
         </div>
     );
 };

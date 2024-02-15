@@ -7,6 +7,7 @@ export const RefreshToken = (): void => {
         try {
             const refreshedToken = extendTokenExpiration(token);
             localStorage.setItem('token', refreshedToken);
+            sessionStorage.setItem('token', refreshedToken);
         } catch (error) {
             console.error('Error refreshing token:', error);
             clearToken();
@@ -23,7 +24,5 @@ const extendTokenExpiration = (token: string): string => {
 
 const generateToken = (payload: object): string => {
     const payloadBase64 = btoa(JSON.stringify(payload));
-    // Assuming you have a function to generate a token string
-    // Replace this with your actual token generation logic
     return `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${payloadBase64}.signature`;
 };

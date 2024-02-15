@@ -32,8 +32,7 @@
 }
 
 .user-detail {
-  margin: 20px;
-  border-style: solid;
+  margin: 10px;
   padding: 10px;
 }
 
@@ -71,7 +70,7 @@
 }
 
 .save-icon {
-  margin: 2px;
+  margin-left: 30px;
 }
 
 .edit-icon {
@@ -92,4 +91,8 @@
 
 .header-user-form {
   margin: 4px;
+}
+
+.input-user-names {
+  width: 62%;
 }

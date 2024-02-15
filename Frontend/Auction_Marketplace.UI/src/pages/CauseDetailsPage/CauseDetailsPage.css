@@ -1,7 +1,7 @@
 .cause-details-container {
     margin-top: 10%;
     margin-bottom: 10%;
-    max-width: 600px;
+    width: 723px;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
@@ -18,21 +18,23 @@
     margin-top: 15px;
 }
 
-.headd{
-    margin-top: 30px;
+.head {
+    margin-top: 10px;
     font-size: 35px;
     margin-bottom: 30px;
     text-align: center;
 }
 
-.head-auction{
+.head-auction {
     font-size: 50px;
     margin: 10px;
 }
 
-.description-cause{
+.description-cause {
     font-size: 20px;
     margin: 20px;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 .line {
@@ -58,7 +60,7 @@
 }
 
 .money-amount {
-    margin-left: 90%;
+    margin-left: 84%;
     font-weight: bold;
     color: #333;
 }
@@ -70,8 +72,10 @@
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    text-decoration: none;
     cursor: pointer;
     font-size: 16px;
+    margin-bottom: 30px;
 }
 
 .donate-button {
