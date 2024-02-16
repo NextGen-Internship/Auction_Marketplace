@@ -98,6 +98,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpGet("check-final-bid/{auctionId}")]
+        [Authorize]
         public async Task<IActionResult> CheckFinalBid([FromRoute] int auctionId)
         {
             try
@@ -108,6 +109,21 @@ namespace Auction_Marketplace.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"{ex.Message}");
+            }
+        }
+
+        [HttpGet("send-winner-email/{auctionId}")]
+        [Authorize]
+        public async Task<IActionResult> SendWinnerEmail([FromRoute] int auctionId)
+        {
+            try
+            {
+                var response = await _auctionsService.SendEmailToWinner(auctionId);
+                return response.Succeed ? Ok(response.Message) : BadRequest(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

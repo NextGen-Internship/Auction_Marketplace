@@ -22,11 +22,12 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
+        private readonly IEmailService _emailService;
 
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService, IS3Service s3Service, IBidRepository bidRepository)
+            IUserService userService, IS3Service s3Service, IBidRepository bidRepository, IEmailService emailService)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
@@ -34,6 +35,7 @@ namespace Auction_Marketplace.Services.Implementation
             _contextAccessor = contextAccessor;
             _userService = userService;
             _s3Service = s3Service;
+            _emailService = emailService;
         }
 
         public async Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction)
@@ -267,6 +269,45 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     Succeed = false,
                     Message = $"An error occurred while checking the finalbid: {ex.Message}"
+                };
+            }
+
+
+        }
+
+        public async Task<Response<string>> SendEmailToWinner(int auctionId)
+        {
+            try
+            {
+                var finalBidResponse = await CheckFinalBid(auctionId);
+
+                if (!finalBidResponse.Succeed)
+                {
+                    return new Response<string>
+                    {
+                        Succeed = false,
+                        Message = finalBidResponse.Message
+                    };
+                }
+
+                var message = finalBidResponse.Data.Split(" ");
+                string winningUserEmail = message[1];
+                decimal winningBidAmount = decimal.Parse(finalBidResponse.Data.Split("made the final bid of")[1].Replace("BGN", "").Trim());
+
+                await _emailService.SendEmail("Auction Winner Notification", winningUserEmail, "Bidder", $"Dear Bidder,\r\n\r\nCongratulations! You've won the auction with the highest bid of {winningBidAmount} BGN.");
+
+                return new Response<string>
+                {
+                    Succeed = true,
+                    Message = $"Email sent successfully to {winningUserEmail}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = $"An error occurred while sending the email to the winner: {ex.Message}"
                 };
             }
         }

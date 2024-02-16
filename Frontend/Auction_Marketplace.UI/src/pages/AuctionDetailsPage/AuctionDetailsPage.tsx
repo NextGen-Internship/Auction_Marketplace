@@ -36,6 +36,7 @@ const AuctionDetailsPage: React.FC = () => {
         throw error;
       }
     };
+    
 
     if (token) {
       fetchAuctionDetails();

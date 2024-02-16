@@ -10,6 +10,7 @@ class AuctionService {
     private GET_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_GET_AUCTION_BY_ID_ENDPOINT;
     private CHECK_FINAL_BID_ENDPOINT = import.meta.env.VITE_CHECK_FINAL_BID_ENDPOINT;
     private DELETE_AUCTION_BY_ID_ENDPOINT = import.meta.env.VITE_DELETE_AUCTION_BY_ID_ENDPOINT;
+    private SEND_WINNER_EMAIL_ENDPOINT = import.meta.env.VITE_SEND_WINNER_EMAIL_ENDPOINT;
     private apiService: ApiService;
 
     constructor(apiService: ApiService) {
@@ -56,6 +57,10 @@ class AuctionService {
 
       async checkFinalBid(auctionId: number) : Promise<ApiResponseDTO> {
         return this.apiService.get<ApiResponseDTO>(`${this.CHECK_FINAL_BID_ENDPOINT}/${auctionId}`);
+    }
+
+    async sendWinnerEmail(auctionId: number) : Promise<ApiResponseDTO> {
+        return this.apiService.get<ApiResponseDTO>(`${this.SEND_WINNER_EMAIL_ENDPOINT}/${auctionId}`);
     }
 }
 
