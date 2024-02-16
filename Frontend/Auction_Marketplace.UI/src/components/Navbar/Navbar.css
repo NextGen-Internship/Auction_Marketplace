@@ -38,10 +38,15 @@
   transition: color 0.3s ease;
   padding: 5px 10px; 
   border: 2px solid transparent; 
+  white-space: nowrap;
 }
 
 .heart-page-link{
   color: rgb(241, 104, 150);
+}
+
+.heart{
+  margin-right: 10%;
 }
 
 .nav-item:hover {

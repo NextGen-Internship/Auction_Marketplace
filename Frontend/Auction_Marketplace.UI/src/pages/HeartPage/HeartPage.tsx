@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import Navbar from '../../components/Navbar/Navbar.tsx';
+import './HeartPage.css'; 
+
 import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
 
 const HeartPage: React.FC = () => {
+  const [biddedAuctions, setBiddedAuctions] = useState<any[]>([]);
+   const [currentPage, setCurrentPage] = useState(1);
+  const auctionsPerPage = 6;
   const token = getToken();
   const navigate = useNavigate();
-  const [biddedItems, setBiddedItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchBiddedAuctions = async () => {
+      try {
+        const response = await auctionService.getAuctionsBidded();
+        setBiddedAuctions(response.data);
+      } catch (error) {
+        console.error('Error fetching bidded auctions:', error);
+      }
+    };
+    fetchBiddedAuctions();
+  }, [currentPage]);
 
   useEffect(() => {
     const saveTokenOnUnload = () => {
-      const token = getToken();
       if (token) {
         localStorage.setItem('token', token);
       }
@@ -27,47 +40,21 @@ const HeartPage: React.FC = () => {
     return () => {
       window.removeEventListener('beforeunload', saveTokenOnUnload);
     };
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const persistedToken = localStorage.getItem('token');
     if (persistedToken) {
       sessionStorage.setItem('token', persistedToken);
-      navigate('/heart');
+      navigate('/aboutUs');
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (isTokenExpired()) {
       clearToken();
     }
   }, []);
-
-  useEffect(() => {
-    const fetchBiddedItems = async () => {
-      if (!token) return;
-
-      const storedItems = JSON.parse(localStorage.getItem('biddedItems') || '[]');
-      const validBiddedItems = await Promise.all(storedItems.map(async (item: any) => {
-        try {
-          const auctionDetailsResponse: ApiResponseDTO = await auctionService.getAuctionById(Number(item.auctionId));
-          const auctionDetails = auctionDetailsResponse.data;
-          return {
-            ...item,
-            name: auctionDetails.name,
-            photo: auctionDetails.photo
-          };
-        } catch (error) {
-          console.log(`Auction ${item.auctionId} does not exist. Removing from bidded items.`);
-          return null;
-        }
-      }));
-
-      setBiddedItems(validBiddedItems.filter((item: any) => item !== null));
-    };
-
-    fetchBiddedItems();
-  }, [token, navigate]);
 
   if (!token) {
     return (
@@ -80,27 +67,49 @@ const HeartPage: React.FC = () => {
     );
   }
 
-  const handleRedirectToAuction = (auctionId: number) => {
-    navigate(`/auctions/details/${auctionId}`);
+  const indexOfLastAuction = currentPage * auctionsPerPage;
+  const indexOfFirstAuction = indexOfLastAuction - auctionsPerPage;
+  const currentAuctions = biddedAuctions.slice(indexOfFirstAuction, indexOfLastAuction);
+
+  const renderMiniPages = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(biddedAuctions.length / auctionsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <div className='pagination'>
+        {pageNumbers.map((number) => (
+          <button
+            key={number}
+            className={number === currentPage ? 'active' : ''}
+            onClick={() => setCurrentPage(number)}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
+    );
   };
 
   return (
     <div>
       <Navbar showAuthButtons={false} />
-      <div>
-        <h1>Bidded Items</h1>
-        <ul>
-          {biddedItems.map((item: any, index: number) => (
-            <li key={index}>
-              <img src={item.photo} alt="Auction" width="100" />
-              <div>
-                <p>Auction Name: {item.name}</p>
-                <button onClick={() => handleRedirectToAuction(item.auctionId)}>View Auction</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className='title-container'>
+        <p className='title'><span role="img" aria-label="heart">❤️</span> Favourite items </p>
       </div>
+      <div className='auctions-container'>
+        {currentAuctions.map((auction) => (
+          <div key={auction.id} className='auction-info'>
+            <h3 className='auction-header'>{auction.name}</h3>
+            <img src={auction.photo} alt={auction.name} className='auction-image' />
+            <Link to={`/auctions/details/${auction.auctionId}`} className='details-button'>
+              Details
+            </Link>
+          </div>
+        ))}
+      </div>
+      {renderMiniPages()}
     </div>
   );
 };

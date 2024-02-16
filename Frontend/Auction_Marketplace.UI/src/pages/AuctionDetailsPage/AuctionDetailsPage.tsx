@@ -55,25 +55,7 @@ const AuctionDetailsPage: React.FC = () => {
 
          const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
 
-         const auctionDetailsResponse: ApiResponseDTO = await auctionService.getAuctionById(Number(auctionId));
-         const auctionDetails = auctionDetailsResponse.data;
-         const biddedItems = JSON.parse(localStorage.getItem('biddedItems') || '[]');
-         const existingItemIndex = biddedItems.findIndex((item: any) => item.auctionId === Number(auctionId));
-
-        if (existingItemIndex !== -1) {
-          biddedItems[existingItemIndex] = {
-           auctionId: Number(auctionId),
-           name: auctionDetails.name,
-           photo: auctionDetails.photo
-          };
-        } else {
-         biddedItems.push({
-          auctionId: Number(auctionId),
-          name: auctionDetails.name,
-          photo: auctionDetails.photo
-          });
-        }
-         localStorage.setItem('biddedItems', JSON.stringify(biddedItems));
+        
         if (finalBidResponse.succeed) {
           setFinalBid(finalBidResponse.data);
         }

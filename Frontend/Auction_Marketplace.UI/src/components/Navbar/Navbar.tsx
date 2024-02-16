@@ -91,9 +91,11 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
         )}
         {!showAuthButtons && !isLogOutPage && (
           <div className="nav-links-user">
+            <div className="heart">
              <Link to="/heart" className="heart-page-link" style={ {textDecoration: 'none' }}>
             {"\u2764"}
             </Link>
+            </div>
             <Link to="/profile">
               <div className="profile-picture-container">
                 <img
