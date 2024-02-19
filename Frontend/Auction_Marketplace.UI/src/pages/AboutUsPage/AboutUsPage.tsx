@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar.tsx';
+import Navbar from '../../components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
-import '../HomePage/HomePage.css';
 import './AboutUsPage.css';
 
 const AboutUsPage: React.FC = () => {

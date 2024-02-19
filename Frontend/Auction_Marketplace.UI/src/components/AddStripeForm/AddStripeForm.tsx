@@ -105,7 +105,6 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             />
           </div>
 
-          {/* Additional inputs for country, city, street, postal code, phone, and date of birth */}
           <div className="formbold-input-flex">
             <div>
               <label htmlFor="countryCode" className="formbold-form-label">

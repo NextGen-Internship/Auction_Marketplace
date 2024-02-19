@@ -126,7 +126,8 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
         <span className="close-cross">&#10005;</span>
       </div>
       <form onSubmit={handleSubmit}>
-        <label>
+        <h2 className='create-cause-header'>Create auction</h2>
+        <label className='label-create-auction'>
           Auction:
         </label>
         <input
@@ -139,10 +140,11 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           required
         />
 
-        <label>
+        <label className='label-create-auction'>
           Description
         </label>
         <textarea
+          className='textarea-description-create-cause'
           id="description"
           name="description"
           placeholder="Description"
@@ -150,6 +152,9 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           onChange={handleInputChange}
           required
         />
+        <label className='label-create-auction'>
+          Photo
+        </label>
 
         <input
           type="file"
@@ -158,19 +163,21 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
-        {submitted && !formData.photo && <p style={{ color: 'red' }}>Please upload a photo.</p>}
-
+        {submitted && !formData.photo &&
+          <p className='please-upload-photo-p'>
+            Please upload a photo.
+          </p>}
 
         <label>
           Start Price:
         </label>
         <div className="input-with-symbol">
-          <span className="symbol">$</span>
+          <span className="symbol">BGN</span>
           <input
-            type="number"
+            className='input-start-price'
             id="startPrice"
             name="startPrice"
-            placeholder="Start Price"
+            placeholder="Start price"
             value={formData.startPrice}
             onChange={handleInputChange}
             required
@@ -178,19 +185,19 @@ const AddAuctionForm: React.FC<AddAuctionFormProps> = ({ onClose }) => {
         </div>
 
         <label>
-          Existing Days:
+          Existing minutes:
         </label>
         <input
-          type="number"
+          className='input-exsisting-minutes'
           id="existingDays"
           name="existingDays"
-          placeholder="Existing Days"
+          placeholder="Existing minutes"
           value={formData.existingDays}
           onChange={handleInputChange}
           required
         />
 
-        <button type="submit" onClick={handleAddAuction}>Submit</button>
+        <button type="submit" className='submit-button-cause' onClick={handleAddAuction}>Submit</button>
       </form>
     </div>
   );
