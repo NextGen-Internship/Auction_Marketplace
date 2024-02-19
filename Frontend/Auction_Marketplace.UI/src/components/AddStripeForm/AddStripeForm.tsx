@@ -4,7 +4,7 @@ import { StripeDTO } from '../../Interfaces/DTOs/StripeDTO';
 import { useNavigate } from 'react-router-dom';
 
 const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<StripeDTO>({
     firstName: '',
     lastName: '',
@@ -40,12 +40,16 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       const result = await response.json();
       console.log(result);
       onClose();
-      navigate('/causes');
-      location.reload();
+
+      if (location.pathname === '/causes') {
+        navigate('/causes')
+      } else if (location.pathname === '/auctions') {
+        navigate('/auctions');
+        location.reload();
+      }
     } catch (error) {
       console.error('Error:', error);
-      alert("Invalid stipe data.");
-      navigate('/causes');
+      navigate('/home');
       location.reload();
     }
   };

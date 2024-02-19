@@ -8,6 +8,7 @@ import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
 import UserService from '../../Services/UserService.ts';
 import ApiService from '../../Services/ApiService.ts';
 import Navbar from '../../components/Navbar/Navbar.tsx';
+import PaymentHistoryForm from './PaymentHistoryForm.tsx';
 
 const apiService = new ApiService;
 const userService = new UserService(apiService);
@@ -23,7 +24,9 @@ const ProfilePage: React.FC = () => {
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
     const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
-
+    const [showHistory,setShowHistory] = useState(false);
+    const [hideProfile, setHideProfile] = useState(false);
+    const [paymentHistory, setPaymentHistory] = useState([]);
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
@@ -33,6 +36,18 @@ const ProfilePage: React.FC = () => {
         email: '',
         profilePicture: ''
     });
+
+    const fetchPaymentHistory = async () => {
+        try {
+            if (token) {
+                const paymentHistoryData = await userService.fetchPaymentHistory();
+                setPaymentHistory(paymentHistoryData)
+            }
+        } catch (error) {
+            console.error('Error fetching payment history:', error);
+        }
+    };
+
 
     useEffect(() => {
         const saveTokenOnUnload = () => {
@@ -72,14 +87,14 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         if (token) {
             fetchUserProfile();
+            fetchPaymentHistory();
         }
 
         if (isTokenExpired()) {
             clearToken();
         }
 
-    }, [token]
-    );
+    }, [token]);
 
     const handleEditClick = () => {
         setEditMode(true);
@@ -111,6 +126,11 @@ const ProfilePage: React.FC = () => {
         }
     };
 
+    const handleShowHistoryClick = () => {
+        setShowHistory(true);
+        setHideProfile(true);
+    } 
+
     const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileInput = e.target;
         const file = fileInput.files && fileInput.files[0];
@@ -134,7 +154,6 @@ const ProfilePage: React.FC = () => {
             setPreviewUrl(null);
         }
     };
-
 
     const handleEditPictureClick = () => {
         const fileInput = document.getElementById('user-avatar');
@@ -245,8 +264,33 @@ const ProfilePage: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    <div className='history'>
+                        <button className='history-button' onClick={handleShowHistoryClick}>History</button>
+                        <PaymentHistoryForm paymentHistory={paymentHistory} />
+                    </div>
                 </div>
             </form>
+            <div className='payment-history-container'>
+                <h2 className='header-payment-history-container'> Payment History</h2>
+                <table className='table-history'>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>IsCompleted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {paymentHistory.map((payment, index) => (
+                            <tr key={index}>
+                                <td>{payment.data}</td>
+                                <td>{payment.amount}</td>
+                                <td>{payment.isCompleted}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
