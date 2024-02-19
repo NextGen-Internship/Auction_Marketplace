@@ -28,37 +28,31 @@ namespace Auction_Marketplace.Services.Implementation
 
 
 
-        public void CreatePayment(PaymentViewModel model)
+        public void CreatePayment(string paymentId, decimal amount, DateTime date, bool isCompleted, int startUserId, int endUserId)
         {
 
-            var payment = new Payment()
+            try
             {
-                UserPaymentMethodId = 0,
-                Amount = model.Amount / 100,
-                Date = model.Date,
-                IsCompleted = model.IsCompleted,
-                StripePaymentId = model.StripePaymentId,
-            };
+                var payment = new Payment()
+                {
+                    Amount = amount / 100,
+                    IsCompleted = isCompleted,
+                    StripePaymentId = paymentId,
+                    EndUserId = endUserId,
+                    UserId = startUserId
+                };
 
+                var cause = _causeRepository.FindCauseByUserId(endUserId);
+                var causeId = cause.Result.CauseId;
 
-            var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-            var user = _userRepository.GetByEmailAsync(email).Result;
-            var userId = user.Id;
+                payment.CauseId = causeId;
 
-            var cause = _causeRepository.FindCauseByUserId(userId);
-            var causeId = cause.Result.CauseId;
-
-
-
-            var endUser = _userRepository.GetUserByCustomerId(model.EndUserId) ;
-            var endUserId = endUser.Result.Id;
-
-
-            payment.CauseId = causeId;
-            payment.UserId = userId;
-            payment.EndUserId = endUserId;
-
-            _paymentRepository.AddPayment(payment);
+                _paymentRepository.AddPayment(payment);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -59,16 +59,21 @@ namespace Auction_Marketplace.Api.Controllers
         [Route("webhook")]
         public async Task<IActionResult> Webhook()
         {
-            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            var stripeSignature = Request.Headers["Stripe-Signature"];
+            try
+            {
+                var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                var stripeSignature = Request.Headers["Stripe-Signature"];
 
-            var payment = await _stripeService.HandleWebhookEvent(json, stripeSignature);
+                await _stripeService.HandleWebhookEvent(json, stripeSignature);
 
-            _stripeService.Payment(payment);
-
-
-            return Ok(payment);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
     }
 }
 
