@@ -12,7 +12,9 @@ namespace Auction_Marketplace.Services.Interface
 	{
 		Task<Session?> CreateCheckoutSession(DonationAmountViewModel model);
 
-		Task<PaymentViewModel> HandleWebhookEvent(string json, string stripeSignature);
+		Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId);
+
+        Task<PaymentViewModel> HandleWebhookEvent(string json, string stripeSignature);
 
         Task CreateConnectedUser(StripeFormViewModel model);
 

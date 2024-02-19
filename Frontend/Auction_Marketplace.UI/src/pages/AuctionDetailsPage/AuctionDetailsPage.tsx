@@ -7,7 +7,7 @@ import AuctionService from '../../Services/AuctionService';
 import BidService from '../../Services/BidService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import './AuctionDetailsPage.css';
-import CountdownTimer from '../../Components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '../../components/CountdownTimer/CountdownTimer';
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
@@ -19,6 +19,7 @@ const AuctionDetailsPage: React.FC = () => {
   const [bidAmount, setBidAmount] = useState<number>();
   const [bidSuccess, setBidSuccess] = useState<boolean>(false); 
   const [finalBid, setFinalBid] = useState<string | null>(null);
+   const [winner, setWinner] = useState<string | null>(null);
   const token = getToken();
 
   useEffect(() => {
@@ -31,6 +32,22 @@ const AuctionDetailsPage: React.FC = () => {
          const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
         if (finalBidResponse.succeed) {
           setFinalBid(finalBidResponse.data);
+        }
+
+         const auctionEndDate = new Date(fetchedAuctionDetails?.endDate);
+        if (auctionEndDate && auctionEndDate <= new Date()) {
+          const winnerResponse: ApiResponseDTO =  await auctionService.sendWinnerEmail(Number(auctionId));
+          if (winnerResponse.succeed){
+            setWinner(winnerResponse.data);
+            window.location.href = `/auctions/details/${auctionId}`;
+          }
+        } else {
+          const timeRemaining = auctionEndDate.getTime() - Date.now();
+            if (timeRemaining > 0) {
+              setTimeout(() => {
+              window.location.reload();
+          }, timeRemaining);
+         }
         }
       } catch (error) {
         throw error;
@@ -69,45 +86,56 @@ const AuctionDetailsPage: React.FC = () => {
   return (
     <>
     <Navbar showAuthButtons={false} />
-    <div className="auction-details-container">
-      <div className="auction-content">
-        <div className="auction-photo">
-          <img src={auctionDetails?.photo} />
-        </div>
-        <div className="auction-details">
-          <div className="header-auction-detail">
-            <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
+      <div className="auction-details-container">
+        <div className="auction-content">
+          <div className="auction-photo">
+            <img src={auctionDetails?.photo} alt="Auction" />
           </div>
-          <p className="description">{auctionDetails?.description}</p>
-          <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
-          <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /> </p>
-          {!auctionDetails || !auctionDetails.endDate || new Date(auctionDetails.endDate) > new Date() ? (
-          <div className="bid-section">
-            <label htmlFor="bidAmount">Your Bid: </label>
-            <input className='input-bid'
-              id="bidAmount"
-              value={bidAmount || ''}
-              onChange={(e) => setBidAmount(Number(e.target.value))}
-              placeholder=""
-            />
-            <button className="bid-button" onClick={handleBidNowClick}>
-              Bid Now <span role="img" aria-label="Money Bag">💰</span>
-            </button>
-
-            <Link to={`/auctions`} className="back-auctions-button">
-              Back to Auctions
-            </Link>
-            
-          </div>
-          ) : null}
-          <div className='user-container'>
-          {finalBid && (
-          <p>{finalBid}</p>
-        )}
+          <div className="auction-details">
+            <div className="header-auction-detail">
+              <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
+            </div>
+            <p className="description">{auctionDetails?.description}</p>
+            {auctionDetails?.endDate && new Date(auctionDetails.endDate) <= new Date() ? (
+              <>
+                {winner}
+                <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
+                <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /></p>
+                <div className='user-container'>
+                {finalBid && (
+                  <p>{finalBid}</p>
+                )}
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
+                <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /></p>
+                <div className="bid-section">
+                  <label htmlFor="bidAmount">Your Bid: </label>
+                  <input className='input-bid'
+                    id="bidAmount"
+                    value={bidAmount || ''}
+                    onChange={(e) => setBidAmount(Number(e.target.value))}
+                    placeholder=""
+                  />
+                  <button className="bid-button" onClick={handleBidNowClick}>
+                    Bid Now <span role="img" aria-label="Money Bag">💰</span>
+                  </button>
+                  <Link to={`/auctions`} className="back-auctions-button">
+                    Back to Auctions
+                  </Link>
+                </div>
+                <div className='user-container'>
+                  {finalBid && (
+                    <p>{finalBid}</p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
-    </div>
   </>
   
   );

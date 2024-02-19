@@ -5,6 +5,7 @@ using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
+using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
@@ -23,11 +24,13 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
         private readonly IEmailService _emailService;
+        private readonly IStripeService _stripeService;
+
 
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService, IS3Service s3Service, IBidRepository bidRepository, IEmailService emailService)
+            IUserService userService, IS3Service s3Service, IBidRepository bidRepository, IEmailService emailService, IStripeService stripeService)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
@@ -36,6 +39,7 @@ namespace Auction_Marketplace.Services.Implementation
             _userService = userService;
             _s3Service = s3Service;
             _emailService = emailService;
+            _stripeService = stripeService;
         }
 
         public async Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction)
@@ -243,6 +247,7 @@ namespace Auction_Marketplace.Services.Implementation
                 }
 
                 decimal highestBidAmount = bids.Max(b => b.Amount);
+                auction.FinalPrice = highestBidAmount;
 
                 Bid finalBid = bids.FirstOrDefault(b => b.Amount == highestBidAmount);
 
@@ -275,41 +280,50 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        public async Task<Response<string>> SendEmailToWinner(int auctionId)
-        {
-            try
-            {
-                var finalBidResponse = await CheckFinalBid(auctionId);
-
-                if (!finalBidResponse.Succeed)
-                {
-                    return new Response<string>
-                    {
-                        Succeed = false,
-                        Message = finalBidResponse.Message
-                    };
-                }
-
-                var message = finalBidResponse.Data.Split(" ");
-                string winningUserEmail = message[1];
-                decimal winningBidAmount = decimal.Parse(finalBidResponse.Data.Split("made the final bid of")[1].Replace("BGN", "").Trim());
-
-                await _emailService.SendEmail("Auction Winner Notification", winningUserEmail, "Bidder", $"Dear Bidder,\r\n\r\nCongratulations! You've won the auction with the highest bid of {winningBidAmount} BGN.");
-
-                return new Response<string>
-                {
-                    Succeed = true,
-                    Message = $"Email sent successfully to {winningUserEmail}"
-                };
-            }
-            catch (Exception ex)
+        public async Task<Response<string>> SendEmailToWinner(int auctionId)        {
+            var auctionResponse = await GetAuctionById(auctionId);
+            if (auctionResponse.Data.IsCompleted)
             {
                 return new Response<string>
                 {
                     Succeed = false,
-                    Message = $"An error occurred while sending the email to the winner: {ex.Message}"
+                    Message = $"The auction is completed"
                 };
             }
+
+            var finalBidResponse = await CheckFinalBid(auctionId);
+
+            if (!finalBidResponse.Succeed)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = finalBidResponse.Message
+                };
+            }
+
+            var message = finalBidResponse.Data.Split(" ");
+            string winningUserEmail = message[1];
+            decimal winningBidAmount = decimal.Parse(finalBidResponse.Data.Split("made the final bid of")[1].Replace("BGN", "").Trim());
+
+           
+            auctionResponse.Data.IsCompleted = true;
+            await _auctionRepository.SaveChangesAsync();
+
+            string auctionName = auctionResponse.Data.Name;
+            long amount = Convert.ToInt64(auctionResponse.Data.FinalPrice);
+            var session = await _stripeService.CreateCheckoutSessionAuctions(amount, auctionId);
+            string strypeLink = session.Url;
+
+            await _emailService.SendEmail("Auction Winner Notification", winningUserEmail, "Bidder", $"Dear Bidder,\r\n\r\nCongratulations!" +
+                $" You've won the auction for {auctionName} with the highest bid of {winningBidAmount} BGN. Here you can make your payment: {strypeLink}");
+
+            return new Response<string>
+            {
+                Succeed = true,
+                Message = $"Email sent successfully to {winningUserEmail}"
+            };
+            
         }
     }
 }
