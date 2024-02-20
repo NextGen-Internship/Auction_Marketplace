@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models.Donation;
+using Auction_Marketplace.Data.Models.Payment;
 using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
@@ -281,18 +282,22 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var paymentIntent = stripeEvent.Data.Object as Session;
 
-            var paymentId = paymentIntent.Id;
-            var amount = paymentIntent.AmountTotal.Value;
-            var date = DateTime.Now;
-            var firstUserid = int.Parse(paymentIntent.Metadata.First(m => m.Key == "sender_id").Value);
             var endUserStripeId = paymentIntent.Metadata.First(m => m.Key == "receiver_id").Value;
-            bool isCompleted = paymentIntent.PaymentStatus == "paid" ? true : false;
 
-            var endUserId = _userRepository.GetUserByCustomerId(endUserStripeId).Result.Id;
+            var model = new CreatePaymentViewModel()
+            {
+                PaymentId = paymentIntent.Id,
+                Amount = paymentIntent.AmountTotal.Value,
+                IsCompleted = paymentIntent.PaymentStatus == "paid" ? true : false,
+                StartUser = int.Parse(paymentIntent.Metadata.First(m => m.Key == "sender_id").Value),
+                EndUser = _userRepository.GetUserByCustomerId(endUserStripeId).Result.Id
+            };
+
+            
 
             try
             {
-                _paymentService.CreatePayment(paymentId, amount , date, isCompleted, firstUserid ,endUserId);
+                _paymentService.CreatePayment(model);
             }
             catch (Exception ex)
             {
