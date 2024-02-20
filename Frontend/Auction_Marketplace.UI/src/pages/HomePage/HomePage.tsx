@@ -6,7 +6,7 @@ import './HomePage.css'
 import firstPhoto from '/src/assets/Kids in need.png';
 import secondPhoto from '/src/assets/Animals.jpeg';
 import thirdPhoto from '/src/assets/Ukrainee.jpeg';
-import forthPhoto from '/src/assets/human kindness.jpeg';
+import forthPhoto from '/src/assets/done.jpeg';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 import Navbar from '../../components/Navbar/Navbar.tsx';
