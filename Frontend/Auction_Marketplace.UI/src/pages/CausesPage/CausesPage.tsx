@@ -88,7 +88,6 @@ const CausesPage: React.FC = () => {
     }
   };
 
-
   const fetchData = async () => {
     try {
       const causesResponse: ApiResponseDTO = await causeService.getAllCauses();
