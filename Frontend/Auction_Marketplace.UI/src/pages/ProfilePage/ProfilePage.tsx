@@ -24,7 +24,7 @@ const ProfilePage: React.FC = () => {
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);
     const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
-    const [showHistory,setShowHistory] = useState(false);
+    const [showHistory, setShowHistory] = useState(false);
     const [hideProfile, setHideProfile] = useState(false);
     const [paymentHistory, setPaymentHistory] = useState([]);
     const navigate = useNavigate();
@@ -47,7 +47,6 @@ const ProfilePage: React.FC = () => {
             console.error('Error fetching payment history:', error);
         }
     };
-
 
     useEffect(() => {
         const saveTokenOnUnload = () => {
@@ -128,8 +127,7 @@ const ProfilePage: React.FC = () => {
 
     const handleShowHistoryClick = () => {
         setShowHistory(true);
-        setHideProfile(true);
-    } 
+    }
 
     const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileInput = e.target;
@@ -178,119 +176,100 @@ const ProfilePage: React.FC = () => {
         <div>
             <Navbar showAuthButtons={false} />
             <form>
-                <div className='profile-container'>
-                    <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
-                    <div className="user-info">
-                        <div className="user-avatar">
-                            <img src={user.profilePicture} alt="Profile" />
+                {!showHistory && (
+                    <div className='profile-container'>
+                        <h2 className='header-user-form'>{user.firstName}'s Profile</h2>
+                        <div className="user-info">
+                            <div className="user-avatar">
+                                <img src={user.profilePicture} alt="Profile" />
 
-                            {!editMode && (
-                                <div className="edit-icons">
-                                    <FaEdit className="edit-icon" onClick={handleEditClick} />
-                                    <span className="edit-label"></span>
-                                </div>
-                            )}
-                            {editMode && (
-                                <div className="edit-icons">
-                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
-                                </div>
-
-                            )}
-                            {editMode && (
-                                <label className="edit-icon-label" onClick={handleEditPictureClick}>
-                                    <input
-                                        type="file"
-                                        id="profilePicture"
-                                        name="profilePicture"
-                                        onChange={handleProfilePictureChange}
-                                        accept="image/*"
-                                    />
-                                </label>
-                            )}
-                        </div>
-                        <div className="user-details">
-                            <div className="user-detail">
-                                <label>First name:</label>
-                                {editMode ? (
-                                    <input
-                                        className='input-user-names'
-                                        type="text"
-                                        value={firstName}
-                                        onChange={(e) => setFirstName(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                handleSaveClick();
-                                            }
-                                        }}
-                                    />
-                                ) : (
-                                    <label>{user.firstName}</label>
+                                {!editMode && (
+                                    <div className="edit-icons">
+                                        <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                        <span className="edit-label"></span>
+                                    </div>
                                 )}
                                 {editMode && (
-                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
-                                )}
-                                {!editMode && (
-                                    <FaEdit className="edit-icon" onClick={handleEditClick} />
-                                )}
-                            </div>
-                            <div className="user-detail">
-                                <label>Last name:</label>
-                                {editMode ? (
-                                    <input
-                                        className='input-user-names'
-                                        type="text"
-                                        value={lastName}
-                                        onChange={(e) => setLastName(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                handleSaveClick();
-                                            }
-                                        }}
-                                    />
-                                ) : (
-                                    <label>{user.lastName}</label>
+                                    <div className="edit-icons">
+                                        <FaCheck className="save-icon" onClick={handleSaveClick} />
+                                    </div>
+
                                 )}
                                 {editMode && (
-                                    <FaCheck className="save-icon" onClick={handleSaveClick} />
-                                )}
-                                {!editMode && (
-                                    <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                    <label className="edit-icon-label" onClick={handleEditPictureClick}>
+                                        <input
+                                            type="file"
+                                            id="profilePicture"
+                                            name="profilePicture"
+                                            onChange={handleProfilePictureChange}
+                                            accept="image/*"
+                                        />
+                                    </label>
                                 )}
                             </div>
-                            <div className="user-detail">
-                                <label>Email: <span className="edit-label"></span> {user.email}
-                                    <span className="edit-label"></span>
-                                </label>
+                            <div className="user-details">
+                                <div className="user-detail">
+                                    <label>First name:</label>
+                                    {editMode ? (
+                                        <input
+                                            className='input-user-names'
+                                            type="text"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleSaveClick();
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <label>{user.firstName}</label>
+                                    )}
+                                    {editMode && (
+                                        <FaCheck className="save-icon" onClick={handleSaveClick} />
+                                    )}
+                                    {!editMode && (
+                                        <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                    )}
+                                </div>
+                                <div className="user-detail">
+                                    <label>Last name:</label>
+                                    {editMode ? (
+                                        <input
+                                            className='input-user-names'
+                                            type="text"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleSaveClick();
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <label>{user.lastName}</label>
+                                    )}
+                                    {editMode && (
+                                        <FaCheck className="save-icon" onClick={handleSaveClick} />
+                                    )}
+                                    {!editMode && (
+                                        <FaEdit className="edit-icon" onClick={handleEditClick} />
+                                    )}
+                                </div>
+                                <div className="user-detail">
+                                    <label>Email: <span className="edit-label"></span> {user.email}
+                                        <span className="edit-label"></span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        <div className='history'>
+                            <button className='history-button' onClick={handleShowHistoryClick}>History</button>
+                        </div>
                     </div>
-                    <div className='history'>
-                        <button className='history-button' onClick={handleShowHistoryClick}>History</button>
-                        <PaymentHistoryForm paymentHistory={paymentHistory} />
-                    </div>
-                </div>
+                )}
+                {showHistory && <PaymentHistoryForm paymentHistory={paymentHistory} setShowHistory={setShowHistory}/>}
             </form>
-            <div className='payment-history-container'>
-                <h2 className='header-payment-history-container'> Payment History</h2>
-                <table className='table-history'>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>IsCompleted</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paymentHistory.map((payment, index) => (
-                            <tr key={index}>
-                                <td>{payment.data}</td>
-                                <td>{payment.amount}</td>
-                                <td>{payment.isCompleted}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
         </div>
     );
 };
