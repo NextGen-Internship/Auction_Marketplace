@@ -36,15 +36,15 @@ namespace Auction_Marketplace.Services.Implementation
                     {
                         if (auction.EndDate < DateTime.Now)
                         {
-                            //var mAuctionService = scope.ServiceProvider.GetRequiredService<IAuctionsService>();
-                            //var emailResponse = await mAuctionService.SendEmailToWinner(auction.AuctionId);
-                            //if (!emailResponse.Succeed)
-                            //{
-                            //    _logger.LogError($"Failed to send email to winner of auction {auction.AuctionId}: {emailResponse.Message}");
-                            //    continue;
-                            //}
+                           var mAuctionService = scope.ServiceProvider.GetRequiredService<IAuctionsService>();
+                           var emailResponse = await mAuctionService.SendEmailToWinner(auction.AuctionId);
+                           if (!emailResponse.Succeed)
+                           {
+                               _logger.LogError($"Failed to send email to winner of auction {auction.AuctionId}: {emailResponse.Message}");
+                               continue;
+                           }
 
-                           // auction.IsCompleted = true;
+                           auction.IsCompleted = true;
                         }
                         
                     }
