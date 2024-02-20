@@ -13,7 +13,6 @@ const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const token = getToken();
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -93,7 +92,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
               <div className="profile-picture-container">
                 <img
                   src={user.profilePicture}
-                  alt="Profile"
+                  alt="Loading"
                   className="profile-picture"
                 />
               </div>

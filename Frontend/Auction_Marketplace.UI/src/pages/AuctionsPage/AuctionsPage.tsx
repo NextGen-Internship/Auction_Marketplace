@@ -14,6 +14,8 @@ import DeleteAuctionForm from '../../Components/AuctionsForm/DeleteAuctionForm';
 import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
 import UserService from '../../Services/UserService';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
+import AddStripeForm from '../../Components/AddStripeForm/AddStripeForm';
+import StripeService from '../../Services/StripeService';
 
 const apiService = new ApiService;
 const auctionService = new AuctionService(apiService);
@@ -25,6 +27,7 @@ const AuctionsPage: React.FC = ({ }) => {
     const [showNewAuctionForm, setShowNewAuctionForm] = useState(false);
     const [showUpdateAuctionForm, setShowUpdateAuctionForm] = useState(false);
     const [showDeleteAuctionForm] = useState(false);
+    const [showAddStrypeForm, setShowAddStrypeForm] = useState(false);
     const [auctions, setAuctions] = useState<AuctionDTO[]>([]);
     const [hideAuctionContainer, setHideAuctionContainer] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -160,13 +163,28 @@ const AuctionsPage: React.FC = ({ }) => {
         );
     }
 
-    const handleAddAuctionClick = () => {
-        setShowNewAuctionForm(true);
-        setHideAuctionContainer(true);
+    const handleAddAuctionClick = async () => {
+        try {
+            const apiService = new ApiService();
+            const stripeService = new StripeService(apiService);
+            const { hasStripeAccount } = await stripeService.StripeUserExists();
+            setShowNewAuctionForm(true);
+
+            if (hasStripeAccount) {
+                setShowNewAuctionForm(true);
+            } else {
+                setShowAddStrypeForm(true);
+                setShowNewAuctionForm(false);
+            }
+            setHideAuctionContainer(true);
+        } catch (error) {
+            console.error('Error checking condition:', error);
+        }
     };
 
     const handleCloseForm = () => {
-        setShowNewAuctionForm(false);
+        setShowNewAuctionForm(false)
+        setShowAddStrypeForm(false);
         setHideAuctionContainer(false);
     };
 
@@ -175,7 +193,7 @@ const AuctionsPage: React.FC = ({ }) => {
     const currentAuction = auctions.slice(indexOfFirstAuction, indexOfLastAuction);
 
     const renderMiniPages = () => {
-        if (!showNewAuctionForm) {
+        if (!showNewAuctionForm && !showAddStrypeForm) {
             const pageNumbers = [];
             const totalPages = Math.ceil(auctions.length / auctionsPerPage);
 
@@ -234,6 +252,7 @@ const AuctionsPage: React.FC = ({ }) => {
             return null;
         }
     };
+    
     return (
         <div>
             <Navbar showAuthButtons={false} />
@@ -245,6 +264,7 @@ const AuctionsPage: React.FC = ({ }) => {
                 )}
             </div>
             {showNewAuctionForm && <AddAuctionForm onClose={handleCloseForm} />}
+            {showAddStrypeForm && <AddStripeForm onClose={handleCloseForm} />}
             {!hideAuctionContainer && (
                 <div className="cause-info-container">
                     {loading ? (
