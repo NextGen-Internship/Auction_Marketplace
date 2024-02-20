@@ -1,6 +1,7 @@
 
 using Stripe;
 using Microsoft.OpenApi.Models;
+using Auction_Marketplace.Services.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
+builder.Services.AddHostedService<AuctionCompletionService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

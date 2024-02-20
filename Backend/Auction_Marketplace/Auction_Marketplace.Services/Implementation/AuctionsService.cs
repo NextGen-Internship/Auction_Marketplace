@@ -280,19 +280,10 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        public async Task<Response<string>> SendEmailToWinner(int auctionId)        {
+        public async Task<Response<string>> SendEmailToWinner(int auctionId){
             var auctionResponse = await GetAuctionById(auctionId);
-            if (auctionResponse.Data.IsCompleted)
-            {
-                return new Response<string>
-                {
-                    Succeed = false,
-                    Message = $"The auction is completed"
-                };
-            }
-
+            
             var finalBidResponse = await CheckFinalBid(auctionId);
-
             if (!finalBidResponse.Succeed)
             {
                 return new Response<string>
@@ -305,10 +296,6 @@ namespace Auction_Marketplace.Services.Implementation
             var message = finalBidResponse.Data.Split(" ");
             string winningUserEmail = message[1];
             decimal winningBidAmount = decimal.Parse(finalBidResponse.Data.Split("made the final bid of")[1].Replace("BGN", "").Trim());
-
-           
-            auctionResponse.Data.IsCompleted = true;
-            await _auctionRepository.SaveChangesAsync();
 
             string auctionName = auctionResponse.Data.Name;
             long amount = Convert.ToInt64(auctionResponse.Data.FinalPrice);

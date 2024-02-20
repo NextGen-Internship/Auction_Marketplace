@@ -19,7 +19,6 @@ const AuctionDetailsPage: React.FC = () => {
   const [bidAmount, setBidAmount] = useState<number>();
   const [bidSuccess, setBidSuccess] = useState<boolean>(false); 
   const [finalBid, setFinalBid] = useState<string | null>(null);
-   const [winner, setWinner] = useState<string | null>(null);
   const token = getToken();
 
   useEffect(() => {
@@ -34,21 +33,7 @@ const AuctionDetailsPage: React.FC = () => {
           setFinalBid(finalBidResponse.data);
         }
 
-         const auctionEndDate = new Date(fetchedAuctionDetails?.endDate);
-        if (auctionEndDate && auctionEndDate <= new Date()) {
-          const winnerResponse: ApiResponseDTO =  await auctionService.sendWinnerEmail(Number(auctionId));
-          if (winnerResponse.succeed){
-            setWinner(winnerResponse.data);
-            window.location.href = `/auctions/details/${auctionId}`;
-          }
-        } else {
-          const timeRemaining = auctionEndDate.getTime() - Date.now();
-            if (timeRemaining > 0) {
-              setTimeout(() => {
-              window.location.reload();
-          }, timeRemaining);
-         }
-        }
+        
       } catch (error) {
         throw error;
       }
@@ -98,7 +83,6 @@ const AuctionDetailsPage: React.FC = () => {
             <p className="description">{auctionDetails?.description}</p>
             {auctionDetails?.endDate && new Date(auctionDetails.endDate) <= new Date() ? (
               <>
-                {winner}
                 <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
                 <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /></p>
                 <div className='user-container'>

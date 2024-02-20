@@ -22,6 +22,7 @@
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
     <PackageReference Include="Stripe.net" Version="43.14.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Quartz" Version="3.8.1" />
   </ItemGroup>
 
   <ItemGroup>
