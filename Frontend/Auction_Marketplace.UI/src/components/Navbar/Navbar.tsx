@@ -13,7 +13,6 @@ const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const token = getToken();
-  
   const navigate = useNavigate();
   const location = useLocation();
 

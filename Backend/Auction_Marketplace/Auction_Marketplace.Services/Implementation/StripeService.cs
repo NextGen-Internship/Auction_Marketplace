@@ -79,7 +79,7 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     TransferData = new SessionPaymentIntentDataTransferDataOptions
                     {
-                        Destination = user.Result?.CustomerId // Set this to the ID of the destination account
+                        Destination = user.Result?.CustomerId
                     }
                 }
 
