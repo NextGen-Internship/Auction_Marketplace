@@ -103,9 +103,13 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        public async Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId)
+        public async Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId, string winningUserEmail)
         {
             var domain = _configuration["Domain"];
+
+            var sender = _userRepository.GetByEmailAsync(winningUserEmail);
+
+            var receiver = GetUserByAuctionId(auctionId);
 
             var user = GetUserByAuctionId(auctionId);
 
@@ -138,7 +142,7 @@ namespace Auction_Marketplace.Services.Implementation
                 {
                     TransferData = new SessionPaymentIntentDataTransferDataOptions
                     {
-                        Destination = user.Result?.CustomerId // Set this to the ID of the destination account
+                        Destination = receiver.Result?.CustomerId
                     }
                 }
 

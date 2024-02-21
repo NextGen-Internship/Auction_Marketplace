@@ -299,7 +299,7 @@ namespace Auction_Marketplace.Services.Implementation
 
             string auctionName = auctionResponse.Data.Name;
             long amount = Convert.ToInt64(auctionResponse.Data.FinalPrice);
-            var session = await _stripeService.CreateCheckoutSessionAuctions(amount, auctionId);
+            var session = await _stripeService.CreateCheckoutSessionAuctions(amount, auctionId, winningUserEmail);
             string strypeLink = session.Url;
 
             await _emailService.SendEmail("Auction Winner Notification", winningUserEmail, "Bidder", $"Dear Bidder,\r\n\r\nCongratulations!" +
