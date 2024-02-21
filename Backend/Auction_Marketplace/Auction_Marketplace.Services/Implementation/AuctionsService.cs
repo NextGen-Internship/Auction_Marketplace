@@ -73,7 +73,7 @@ namespace Auction_Marketplace.Services.Implementation
                     Name = auction.Name,
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
-                    EndDate = DateTime.Now.AddMinutes(auction.ExistingDays),
+                    EndDate = DateTime.Now.AddDays(auction.ExistingDays),
                     IsCompleted = false,
                 };
 

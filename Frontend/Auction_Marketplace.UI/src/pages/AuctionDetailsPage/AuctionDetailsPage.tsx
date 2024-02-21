@@ -32,13 +32,10 @@ const AuctionDetailsPage: React.FC = () => {
         if (finalBidResponse.succeed) {
           setFinalBid(finalBidResponse.data);
         }
-
-        
       } catch (error) {
         throw error;
       }
     };
-    
 
     if (token) {
       fetchAuctionDetails();
@@ -57,6 +54,8 @@ const AuctionDetailsPage: React.FC = () => {
         setBidAmount(undefined); 
 
          const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+
+        
         if (finalBidResponse.succeed) {
           setFinalBid(finalBidResponse.data);
         }
@@ -71,55 +70,45 @@ const AuctionDetailsPage: React.FC = () => {
   return (
     <>
     <Navbar showAuthButtons={false} />
-      <div className="auction-details-container">
-        <div className="auction-content">
-          <div className="auction-photo">
-            <img src={auctionDetails?.photo} alt="Auction" />
+    <div className="auction-details-container">
+      <div className="auction-content">
+        <div className="auction-photo">
+          <img src={auctionDetails?.photo} />
+        </div>
+        <div className="auction-details">
+          <div className="header-auction-detail">
+            <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
           </div>
-          <div className="auction-details">
-            <div className="header-auction-detail">
-              <h3 className='head-auction-name'>{auctionDetails?.name}</h3>
-            </div>
-            <p className="description">{auctionDetails?.description}</p>
-            {auctionDetails?.endDate && new Date(auctionDetails.endDate) <= new Date() ? (
-              <>
-                <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
-                <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /></p>
-                <div className='user-container'>
-                {finalBid && (
-                  <p>{finalBid}</p>
-                )}
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
-                <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /></p>
-                <div className="bid-section">
-                  <label htmlFor="bidAmount">Your Bid: </label>
-                  <input className='input-bid'
-                    id="bidAmount"
-                    value={bidAmount || ''}
-                    onChange={(e) => setBidAmount(Number(e.target.value))}
-                    placeholder=""
-                  />
-                  <button className="bid-button" onClick={handleBidNowClick}>
-                    Bid Now <span role="img" aria-label="Money Bag">💰</span>
-                  </button>
-                  <Link to={`/auctions`} className="back-auctions-button">
-                    Back to Auctions
-                  </Link>
-                </div>
-                <div className='user-container'>
-                  {finalBid && (
-                    <p>{finalBid}</p>
-                  )}
-                </div>
-              </>
-            )}
+          <p className="description">{auctionDetails?.description}</p>
+          <p className="start-price">Start Price: {auctionDetails?.startPrice} BGN</p>
+          <p>Time Left: <CountdownTimer endDate={new Date(auctionDetails?.endDate)} /> </p>
+          {!auctionDetails || !auctionDetails.endDate || new Date(auctionDetails.endDate) > new Date() ? (
+          <div className="bid-section">
+            <label htmlFor="bidAmount">Your Bid: </label>
+            <input className='input-bid'
+              id="bidAmount"
+              value={bidAmount || ''}
+              onChange={(e) => setBidAmount(Number(e.target.value))}
+              placeholder=""
+            />
+            <button className="bid-button" onClick={handleBidNowClick}>
+              Bid Now <span role="img" aria-label="Money Bag">💰</span>
+            </button>
+
+            <Link to={`/auctions`} className="back-auctions-button">
+              Back to Auctions
+            </Link>
+            
+          </div>
+          ) : null}
+          <div className='user-container'>
+          {finalBid && (
+          <p>{finalBid}</p>
+        )}
           </div>
         </div>
       </div>
+    </div>
   </>
   
   );
