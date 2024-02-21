@@ -43,6 +43,9 @@
 
 .heart-page-link{
   color: rgb(241, 104, 150);
+  font-size: 32px;
+  text-decoration: none;
+  margin-right: 5px;
 }
 
 .heart{
