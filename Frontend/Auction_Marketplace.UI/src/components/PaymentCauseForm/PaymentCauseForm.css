@@ -3,6 +3,7 @@
     border: 1px solid #ffffff;
     background-color: #ffffff;
     width: 650px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .header-payment-history {
@@ -12,6 +13,8 @@
 
 .th-rows-payment-history {
     padding: 12px;
+    border: 1px solid black;
+    background-color: #f2f2f2;
 }
 
 .form-buttons {
@@ -24,5 +27,6 @@
 }
 
 .history-table {
-    text-align: center;
+    width: 100%;
+    border-collapse: collapse;
 }

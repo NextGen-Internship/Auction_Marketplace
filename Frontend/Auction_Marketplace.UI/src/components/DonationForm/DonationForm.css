@@ -62,9 +62,11 @@
   margin-right: 10px;
   border: none;
   padding: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
   border-radius: 15px;
   background-color: #28a745;
-  color: #fff;
+  color: #000000;
   font-size: 14px;
   font-weight: 550;
   cursor: pointer;
