@@ -112,21 +112,6 @@ namespace Auction_Marketplace.Api.Controllers
             }
         }
 
-        [HttpGet("send-winner-email/{auctionId}")]
-        [Authorize]
-        public async Task<IActionResult> SendWinnerEmail([FromRoute] int auctionId)
-        {
-            try
-            {
-                var response = await _auctionsService.SendEmailToWinner(auctionId);
-                return response.Succeed ? Ok(response.Message) : BadRequest(response.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }    
-
         [HttpGet]
         [Route("Bidded")]
         [Authorize]
