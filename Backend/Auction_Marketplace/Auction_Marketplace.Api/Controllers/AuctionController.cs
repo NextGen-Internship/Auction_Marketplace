@@ -125,6 +125,22 @@ namespace Auction_Marketplace.Api.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }    
+
+        [HttpGet]
+        [Route("Bidded")]
+        [Authorize]
+        public async Task<IActionResult> GetAllAuctionsUserBidded()
+        {
+            try
+            {
+                var response = await _auctionsService.GetAllAuctionsUserBidded();
+                return response.Succeed == true ? Ok(response) : BadRequest(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
         }
     }
 }

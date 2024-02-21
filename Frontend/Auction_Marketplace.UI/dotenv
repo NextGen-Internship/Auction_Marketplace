@@ -21,5 +21,4 @@ VITE_PLACE_BID_ENDPOINT=api/Bid
 VITE_LOGOUT_ENDPOINT=api/Authentication/Logout
 VITE_CHECK_FINAL_BID_ENDPOINT=api/Auction/check-final-bid
 VITE_SEND_WINNER_EMAIL_ENDPOINT=api/Auction/send-winner-email
-
-
+VITE_GET_AUCTIONS_BIDDED=api/Auction/Bidded

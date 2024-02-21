@@ -312,6 +312,44 @@ namespace Auction_Marketplace.Services.Implementation
             };
             
         }
+
+        public async Task<Response<List<Auction>>> GetAllAuctionsUserBidded()
+        {
+           var email = _contextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+           if (email == null)
+           {
+               return new Response<List<Auction>>
+               {
+                   Succeed = false,
+                   Message = "Invalid auction data.",
+               };
+           }
+
+           var user = await _userService.GetByEmailAsync(email);
+           List<Bid> bids = await _bidRepository.GetBidsMadeByUser(user.Id);
+           List<Auction> auctions = new List<Auction>();
+           foreach (var bid in bids)
+           {
+               Auction auction = await _auctionRepository.FindAuctionById(bid.AuctionId);
+               auctions.Add(auction);
+           }
+
+           auctions = auctions.DistinctBy(a => a.AuctionId).ToList();
+           if (auctions.Count() == 0 || auctions == null)
+           {
+               return new Response<List<Auction>>
+               {
+                   Succeed = false,
+                   Message = "Invalid auction data.",
+               };
+           }
+
+           return new Response<List<Auction>>
+           {
+               Succeed = true,
+               Data = auctions
+           };
+        }
     }
 }
 

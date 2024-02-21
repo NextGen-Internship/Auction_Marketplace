@@ -22,6 +22,7 @@ interface ImportMetaEnv {
     readonly VITE_PLACE_BID_ENDPOINT: string
     readonly VITE_CHECK_FINAL_BID_ENDPOINT: string
     readonly VITE_SEND_WINNER_EMAIL_ENDPOINT: string
+    readonly VITE_GET_AUCTIONS_BIDDED: string
 }
 
 interface ImportMeta {
