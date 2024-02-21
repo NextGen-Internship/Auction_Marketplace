@@ -41,6 +41,7 @@
     <None Remove="Models\Stripe\" />
     <None Remove="Models\User\" />
     <None Remove="Models\Bid\" />
+    <None Remove="Models\Payment\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\Abstract\" />
@@ -56,5 +57,6 @@
     <Folder Include="Models\Stripe\" />
     <Folder Include="Models\User\" />
     <Folder Include="Models\Bid\" />
+    <Folder Include="Models\Payment\" />
   </ItemGroup>
 </Project>

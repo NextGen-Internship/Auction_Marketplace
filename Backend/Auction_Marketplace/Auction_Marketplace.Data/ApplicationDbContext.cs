@@ -69,17 +69,6 @@ namespace Auction_Marketplace.Data
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Payment>()
-                .HasOne(r => r.Cause)
-                .WithMany()
-                .HasForeignKey(r => r.CauseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Payment>()
-                .HasOne(r => r.UserPaymentMethod)
-                .WithMany()
-                .HasForeignKey(r => r.UserPaymentMethodId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Payment>()
                 .HasOne(r => r.User)

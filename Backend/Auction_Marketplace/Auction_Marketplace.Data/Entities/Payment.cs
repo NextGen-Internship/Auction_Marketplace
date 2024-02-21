@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Auction_Marketplace.Data.Entities.Abstract;
+using Auction_Marketplace.Data.Enums;
 
 namespace Auction_Marketplace.Data.Entities
 {
@@ -18,25 +19,16 @@ namespace Auction_Marketplace.Data.Entities
         public int EndUserId { get; set; }
         public User EndUser { get; set; }
 
-        [ForeignKey("Cause")]
         public int? CauseId { get; set; }
-        public Cause Cause { get; set; }
+        public Cause? Cause { get; set; }
 
-        [ForeignKey("Auction")]
         public int? AuctionId { get; set; }
         public Auction Auction { get; set; }
-
-        [ForeignKey("UserPaymentMethod")]
-        public int UserPaymentMethodId { get; set; }
-        public UserPaymentMethod UserPaymentMethod { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
-
-        [Required]
-        public DateTime Date { get; set; }
-
+        
         public string StripePaymentId { get; set; }
 
 
@@ -49,4 +41,5 @@ namespace Auction_Marketplace.Data.Entities
         public DateTime? DeletedOn { get; set; }
     }
 }
+
 

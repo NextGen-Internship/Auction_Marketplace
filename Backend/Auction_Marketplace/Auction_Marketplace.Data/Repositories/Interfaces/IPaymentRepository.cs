@@ -6,5 +6,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
 	{
         Task AddPayment(Payment payment);
 
+        Task<List<Payment>> GetPaymentsByUserId(int userId);
+
     }
 }

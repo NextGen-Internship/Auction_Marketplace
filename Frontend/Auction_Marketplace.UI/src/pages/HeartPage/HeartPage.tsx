@@ -42,13 +42,6 @@ const HeartPage: React.FC = () => {
     };
   }, [token]);
 
-  useEffect(() => {
-    const persistedToken = localStorage.getItem('token');
-    if (persistedToken) {
-      sessionStorage.setItem('token', persistedToken);
-      navigate('/aboutUs');
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (isTokenExpired()) {

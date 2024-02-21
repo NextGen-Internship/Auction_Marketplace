@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models.Donation;
+using Auction_Marketplace.Data.Models.Payment;
 using Auction_Marketplace.Data.Models.Stripe;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Interface;
@@ -48,7 +49,9 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var domain = _configuration["Domain"];
 
-            var user = GetUserByCauseId(model.CauseId);
+            var sender = _userRepository.GetByEmailAsync(model.Email);
+
+            var receiver = GetUserByCauseId(model.CauseId);
 
             var options = new SessionCreateOptions
             {
@@ -75,11 +78,16 @@ namespace Auction_Marketplace.Services.Implementation
                 Mode = "payment",
                 SuccessUrl = $"{domain}/completion",
                 CancelUrl = $"{domain}/cancel",
+                Metadata = new Dictionary<string, string>
+                    {
+                        { "sender_id", sender.Result?.Id.ToString() },
+                        { "receiver_id", receiver.Result?.CustomerId.ToString()}
+                    },
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     TransferData = new SessionPaymentIntentDataTransferDataOptions
                     {
-                        Destination = user.Result?.CustomerId
+                        Destination = receiver.Result?.CustomerId
                     }
                 }
 
@@ -268,7 +276,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<PaymentViewModel> HandleWebhookEvent(string json, string stripeSignature)
+        public async Task HandleWebhookEvent(string json, string stripeSignature)
         {
             try
             {
@@ -277,10 +285,18 @@ namespace Auction_Marketplace.Services.Implementation
                     _configuration.GetSection("Stripe:WebhookSecret").Get<string>());
 
                 switch (stripeEvent.Type)
-                {
+               {
+                   case Events.CustomerCreated:
+                       await CustomerCreated(stripeEvent);
+                       break;
+                   case Events.CheckoutSessionCompleted:
+                       await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+                       break;
+                        
                     default:
-                        return await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
-                }
+                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+                        break;
+               }
             }
             catch (StripeException e)
             {
@@ -325,46 +341,35 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        private async Task <PaymentViewModel> HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
+        private async Task HandleCheckoutSessionPaymentSucceeded(Event stripeEvent)
         {
-            var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+            var paymentIntent = stripeEvent.Data.Object as Session;
 
-            var paymentId = paymentIntent.Id;
-            var amount = paymentIntent.Amount;
-            var paymentStatus = paymentIntent.Status;
-            bool isCompleted = paymentStatus == "succeeded";
-            var date = DateTime.Now;
-            var endUserCustomerId = paymentIntent.CustomerId;
+            var endUserStripeId = paymentIntent.Metadata.First(m => m.Key == "receiver_id").Value;
 
-            var paymentInfo = new PaymentViewModel
+            var model = new CreatePaymentViewModel()
             {
-                StripePaymentId = paymentId,
-                Amount = amount,
-                Date = date,
-                IsCompleted = isCompleted,
-                EndUserId = endUserCustomerId // should it be string?
+                PaymentId = paymentIntent.Id,
+                Amount = paymentIntent.AmountTotal.Value,
+                IsCompleted = paymentIntent.PaymentStatus == "paid" ? true : false,
+                StartUser = int.Parse(paymentIntent.Metadata.First(m => m.Key == "sender_id").Value),
+                EndUser = _userRepository.GetUserByCustomerId(endUserStripeId).Result.Id
             };
+
+            
 
             try
             {
-        
-                // _paymentService.CreatePayment(paymentId,amount, date, isCompleted, endUserCustomerId);
+                _paymentService.CreatePayment(model);
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ex; 
             }
 
-            return paymentInfo;
-
-
-
         }
 
-        public void Payment(PaymentViewModel model)
-        {
-            _paymentService.CreatePayment(model);
-        }
+
         private async Task AddMoneyToCause(DonationAmountViewModel model)
         {
             var cause = await _causeRepository.FindCauseById(model.CauseId);

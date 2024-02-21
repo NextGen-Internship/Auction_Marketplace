@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HomePage.css'
-import firstPhoto from '/src/assets/5-Reasons-Why-You-Should-Donate-to-Charity.jpg';
-import secondPhoto from '/src/assets/1140-donation-box.jpg';
-import thirdPhoto from '/src/assets/donate-2.jpg';
-import forthPhoto from '/src/assets/gettyimages-1189942849_900xx2121-1193-0-111.jpg';
+import firstPhoto from '/src/assets/Kids in need.png';
+import secondPhoto from '/src/assets/Animals.jpeg';
+import thirdPhoto from '/src/assets/Ukrainee.jpeg';
+import forthPhoto from '/src/assets/done.jpeg';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 import Navbar from '../../components/Navbar/Navbar.tsx';

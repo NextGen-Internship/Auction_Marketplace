@@ -14,15 +14,13 @@ namespace Auction_Marketplace.Services.Interface
 
 		Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId);
 
-        Task<PaymentViewModel> HandleWebhookEvent(string json, string stripeSignature);
+		Task HandleWebhookEvent(string json, string stripeSignature);
 
         Task CreateConnectedUser(StripeFormViewModel model);
 
 		Task PayOut();
 
 		bool CheckStripeAccount();
-
-		void Payment(PaymentViewModel model);
     }
 }
 
