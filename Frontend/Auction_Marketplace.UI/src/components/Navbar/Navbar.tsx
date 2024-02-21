@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
-import logo from "../../assets/Marketplace.png";
+import logo from "../../assets/Marketplace.pdf.png";
 import NavbarProps from '../../Interfaces/ComponentProps';
 import { getToken } from '../../utils/GoogleToken';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
@@ -13,6 +13,7 @@ const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const token = getToken();
+  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -89,9 +90,9 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
         {!showAuthButtons && !isLogOutPage && (
           <div className="nav-links-user">
             <div className="heart">
-              <Link to="/heart" className="heart-page-link" style={{ textDecoration: 'none' }}>
-                {"\u2764"}
-              </Link>
+             <Link to="/heart" className="heart-page-link">
+            {"\u2764"}
+            </Link>
             </div>
             <Link to="/profile">
               <div className="profile-picture-container">

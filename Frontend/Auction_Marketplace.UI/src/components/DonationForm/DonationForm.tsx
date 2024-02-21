@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from "jwt-decode";
 import './DonationForm.css';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken';
 import { Link } from 'react-router-dom';
@@ -9,15 +10,20 @@ interface DonationFormProps {
 }
 
 const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
-  
+
   const token = getToken();
+  const [email, setEmail] = useState<string>(''); // State for storing the email
 
   useEffect(() => {
     if (isTokenExpired()) {
       clearToken();
+    } else {
+      // Decode JWT and extract email
+      const decoded = jwtDecode(token);
+      setEmail(decoded.email);
     }
-  }, []);
-  
+  }, [token]);
+
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -42,7 +48,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     try {
       const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
         method: 'POST',
@@ -51,16 +57,17 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         },
         body: JSON.stringify({
           causeId: causeId,
-          amount: donationAmount
+          amount: donationAmount,
+          email: email // Include the email from JWT
         }),
       });
 
       if (response.ok) {
         const responseData = await response.json();
 
-            const redirectUrl = responseData.returnUrl; 
-            console.log('Checkout session created successfully');
-            window.location.href = redirectUrl;
+        const redirectUrl = responseData.returnUrl;
+        console.log('Checkout session created successfully');
+        window.location.href = redirectUrl;
       } else {
         console.error('Error creating checkout session');
       }
@@ -83,7 +90,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         </div>
         <div className="custom-amount-input">
           <input
-          className='money'
+            className='money'
             type="number"
             placeholder="Enter custom amount"
             value={donationAmount !== null ? donationAmount : ''}
@@ -91,12 +98,13 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
           />
         </div>
         <div className='buttons'>
-        <form onSubmit={handleSubmit}>
-          <button type="submit" className="checkout-button">Checkout</button>
-        </form>
-        <button className='close-btn' onClick={onClose}>Close</button>
-      </div>
+          <form onSubmit={handleSubmit}>
+            <button type="submit" className="checkout-button">Checkout</button>
+          </form>
+          <button className='close-btn' onClick={onClose}>Close</button>
         </div>
+
+      </div>
     </div>
   );
 };
