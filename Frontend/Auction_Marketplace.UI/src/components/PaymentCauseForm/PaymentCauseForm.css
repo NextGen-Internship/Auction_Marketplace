@@ -1,0 +1,10 @@
+.payments-form-container {
+    padding: 20px;
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+    width: 650px;
+}
+
+.header-payment-history {
+    padding: 20px;
+}

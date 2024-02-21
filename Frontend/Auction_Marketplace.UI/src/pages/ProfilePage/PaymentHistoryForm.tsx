@@ -16,14 +16,15 @@ interface PaymentHistoryFormProps {
 const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory, setShowHistory }) => {
     return (
         <div className='payment-history-container'>
-                        <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={() => setShowHistory(false)} />
+            <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={() => setShowHistory(false)} />
             <h2 className='header-payment-history-container'> Payment History</h2>
             <table className='table-history'>
                 <thead>
                     <tr>
+                        <th>Name</th>
                         <th>Date</th>
                         <th>Amount</th>
-                        <th>IsCompleted</th>
+                        <th>Completed</th>
                     </tr>
                 </thead>
                 <tbody>
