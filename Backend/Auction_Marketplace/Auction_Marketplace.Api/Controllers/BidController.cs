@@ -31,7 +31,4 @@ namespace Auction_Marketplace.Api.Controllers
             }
         }
     }
-
-   
 }
-
