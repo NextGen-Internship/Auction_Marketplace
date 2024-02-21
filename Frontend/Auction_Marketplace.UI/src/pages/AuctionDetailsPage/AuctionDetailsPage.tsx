@@ -7,7 +7,7 @@ import AuctionService from '../../Services/AuctionService';
 import BidService from '../../Services/BidService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import './AuctionDetailsPage.css';
-import CountdownTimer from '../../Components/CountdownTimer/CountdownTimer';
+import CountdownTimer from '../../components/CountdownTimer/CountdownTimer';
 
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
@@ -54,6 +54,8 @@ const AuctionDetailsPage: React.FC = () => {
         setBidAmount(undefined); 
 
          const finalBidResponse: ApiResponseDTO = await auctionService.checkFinalBid(Number(auctionId));
+
+        
         if (finalBidResponse.succeed) {
           setFinalBid(finalBidResponse.data);
         }
