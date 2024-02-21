@@ -22,5 +22,13 @@ namespace Auction_Marketplace.Data.Repositories.Implementations
                 .Where(b => b.AuctionId == auctionId)
                 .ToListAsync();
         }
+
+
+        public async Task<List<Bid>> GetBidsMadeByUser(int userId)
+        {
+            return await _context.Bids
+                .Where(b => b.UserId == userId)
+                .ToListAsync();
+        }
     }
 }

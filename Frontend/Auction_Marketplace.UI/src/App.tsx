@@ -14,6 +14,7 @@ import CauseDetailsPage from './Pages/CauseDetailsPage/CauseDetailsPage.tsx';
 import AboutUsPage from './Pages/AboutUsPage/AboutUsPage.tsx';
 import Footer from './Components/Footer/Footer.tsx';
 import Navbar from './components/Navbar/Navbar.tsx';
+import HeartPage from './pages/HeartPage/HeartPage.tsx';
 
 function App() {
   return (
@@ -34,7 +35,8 @@ function App() {
           <Route path="/causes/details/:causeId" element={<CauseDetailsPage />} />
           <Route path="auction/:auctionId" element={<AuctionPage />}/>
           <Route path="cause/:causeId" element={<CausePage/>}/>
-          <Route path="/aboutUs" element={<AboutUsPage />}/>
+          <Route path="/aboutUs" element={<AboutUsPage />}></Route>
+          <Route path="/heart" element={<HeartPage/>}></Route>
         </Routes>
         <Footer />
       </Router>

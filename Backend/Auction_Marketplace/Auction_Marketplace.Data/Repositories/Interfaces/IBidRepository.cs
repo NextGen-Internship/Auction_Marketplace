@@ -7,5 +7,7 @@ namespace Auction_Marketplace.Data.Repositories.Interfaces
         public Task<Auction?> FindAuctionById(int auctionId);
 
         public Task<List<Bid>> GetBidsByAuctionId(int auctionId);
+
+        public Task<List<Bid>> GetBidsMadeByUser(int userId);
     }
 }
