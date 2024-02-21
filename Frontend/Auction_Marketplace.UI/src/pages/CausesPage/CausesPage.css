@@ -1,6 +1,6 @@
 .add-cause-button {
   font-family: "Lucida Console", "Courier New", monospace;
-  position: fixed;
+  position: relative;
   top: 100px;
   left: 8%;
   transform: translateX(-50%);
@@ -122,4 +122,8 @@
   padding-top: 10px;
   padding-left: 2px;
   font-family: 'Times New Roman', Times, serif
+}
+
+.buttons-body-container{
+  background-color: #ebe8e8;
 }

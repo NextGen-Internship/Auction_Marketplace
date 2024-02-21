@@ -81,12 +81,12 @@ const AboutUsPage: React.FC = () => {
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U066ZL2A9M2-913bb3537e80-512' alt="Founder 2" />
           <h4>Luben Kulishev</h4>
-          <p>Savina is an Highly experienced Fullstack Developer</p>
+          <p>Luben is a Highly experienced Fullstack Developer</p>
         </div>
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U067L6EH6TS-b8293e458c8a-512' alt="Founder 3" />
           <h4>Savina Valchanova</h4>
-          <p>Savina is an Highly experienced Fullstack Developer </p>
+          <p>Savina is a Highly experienced Fullstack Developer </p>
         </div>
       </div>
     </div>
