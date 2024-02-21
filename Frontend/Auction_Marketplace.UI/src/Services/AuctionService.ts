@@ -42,7 +42,6 @@ class AuctionService {
         if (data.photo) {
             formData.append('photo', data.photo);
         }
-        formData.append('existindDays', String(data.existingDays));
 
         return this.apiService.put<ApiResponseDTO>(`${this.UPDATE_AUCTION_ENDPOINT}${auctionId}`, formData);
     }

@@ -198,11 +198,6 @@ namespace Auction_Marketplace.Services.Implementation
                     existingAuction.Photo = await _s3Service.UploadFileAsync(updatedAuction.Photo, path, fileName);
                 }
 
-                if (existingAuction.EndDate < existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays))
-                {
-                    existingAuction.EndDate = existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays);
-                }
-
                 await _auctionRepository.UpdateAuction(existingAuction);
 
                 return new Response<Auction>
