@@ -76,17 +76,17 @@ const AboutUsPage: React.FC = () => {
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U066GLJT9C7-6afd0d815660-512' alt="Founder 1" />
           <h4>Teoslava Yordanova</h4>
-          <p>Teoslava is a Highly experienced Backend Developer</p>
+          <p>Teoslava is a Highly experienced Fullstack Developer</p>
         </div>
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U066ZL2A9M2-913bb3537e80-512' alt="Founder 2" />
-          <h4>Luben Kulishv</h4>
-          <p>CEO</p>
+          <h4>Luben Kulishev</h4>
+          <p>Savina is an Highly experienced Fullstack Developer</p>
         </div>
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U067L6EH6TS-b8293e458c8a-512' alt="Founder 3" />
           <h4>Savina Valchanova</h4>
-          <p>Savina is an Highly experienced Frontend Developer </p>
+          <p>Savina is an Highly experienced Fullstack Developer </p>
         </div>
       </div>
     </div>
