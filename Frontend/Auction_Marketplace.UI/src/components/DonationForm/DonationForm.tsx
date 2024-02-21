@@ -92,7 +92,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         </div>
         <div className='buttons'>
         <form onSubmit={handleSubmit}>
-          <button type="submit" className="btn">Checkout</button>
+          <button type="submit" className="checkout-button">Checkout</button>
         </form>
         <button className='close-btn' onClick={onClose}>Close</button>
       </div>

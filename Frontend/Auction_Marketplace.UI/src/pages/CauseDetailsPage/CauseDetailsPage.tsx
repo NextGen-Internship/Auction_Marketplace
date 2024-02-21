@@ -24,7 +24,7 @@ const CauseDetailsPage: React.FC = () => {
   const id = Number(causeId);
   const apiService = new ApiService();
   const causeService = new CauseService(apiService);
-  const userService =  new UserService(apiService);
+  const userService = new UserService(apiService);
   const token = getToken();
   const [user, setUser] = useState<UserDTO>({
     firstName: '',
@@ -123,7 +123,7 @@ const CauseDetailsPage: React.FC = () => {
   };
 
   const handlePaymentFormClose = () => {
-    setShowPaymentsForm(true);
+    setShowPaymentsForm(false);
     setShowDonationForm(false);
   }
 
@@ -146,12 +146,14 @@ const CauseDetailsPage: React.FC = () => {
                 <span className="money-amount">BGN {cause.amountCurrent}</span>
               </div>
             </div>
-            <button className="donate-button" onClick={handleDonateClick}>Donate</button>
+            <div className='buttons-cause-details'>
+              <button className="donate-button" onClick={handleDonateClick}>Donate</button>
 
-            <Link to={`/causes`} className="back-causes-button">
-              Back to Causes
-            </Link>
-            {isCreator && <button className="payments-button" onClick={handlePaymentClick}>Payments</button>}
+              <Link to={`/causes`} className="back-causes-button">
+                Back to Causes
+              </Link>
+              {isCreator && <button className="payments-button" onClick={handlePaymentClick}>Payments</button>}
+            </div>
           </>
         </div>
       )}

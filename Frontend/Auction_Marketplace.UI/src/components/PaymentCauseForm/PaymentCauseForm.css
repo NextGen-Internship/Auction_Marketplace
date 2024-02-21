@@ -6,5 +6,23 @@
 }
 
 .header-payment-history {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.th-rows-payment-history {
+    padding: 12px;
+}
+
+.form-buttons {
+    margin-top:20px;
+    text-align: center;
+}
+
+.td-rows-payment-history {
     padding: 20px;
+}
+
+.history-table {
+    text-align: center;
 }

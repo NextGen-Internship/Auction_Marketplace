@@ -25,7 +25,6 @@ const ProfilePage: React.FC = () => {
     const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
     const [showHistory, setShowHistory] = useState(false);
-    const [hideProfile, setHideProfile] = useState(false);
     const [paymentHistory, setPaymentHistory] = useState([]);
     const navigate = useNavigate();
 
@@ -264,7 +263,7 @@ const ProfilePage: React.FC = () => {
                             </div>
                         </div>
                         <div className='history'>
-                            <button className='history-button' onClick={handleShowHistoryClick}>History</button>
+                            <button className='history-button' onClick={handleShowHistoryClick}>Payment History</button>
                         </div>
                     </div>
                 )}

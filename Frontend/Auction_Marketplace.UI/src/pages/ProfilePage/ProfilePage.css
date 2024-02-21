@@ -99,7 +99,6 @@
 
 .history-button {
   background-color:rgb(140, 211, 225);
-  margin-left: 17px;
   border:solid 1px #7fa1c7;
 }
 
@@ -137,4 +136,9 @@
 
 .table-history tr:hover {
   background-color: #ddd;
+}
+
+.history {
+  display: flex;
+  justify-content: center;
 }
