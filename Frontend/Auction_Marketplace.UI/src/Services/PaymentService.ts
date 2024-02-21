@@ -10,8 +10,8 @@ class PaymentService {
     this.apiService = apiService;
   }
 
-  async getPaymentById(causeId: number): Promise<ApiResponseDTO> {
-    return this.apiService.get<ApiResponseDTO>(`${this.GET_PAYMENTS_BY_ID_ENDPOINT}${causeId}`);
+  async getPaymentById(userId: number): Promise<ApiResponseDTO> {
+    return this.apiService.get<ApiResponseDTO>(`${this.GET_PAYMENTS_BY_ID_ENDPOINT}${userId}`);
   }
 
 }

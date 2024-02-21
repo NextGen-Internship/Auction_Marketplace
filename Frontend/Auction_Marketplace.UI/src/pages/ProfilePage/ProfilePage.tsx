@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
     const [, setPreviewUrl] = useState<string | null>(null);
     const [email] = useState('');
     const [showHistory, setShowHistory] = useState(false);
-    const [paymentHistory, setPaymentHistory] = useState([]);
+    const [paymentHistory,] = useState([]);
     const navigate = useNavigate();
 
     const [user, setUser] = useState({
@@ -35,17 +35,6 @@ const ProfilePage: React.FC = () => {
         email: '',
         profilePicture: ''
     });
-
-    const fetchPaymentHistory = async () => {
-        try {
-            if (token) {
-                const paymentHistoryData = await userService.fetchPaymentHistory();
-                setPaymentHistory(paymentHistoryData)
-            }
-        } catch (error) {
-            console.error('Error fetching payment history:', error);
-        }
-    };
 
     useEffect(() => {
         const saveTokenOnUnload = () => {
@@ -85,7 +74,6 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         if (token) {
             fetchUserProfile();
-            fetchPaymentHistory();
         }
 
         if (isTokenExpired()) {
