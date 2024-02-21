@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionMarketplace.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240208120813_Added_Stripe_PaymentId_column")]
-    partial class AddedStripePaymentIdcolumn
+    [Migration("20240219101220_Initial_Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,8 +44,8 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("ExistingDays")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("decimal(18, 2)");
@@ -173,20 +173,12 @@ namespace AuctionMarketplace.Data.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int?>("AuctionId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("CauseId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CauseId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
@@ -208,22 +200,15 @@ namespace AuctionMarketplace.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserPaymentMethodId")
-                        .HasColumnType("int");
-
                     b.HasKey("PaymentId");
 
                     b.HasIndex("AuctionId");
 
                     b.HasIndex("CauseId");
 
-                    b.HasIndex("CauseId1");
-
                     b.HasIndex("EndUserId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserPaymentMethodId");
 
                     b.ToTable("Payments", (string)null);
                 });
@@ -631,19 +616,11 @@ namespace AuctionMarketplace.Data.Migrations
                 {
                     b.HasOne("Auction_Marketplace.Data.Entities.Auction", "Auction")
                         .WithMany()
-                        .HasForeignKey("AuctionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuctionId");
 
                     b.HasOne("Auction_Marketplace.Data.Entities.Cause", "Cause")
-                        .WithMany()
-                        .HasForeignKey("CauseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Auction_Marketplace.Data.Entities.Cause", null)
                         .WithMany("Donations")
-                        .HasForeignKey("CauseId1");
+                        .HasForeignKey("CauseId");
 
                     b.HasOne("Auction_Marketplace.Data.Entities.User", "EndUser")
                         .WithMany()
@@ -657,12 +634,6 @@ namespace AuctionMarketplace.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Auction_Marketplace.Data.Entities.UserPaymentMethod", "UserPaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("UserPaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Auction");
 
                     b.Navigation("Cause");
@@ -670,8 +641,6 @@ namespace AuctionMarketplace.Data.Migrations
                     b.Navigation("EndUser");
 
                     b.Navigation("User");
-
-                    b.Navigation("UserPaymentMethod");
                 });
 
             modelBuilder.Entity("Auction_Marketplace.Data.Entities.Review", b =>

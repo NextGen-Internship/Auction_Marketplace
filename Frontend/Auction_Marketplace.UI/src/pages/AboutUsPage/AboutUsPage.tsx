@@ -50,36 +50,44 @@ const AboutUsPage: React.FC = () => {
   return (
     <div>
       <Navbar showAuthButtons={false} />
-      <div className='about-us-content'>
-        <h1>Welcome to Auction Marketplace!</h1>
-        <h2>About us</h2>
-        <p>
-          Welcome to Auction Marketplace - your exclusive online marketplace where we combine exciting auctions with the opportunity to buy shares of unique items. We believe in providing incredible opportunities for our users by creating an interactive space where every step is an opportunity for discovery and participation.
-
-          <h2>User Profile</h2>
-          Create your personal Auction Marketplace profile to get full access to our platform. Your preferences and interests are important to us, and they will be taken into account to provide you with personalized experiences and offers.
-        </p>
-        <h2>Buying Shares with Items</h2>
-        <p>
-          Immerse yourself in a unique shopping experience by participating in our auctions. Our diverse catalog includes a variety of items from historical artifacts and art to exclusive collector's items. With every purchase, become part of the larger story of Auction Marketplace.
-        </p>
-        <h2>Cause page</h2>
-        <p>
-          We believe in the power of community and value socially responsible activity. Visit our causes page and discover projects and organizations you can donate to with every successful transaction. With your help, we support various public and charitable initiatives and create a better future for everyone.
-        </p>
-        <h2>Content and Information</h2>
-        <p>
-          Regularly follow our news page and blog for interesting stories, articles and interviews. We want to provide you with valuable information that will inspire and enrich your shopping experience at Auction Marketplace.
-        </p>
-        <p>
-          Thank you for being part of our community! We are always here to offer you amazing experiences and opportunities. Auction with us and be part of a better future.
-        </p>
-        <p>
-          With love,
+      <div className="about-us-container">
+        <div className="about-us-section">
+          <h2>About Us</h2>
           <p>
-            The Auction Marketplace team
+            Welcome to Auction Marketplace, where we merge the power of auctions and donations to create a platform that drives positive change and supports meaningful causes. Our mission is to foster a community where individuals, businesses, and organizations come together to make a difference through both commerce and philanthropy.
           </p>
-        </p>
+        </div>
+        <div className="about-us-section">
+          <h3>Vision</h3>
+          <p>
+            At Auction Marketplace, we envision a world where every action, whether buying or giving, contributes to the betterment of society. We strive to build a platform that not only facilitates transactions but also cultivates empathy, generosity, and social responsibility.
+          </p>
+        </div>
+        <div className="about-us-section">
+          <h3>Get Involved</h3>
+          <p>
+            Join us in our mission to create a world where commerce and compassion intersect. Whether you're a buyer, seller, donor, or simply an advocate for positive change, there's a place for you in the Auction Marketplace community. Thank you for being a part of our journey.
+          </p>
+        </div>
+      </div>
+
+      <h3 className='aboutUs-h3'>These People Started Everything:</h3>
+      <div className="founders-container">
+        <div className="founder">
+          <img src='https://ca.slack-edge.com/T55M7NDST-U066GLJT9C7-6afd0d815660-512' alt="Founder 1" />
+          <h4>Teoslava Yordanova</h4>
+          <p>Teoslava is a Highly experienced Fullstack Developer</p>
+        </div>
+        <div className="founder">
+          <img src='https://ca.slack-edge.com/T55M7NDST-U066ZL2A9M2-913bb3537e80-512' alt="Founder 2" />
+          <h4>Luben Kulishev</h4>
+          <p>Savina is an Highly experienced Fullstack Developer</p>
+        </div>
+        <div className="founder">
+          <img src='https://ca.slack-edge.com/T55M7NDST-U067L6EH6TS-b8293e458c8a-512' alt="Founder 3" />
+          <h4>Savina Valchanova</h4>
+          <p>Savina is an Highly experienced Fullstack Developer </p>
+        </div>
       </div>
     </div>
   );
