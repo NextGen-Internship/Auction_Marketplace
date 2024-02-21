@@ -71,7 +71,7 @@ const AboutUsPage: React.FC = () => {
         </div>
       </div>
 
-      <h3 className='aboutUs-h3'>These People Started Everything</h3>
+      <h3 className='aboutUs-h3'>These People Started Everything:</h3>
       <div className="founders-container">
         <div className="founder">
           <img src='https://ca.slack-edge.com/T55M7NDST-U066GLJT9C7-6afd0d815660-512' alt="Founder 1" />

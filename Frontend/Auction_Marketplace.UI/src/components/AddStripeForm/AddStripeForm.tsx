@@ -55,8 +55,8 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       <div className="formbold-form-wrapper">
         <form onSubmit={handleSubmit}>
           <div className="formbold-form-title">
-            <h2>Stripe Form</h2>
-            <p></p>
+            <p>At Auction Marketplace, we strive to provide our users with a seamless and secure payment experience. To achieve this goal, we have partnered with Stripe, a leading online payment processing platform trusted by businesses worldwide.</p>
+            <hr></hr>
           </div>
 
           <div className="formbold-input-flex">

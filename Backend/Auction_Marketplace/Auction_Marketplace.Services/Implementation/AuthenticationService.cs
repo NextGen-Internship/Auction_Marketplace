@@ -7,7 +7,6 @@ using Auction_Marketplace.Data.Models.Google;
 using Auction_Marketplace.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Auction_Marketplace.Services.Constants;
-using Auction_Marketplace.Data.Repositories.Interfaces;
 
 namespace Auction_Marketplace.Services.Implementation
 {
@@ -17,7 +16,6 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
-        private readonly IStripeService _stripeService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IS3Service _s3Service;
@@ -25,7 +23,6 @@ namespace Auction_Marketplace.Services.Implementation
         public AuthenticationService(IUserService userSevice,
                                         ITokenService tokenService,
                                         IEmailService emailService,
-                                        IStripeService stripeService,
                                         UserManager<User> userManager,
                                         SignInManager<User> signInManager,
                                         IConfiguration configuration,
@@ -34,7 +31,6 @@ namespace Auction_Marketplace.Services.Implementation
             _userService = userSevice;
             _emailService = emailService;
             _tokenService = tokenService;
-            _stripeService = stripeService;
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -136,7 +132,7 @@ namespace Auction_Marketplace.Services.Implementation
             }
 
             // ToDO:Seed roles
-            await _userManager.AddToRoleAsync(user, "user");
+            await _userManager.AddToRoleAsync(user, "User");
             var token = _tokenService.GenerateJwtToken(user);
             await _emailService.SendEmail("Register Confirmation Email", registerUser.Email, $"{registerUser.FirstName} {registerUser.LastName}", $"Dear {registerUser.FirstName},\r\n\r\nWelcome to Blankfactor Marketplace! We're delighted to have you on board. Your account has been successfully created.\r\n\r\nIf you have any questions or need assistance, kindly inform us.\r\n\r\nEnjoy exploring and making the most of our services!\r\n\r\nBest regards,\r\n\r\nBlankfactor");
 
