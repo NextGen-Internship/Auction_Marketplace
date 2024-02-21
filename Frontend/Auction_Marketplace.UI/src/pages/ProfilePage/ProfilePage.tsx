@@ -18,7 +18,7 @@ const ProfilePage: React.FC = () => {
     const token = getToken();
 
     const [editMode, setEditMode] = useState(false);
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [profilePicture, setProfilePicture] = useState<File | undefined>(undefined);

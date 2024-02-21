@@ -6,7 +6,7 @@ import ApiService from '../../Services/ApiService';
 import PaymentService from '../../Services/PaymentService';
 import UserService from '../../Services/UserService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import UserDTO from '../../Interfaces/DTOs/UserDTO';
+import PaymentDTO from '../../Interfaces/DTOs/PaymentDTO';
 
 interface Payment {
     date: string;
@@ -15,22 +15,23 @@ interface Payment {
 }
 
 interface PaymentHistoryFormProps {
-    paymentHistory: Payment[];
+    paymentHistory: PaymentDTO[];
     setShowHistory: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory, setShowHistory }) => {
     const token = getToken();
     const apiService = new ApiService;
+    const [userId, setUserId] = useState('');
     const paymentService = new PaymentService(apiService);
     const userService = new UserService(apiService);
     const [, setPaymentHistory] = useState([]);
-    const [user, setUser] = useState<UserDTO>({
+    const [user, setUser] = useState({
+        userId,
         firstName: '',
         lastName: '',
         email: '',
-        userId: 0,
-        profilePicture: undefined
+        profilePicture: ''
     });
 
     const fetchUserProfile = async () => {
@@ -75,25 +76,28 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory,
         <div className='payment-history-container'>
             <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={() => setShowHistory(false)} />
             <h2 className='header-payment-history-container'> Payment History</h2>
-            <table className='table-history'>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Completed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {paymentHistory.map((payment, index) => (
-                        <tr key={index}>
-                            <td>{payment.date}</td>
-                            <td>{payment.amount}</td>
-                            <td>{payment.isCompleted ? 'Completed' : 'Pending'}</td>
+            {paymentHistory.length === 0 ? (
+                <p className='no-payments-label'>No payments available</p>
+            ) : (
+                <table className='table-history'>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Completed</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {paymentHistory.map((payment, index) => (
+                            <tr key={index}>
+                                <td>{payment.date}</td>
+                                <td>{payment.amount}</td>
+                                <td>{payment.isCompleted ? 'Completed' : 'Pending'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };

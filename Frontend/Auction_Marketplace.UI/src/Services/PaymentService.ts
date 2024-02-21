@@ -3,7 +3,7 @@ import ApiResponseDTO from '../Interfaces/DTOs/ApiResponseDTO';
 import ApiService from './ApiService';
 
 class PaymentService {
-  private GET_PAYMENTS_BY_ID_ENDPOINT = import.meta.env.VITE_PAYMENTS_BY_ID_ENDPOINT;
+  private GET_PAYMENT_BY_ID_ENDPOINT = import.meta.env.VITE_GET_PAYMENTS_BY_USER_ID_ENDPOINT;
   private apiService: ApiService;
 
   constructor(apiService: ApiService) {
@@ -11,9 +11,8 @@ class PaymentService {
   }
 
   async getPaymentById(userId: number): Promise<ApiResponseDTO> {
-    return this.apiService.get<ApiResponseDTO>(`${this.GET_PAYMENTS_BY_ID_ENDPOINT}${userId}`);
+    return this.apiService.get<ApiResponseDTO>(`${this.GET_PAYMENT_BY_ID_ENDPOINT}${userId}`);
   }
-
 }
 
 export default PaymentService;

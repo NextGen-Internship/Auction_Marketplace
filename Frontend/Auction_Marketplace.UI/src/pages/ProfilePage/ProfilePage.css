@@ -98,8 +98,8 @@
 }
 
 .history-button {
-  background-color:rgb(140, 211, 225);
-  border:solid 1px #7fa1c7;
+  background-color: rgb(140, 211, 225);
+  border: solid 1px #7fa1c7;
 }
 
 .payment-history-container {
@@ -141,4 +141,8 @@
 .history {
   display: flex;
   justify-content: center;
+}
+
+.no-payments-label {
+  text-align: center;
 }
