@@ -47,19 +47,19 @@ namespace Auction_Marketplace.Services.Implementation
 
         public async Task<Session?> CreateCheckoutSession(DonationAmountViewModel model)
         {
-            var domain = _configuration["Domain"];
+                var domain = _configuration["Domain"];
 
-            var sender = _userRepository.GetByEmailAsync(model.Email);
+                var sender = await _userRepository.GetByEmailAsync(model.Email);
 
-            var receiver = GetUserByCauseId(model.CauseId);
+                var receiver = await GetUserByCauseId(model.CauseId);
 
-            var options = new SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string>
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string>
                 {
                     "card",
                 },
-                LineItems = new List<SessionLineItemOptions>
+                    LineItems = new List<SessionLineItemOptions>
                 {
                     new SessionLineItemOptions
                     {
@@ -75,32 +75,29 @@ namespace Auction_Marketplace.Services.Implementation
                         Quantity = 1
                     },
                 },
-                Mode = "payment",
-                SuccessUrl = $"{domain}/completion",
-                CancelUrl = $"{domain}/cancel",
-                Metadata = new Dictionary<string, string>
+                    Mode = "payment",
+                    SuccessUrl = $"{domain}/completion",
+                    CancelUrl = $"{domain}/cancel",
+                    Metadata = new Dictionary<string, string>
                     {
-                        { "sender_id", sender.Result?.Id.ToString() },
-                        { "receiver_id", receiver.Result?.CustomerId.ToString()}
+                        { "sender_id", sender.Id.ToString() },
+                        { "receiver_id", receiver.CustomerId.ToString()}
                     },
-                PaymentIntentData = new SessionPaymentIntentDataOptions
-                {
-                    TransferData = new SessionPaymentIntentDataTransferDataOptions
+                    PaymentIntentData = new SessionPaymentIntentDataOptions
                     {
-                        Destination = receiver.Result?.CustomerId
+                        TransferData = new SessionPaymentIntentDataTransferDataOptions
+                        {
+                            Destination = receiver.CustomerId
+                        }
                     }
-                }
 
-            };
+                };
 
-            var service = new SessionService();
+                var service = new SessionService();
 
-            var session = await service.CreateAsync(options);
+                var session = await service.CreateAsync(options);
 
-            await AddMoneyToCause(model);
-
-            return session;
-
+                return session;
         }
 
         public async Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId, string winningUserEmail)
@@ -298,7 +295,7 @@ namespace Auction_Marketplace.Services.Implementation
                        break;
                         
                     default:
-                        await HandleCheckoutSessionPaymentSucceeded(stripeEvent);
+                        Console.WriteLine();
                         break;
                }
             }
@@ -310,9 +307,9 @@ namespace Auction_Marketplace.Services.Implementation
 
         private async Task<User?> GetUserByCauseId(int customerId)
         {
-            var cause = _causeRepository.FindCauseById(customerId);
+            var cause = await _causeRepository.FindCauseById(customerId);
 
-            var userId = cause.Result.UserId;
+            var userId = cause.UserId;
 
             var user = await _userRepository.GetUserById(userId);
 
@@ -350,6 +347,8 @@ namespace Auction_Marketplace.Services.Implementation
             var paymentIntent = stripeEvent.Data.Object as Session;
 
             var endUserStripeId = paymentIntent.Metadata.First(m => m.Key == "receiver_id").Value;
+            var endUser = _userRepository.GetUserByCustomerId(endUserStripeId).Result.Id;
+            var cause = _causeRepository.FindCauseByUserId(endUser);
 
             var model = new CreatePaymentViewModel()
             {
@@ -357,10 +356,10 @@ namespace Auction_Marketplace.Services.Implementation
                 Amount = paymentIntent.AmountTotal.Value,
                 IsCompleted = paymentIntent.PaymentStatus == "paid" ? true : false,
                 StartUser = int.Parse(paymentIntent.Metadata.First(m => m.Key == "sender_id").Value),
-                EndUser = _userRepository.GetUserByCustomerId(endUserStripeId).Result.Id
+                EndUser = endUser
             };
 
-            
+            await AddMoneyToCause(model, cause.Result.CauseId);
 
             try
             {
@@ -373,11 +372,10 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-
-        private async Task AddMoneyToCause(DonationAmountViewModel model)
+        private async Task AddMoneyToCause(CreatePaymentViewModel model, int causeId)
         {
-            var cause = await _causeRepository.FindCauseById(model.CauseId);
-            cause.AmountCurrent += (long)model.Amount;
+            var cause = await _causeRepository.FindCauseById(causeId);
+            cause.AmountCurrent += (long)model.Amount / 100;
             await _causeRepository.UpdateCause(cause);
         }
 
