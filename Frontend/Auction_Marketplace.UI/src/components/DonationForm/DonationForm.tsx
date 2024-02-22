@@ -12,7 +12,7 @@ interface DonationFormProps {
 const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
 
   const token = getToken();
-  const [email, setEmail] = useState<string>(''); // State for storing the email
+  const [email, setEmail] = useState<string>(''); 
 
   useEffect(() => {
     if (isTokenExpired()) {
@@ -57,7 +57,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         body: JSON.stringify({
           causeId: causeId,
           amount: donationAmount,
-          email: email // Include the email from JWT
+          email: email 
         }),
       });
 

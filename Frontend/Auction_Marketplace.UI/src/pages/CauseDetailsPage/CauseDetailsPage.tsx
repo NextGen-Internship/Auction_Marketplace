@@ -17,7 +17,6 @@ declare const navigate: (to: string) => void;
 const CauseDetailsPage: React.FC = () => {
   const { causeId } = useParams<{ causeId: string | undefined }>();
   const [cause, setCause] = useState<CauseDTO | null>(null);
-  const [donationHistory, setDonationHistory] = useState<any[]>([]);
   const [isCreator, setIsCreator] = useState(false);
   const [showDonationForm, setShowDonationForm] = useState(false);
   const [showPaymentsForm, setShowPaymentsForm] = useState(false);
@@ -71,15 +70,6 @@ const CauseDetailsPage: React.FC = () => {
       clearToken();
     }
   }, [causeId, token]);
-
-  const fetchDonationHistory = async () => {
-    try {
-      const donationHistoryData = await causeService.fetchPayment();
-      setDonationHistory(donationHistoryData);
-    } catch (error) {
-      console.error('Error fetching donation history:', error);
-    }
-  };
 
   if (!token) {
     return (

@@ -8,10 +8,7 @@ import UserService from '../../Services/UserService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import PaymentDTO from '../../Interfaces/DTOs/PaymentDTO';
 import CauseService from '../../Services/CauseService';
-import { useParams } from 'react-router-dom';
-import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import AuctionService from '../../Services/AuctionService';
-import AuctionDTO from '../../Interfaces/DTOs/AuctionDTO';
 
 interface PaymentHistoryFormProps {
     onClose: () => void;
@@ -24,7 +21,6 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
     const userService = new UserService(apiService);
     const causeService = new CauseService(apiService);
     const auctionService = new AuctionService(apiService);
-    const [cause, setCause] = useState<CauseDTO>();
     const [paymentHistory, setPaymentHistory] = useState<PaymentDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [causeNames, setCauseNames] = useState<{ [key: number]: string }>({});
