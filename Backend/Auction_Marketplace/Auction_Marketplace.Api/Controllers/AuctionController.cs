@@ -98,6 +98,7 @@ namespace Auction_Marketplace.Api.Controllers
         }
 
         [HttpGet("check-final-bid/{auctionId}")]
+        [Authorize]
         public async Task<IActionResult> CheckFinalBid([FromRoute] int auctionId)
         {
             try

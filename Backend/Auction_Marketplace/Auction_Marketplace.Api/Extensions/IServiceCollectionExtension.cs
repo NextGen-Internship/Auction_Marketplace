@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Auction_Marketplace.Services.Jobs;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -90,9 +93,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-
-
-
         private static IServiceCollection AddScopedServiceTypes(this IServiceCollection services, Assembly assembly, Type fromType)
         {
             var serviceTypes = assembly.GetTypes()
@@ -119,6 +119,23 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScopedServiceTypes(typeof(BaseRepository).Assembly, typeof(IRepository));
 
             services.AddDefaultAWSOptions(configuration.GetAWSOptions()).AddAWSService<IAmazonS3>();
+
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                q.AddJob<AuctionCompletionJob>(opts => opts.WithIdentity("AuctionCompletionJob"));
+
+                q.AddTrigger(opts => opts
+                    .ForJob("AuctionCompletionJob")
+                    .WithIdentity("AuctionCompletionJob-trigger")
+                    .WithCronSchedule("0 0 8 * * ?")); 
+            });
+
+            services.AddQuartzHostedService(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
 
             return services;
         }

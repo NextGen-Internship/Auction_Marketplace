@@ -5,6 +5,7 @@ using Auction_Marketplace.Data;
 using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models;
 using Auction_Marketplace.Data.Models.Auction;
+using Auction_Marketplace.Data.Models.Donation;
 using Auction_Marketplace.Data.Repositories.Implementations;
 using Auction_Marketplace.Data.Repositories.Interfaces;
 using Auction_Marketplace.Services.Constants;
@@ -22,11 +23,14 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
         private readonly IS3Service _s3Service;
+        private readonly IEmailService _emailService;
+        private readonly IStripeService _stripeService;
+
 
         public AuctionsService(ApplicationDbContext dbContext,
             IAuctionRepository auctionRepository,
             IHttpContextAccessor contextAccessor,
-            IUserService userService, IS3Service s3Service, IBidRepository bidRepository)
+            IUserService userService, IS3Service s3Service, IBidRepository bidRepository, IEmailService emailService, IStripeService stripeService)
         {
             _dbContext = dbContext;
             _auctionRepository = auctionRepository;
@@ -34,6 +38,8 @@ namespace Auction_Marketplace.Services.Implementation
             _contextAccessor = contextAccessor;
             _userService = userService;
             _s3Service = s3Service;
+            _emailService = emailService;
+            _stripeService = stripeService;
         }
 
         public async Task<Response<Auction>> CreateAuction(NewAuctionViewModel auction)
@@ -67,7 +73,7 @@ namespace Auction_Marketplace.Services.Implementation
                     Name = auction.Name,
                     Description = auction.Description,
                     StartPrice = auction.StartPrice,
-                    EndDate = DateTime.Now.AddMinutes(auction.ExistingDays),
+                    EndDate = DateTime.Now.AddDays(auction.ExistingDays),
                     IsCompleted = false,
                 };
 
@@ -192,11 +198,6 @@ namespace Auction_Marketplace.Services.Implementation
                     existingAuction.Photo = await _s3Service.UploadFileAsync(updatedAuction.Photo, path, fileName);
                 }
 
-                if (existingAuction.EndDate < existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays))
-                {
-                    existingAuction.EndDate = existingAuction.CreatedAt.AddMinutes(updatedAuction.ExistingDays);
-                }
-
                 await _auctionRepository.UpdateAuction(existingAuction);
 
                 return new Response<Auction>
@@ -241,6 +242,7 @@ namespace Auction_Marketplace.Services.Implementation
                 }
 
                 decimal highestBidAmount = bids.Max(b => b.Amount);
+                auction.FinalPrice = highestBidAmount;
 
                 Bid finalBid = bids.FirstOrDefault(b => b.Amount == highestBidAmount);
 
@@ -269,6 +271,41 @@ namespace Auction_Marketplace.Services.Implementation
                     Message = $"An error occurred while checking the finalbid: {ex.Message}"
                 };
             }
+
+
+        }
+
+        public async Task<Response<string>> SendEmailToWinner(int auctionId){
+            var auctionResponse = await GetAuctionById(auctionId);
+            
+            var finalBidResponse = await CheckFinalBid(auctionId);
+            if (!finalBidResponse.Succeed)
+            {
+                return new Response<string>
+                {
+                    Succeed = false,
+                    Message = finalBidResponse.Message
+                };
+            }
+
+            var message = finalBidResponse.Data.Split(" ");
+            string winningUserEmail = message[1];
+            decimal winningBidAmount = decimal.Parse(finalBidResponse.Data.Split("made the final bid of")[1].Replace("BGN", "").Trim());
+
+            string auctionName = auctionResponse.Data.Name;
+            long amount = Convert.ToInt64(auctionResponse.Data.FinalPrice);
+            var session = await _stripeService.CreateCheckoutSessionAuctions(amount, auctionId, winningUserEmail);
+            string strypeLink = session.Url;
+
+            await _emailService.SendEmail("Auction Winner Notification", winningUserEmail, "Bidder", $"Dear Bidder,\r\n\r\nCongratulations!" +
+                $" You've won the auction for {auctionName} with the highest bid of {winningBidAmount} BGN. Here you can make your payment: {strypeLink}");
+
+            return new Response<string>
+            {
+                Succeed = true,
+                Message = $"Email sent successfully to {winningUserEmail}"
+            };
+            
         }
 
         public async Task<Response<List<Auction>>> GetAllAuctionsUserBidded()

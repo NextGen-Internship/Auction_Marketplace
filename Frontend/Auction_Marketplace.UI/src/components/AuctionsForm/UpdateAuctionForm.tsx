@@ -13,7 +13,6 @@ interface FormData {
     name: string;
     description: string;
     photo: File | null;
-    existingDays: number;
 }
 
 const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionId, initialAuctionData }) => {
@@ -21,8 +20,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
-        photo: null,
-        existingDays: 0
+        photo: null
     });
 
     const allowedFileTypes = ['image/jpeg', 'image/png'];
@@ -37,8 +35,7 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
             setFormData({
                 name: initialAuctionData.name,
                 description: initialAuctionData.description,
-                photo: null,
-                existingDays: initialAuctionData.existingDays
+                photo: null
             });
         }
     }, [initialAuctionData]);
@@ -151,18 +148,6 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     <p className='please-upload-photo-p'>
                         Please upload a photo.
                     </p>}
-
-                <label>
-                    Exsisting days:
-                </label>
-                <textarea
-                    id="existingDays"
-                    name="existingDays"
-                    placeholder="exsisting days"
-                    value={formData.existingDays}
-                    onChange={handleInputChange}
-                    required
-                />
 
                 <button type="submit" className='submit-button-cause' onClick={handleUpdateAuction}>Submit</button>
             </form>

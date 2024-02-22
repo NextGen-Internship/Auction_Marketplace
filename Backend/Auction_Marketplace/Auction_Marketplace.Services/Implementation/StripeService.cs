@@ -22,6 +22,7 @@ namespace Auction_Marketplace.Services.Implementation
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserRepository _userRepository;
         private readonly ICauseRepository _causeRepository;
+        private readonly IAuctionRepository _auctionRepository;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
 
@@ -30,6 +31,7 @@ namespace Auction_Marketplace.Services.Implementation
                             IHttpContextAccessor contextAccessor,
                             IUserRepository userRepository,
                             ICauseRepository causeRepository,
+                            IAuctionRepository auctionRepository,
                             IPaymentService paymentService,
                             IUserService userService)
         {
@@ -38,6 +40,7 @@ namespace Auction_Marketplace.Services.Implementation
             _contextAccessor = contextAccessor;
             _userRepository = userRepository;
             _causeRepository = causeRepository;
+            _auctionRepository = auctionRepository;
             _paymentService = paymentService;
             _userService = userService;
         }
@@ -100,7 +103,60 @@ namespace Auction_Marketplace.Services.Implementation
 
         }
 
-        
+        public async Task<Session?> CreateCheckoutSessionAuctions(long amount, int auctionId, string winningUserEmail)
+        {
+            var domain = _configuration["Domain"];
+
+            var sender = _userRepository.GetByEmailAsync(winningUserEmail);
+
+            var receiver = GetUserByAuctionId(auctionId);
+
+            var user = GetUserByAuctionId(auctionId);
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string>
+                {
+                    "card",
+                },
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            Currency = "bgn",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = "Donation for charity cause"
+                            },
+                            UnitAmount = amount * 100,
+                        },
+                        Quantity = 1
+                    },
+                },
+                Mode = "payment",
+                SuccessUrl = $"{domain}/completion",
+                CancelUrl = $"{domain}/cancel",
+                PaymentIntentData = new SessionPaymentIntentDataOptions
+                {
+                    TransferData = new SessionPaymentIntentDataTransferDataOptions
+                    {
+                        Destination = receiver.Result?.CustomerId
+                    }
+                }
+
+            };
+
+            var service = new SessionService();
+
+            var session = await service.CreateAsync(options);
+
+            return session;
+
+        }
+
+
         public async Task CreateConnectedUser(StripeFormViewModel model)
         {
             DateTime dob;
@@ -257,6 +313,17 @@ namespace Auction_Marketplace.Services.Implementation
             var cause = _causeRepository.FindCauseById(customerId);
 
             var userId = cause.Result.UserId;
+
+            var user = await _userRepository.GetUserById(userId);
+
+            return user;
+        }
+
+        private async Task<User?> GetUserByAuctionId(int customerId)
+        {
+            var auction = _auctionRepository.FindAuctionById(customerId);
+
+            var userId = auction.Result.UserId;
 
             var user = await _userRepository.GetUserById(userId);
 
