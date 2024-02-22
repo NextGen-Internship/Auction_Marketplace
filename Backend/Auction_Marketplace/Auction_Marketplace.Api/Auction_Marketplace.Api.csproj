@@ -24,6 +24,9 @@
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
         <PackageReference Include="Amazon.S3" Version="0.31.0" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+        <PackageReference Include="Quartz" Version="3.8.1" />
+        <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.1" />
+        <PackageReference Include="Quartz.AspNetCore" Version="3.8.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -18,6 +18,8 @@ namespace Auction_Marketplace.Services.Interface
         Task<Response<Auction>> UpdateAuction(int auctionId, UpdateAuctionViewModel updatedAuction);
 
         public Task<Response<string>> CheckFinalBid(int auctionId);
+        
+        public Task<Response<string>> SendEmailToWinner(int auctionId);
 
         public Task<Response<List<Auction>>> GetAllAuctionsUserBidded();
     }
