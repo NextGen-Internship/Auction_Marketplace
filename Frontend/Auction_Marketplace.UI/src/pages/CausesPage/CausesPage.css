@@ -116,12 +116,13 @@
 
 .header-cause {
   font-family: "Lucida Console", "Courier New", monospace;
+  max-width: 400px;
   font-size: 30px;
   text-align: center;
   margin-bottom: 20px;
   padding-top: 10px;
   padding-left: 2px;
-  font-family: 'Times New Roman', Times, serif
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .buttons-body-container{

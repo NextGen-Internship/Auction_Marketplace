@@ -89,19 +89,15 @@ const HeartPage: React.FC = () => {
     <div>
       <Navbar showAuthButtons={false} />
       <div className='title-container'>
-        <p className='title'><span role="img" aria-label="heart">❤️</span> Favourite items </p>
+      <p className='title'>Items you bidded for: </p>
       </div>
       <div className='auctions-container'>
-        {currentAuctions.map((auction) => (
-          <div key={auction.id} className='auction-info'>
-            <h3 className='auction-header'>{auction.name}</h3>
-            <img src={auction.photo} alt={auction.name} className='auction-image' />
-            <Link to={`/auctions/details/${auction.auctionId}`} className='details-button'>
-              Details
-            </Link>
-          </div>
-        ))}
-      </div>
+      {currentAuctions.map((auction) => (
+      <Link key={auction.id} to={`/auctions/details/${auction.auctionId}`} className='auction-info'>
+          <img src={auction.photo} alt={auction.name} className='auction-image' />
+      </Link>
+    ))}
+  </div>
       {renderMiniPages()}
     </div>
   );
