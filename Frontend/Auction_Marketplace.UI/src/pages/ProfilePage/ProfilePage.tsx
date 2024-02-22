@@ -140,6 +140,10 @@ const ProfilePage: React.FC = () => {
         }
     };
 
+    const handleClose = () => {
+        setShowHistory(false);
+    }
+
     const handleEditPictureClick = () => {
         const fileInput = document.getElementById('user-avatar');
         if (fileInput) {
@@ -255,7 +259,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                 )}
-                {showHistory && <PaymentHistoryForm paymentHistory={paymentHistory} setShowHistory={setShowHistory}/>}
+                {showHistory && <PaymentHistoryForm onClose={handleClose}/>}
             </form>
         </div>
     );

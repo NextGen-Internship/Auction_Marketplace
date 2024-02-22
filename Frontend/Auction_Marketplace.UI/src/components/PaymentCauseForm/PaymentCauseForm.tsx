@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './PaymentCauseForm.css'
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
+import PaymentService from '../../Services/PaymentService';
 
 interface PaymentsFormProps {
     causeId: number;
@@ -12,12 +13,21 @@ const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => 
     const [payments, setPayments] = useState<any[]>([]);
     const apiService = new ApiService();
     const causeService = new CauseService(apiService);
+    const paymentService = new PaymentService(apiService);
+    const [userId, setUserId] = useState('');
+    const [user, setUser] = useState({
+        userId,
+        firstName: '',
+        lastName: '',
+        email: '',
+        profilePicture: ''
+    });
 
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const paymentData = await causeService.fetchPaymentsByCauseId(causeId);
-                setPayments(paymentData);
+                const paymentData = await paymentService.getPaymentByCauseId(causeId);
+                setPayments(paymentData.data);
             } catch (error) {
                 console.error('Error fetching payments:', error);
             }

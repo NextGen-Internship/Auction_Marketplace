@@ -7,7 +7,7 @@ namespace Auction_Marketplace.Services.Interface
     {
         void CreatePayment(CreatePaymentViewModel model);
 
-        Task<IList<Payment>> GetPaymentsAsync(UserPaymentsViewModel model);
+        Task<IList<Payment>> GetPaymentsAsync(int userId);
 
     }
 }

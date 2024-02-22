@@ -8,76 +8,72 @@ import UserService from '../../Services/UserService';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import PaymentDTO from '../../Interfaces/DTOs/PaymentDTO';
 
-interface Payment {
-    date: string;
-    amount: number;
-    isCompleted: boolean;
-}
-
 interface PaymentHistoryFormProps {
-    paymentHistory: PaymentDTO[];
-    setShowHistory: React.Dispatch<React.SetStateAction<boolean>>;
+    onClose: () => void;
 }
 
-const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory, setShowHistory }) => {
+const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({onClose}) => {
     const token = getToken();
     const apiService = new ApiService;
-    const [userId, setUserId] = useState('');
     const paymentService = new PaymentService(apiService);
     const userService = new UserService(apiService);
-    const [, setPaymentHistory] = useState([]);
-    const [user, setUser] = useState({
-        userId,
-        firstName: '',
-        lastName: '',
-        email: '',
-        profilePicture: ''
-    });
+    const [paymentHistory, setPaymentHistory] = useState<PaymentDTO[]>([]);
+    const [loading, setLoading] = useState<boolean>(false); 
 
-    const fetchUserProfile = async () => {
+    const fetchUserData = async () => {
         try {
             if (token) {
                 const response: ApiResponseDTO = await userService.fetchUser();
-                const userData = response.data;
                 if (response.succeed) {
-                    setUser(userData);
+                    const userId = response.data.userId;
+                    return userId;
                 }
             }
         } catch (error) {
             console.error('Error during user profile fetch:', error);
         }
+        return null;
     };
 
-    const fetchPaymentHistory = async () => {
+    const handleClose = () => {
+        onClose();
+        window.history.back();
+    }
+
+    const fetchPaymentHistory = async (userId: number | null) => {
         try {
-            if (token) {
-                const response: ApiResponseDTO = await paymentService.getPaymentById(Number(user.userId));
-                setPaymentHistory(response.data);
+            if (userId) {
+                setLoading(true);
+                const response = await paymentService.getPaymentByUserId();
+                console.log(response);
+                setPaymentHistory(response as unknown as PaymentDTO[]);
             }
         } catch (error) {
             console.error('Error fetching payment history:', error);
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
-        if (token) {
-            fetchUserProfile();
-        }
-        if (isTokenExpired()) {
+        if (token && !isTokenExpired()) {
+            const fetchUserProfileAndPaymentHistory = async () => {
+                const userId = await fetchUserData();
+                fetchPaymentHistory(userId);
+            };
+            fetchUserProfileAndPaymentHistory();
+        } else {
             clearToken();
         }
     }, [token]);
-
-    useEffect(() => {
-        fetchPaymentHistory();
-    },);
-
+    
     return (
         <div className='payment-history-container'>
-            <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={() => setShowHistory(false)} />
+            <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={handleClose}/>
             <h2 className='header-payment-history-container'> Payment History</h2>
-            {paymentHistory.length === 0 ? (
-                <p className='no-payments-label'>No payments available</p>
+            {loading ? ( 
+                <div>Loading...</div>
             ) : (
                 <table className='table-history'>
                     <thead>
@@ -85,14 +81,16 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory,
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Completed</th>
+                            <th>Cause</th>
                         </tr>
                     </thead>
                     <tbody>
                         {paymentHistory.map((payment, index) => (
                             <tr key={index}>
-                                <td>{payment.date}</td>
+                                <td>{payment.createdAt}</td>
                                 <td>{payment.amount}</td>
-                                <td>{payment.isCompleted ? 'Completed' : 'Pending'}</td>
+                                <td>{payment.isCompleted.toString()}</td>
+                                <td>{payment.causeId}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -101,4 +99,5 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ paymentHistory,
         </div>
     );
 };
+
 export default PaymentHistoryForm;
