@@ -18,7 +18,6 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
     if (isTokenExpired()) {
       clearToken();
     } else {
-      // Decode JWT and extract email
       const decoded = jwtDecode(token);
       setEmail(decoded.email);
     }
