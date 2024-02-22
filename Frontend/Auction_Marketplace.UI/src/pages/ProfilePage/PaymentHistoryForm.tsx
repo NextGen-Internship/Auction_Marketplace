@@ -115,9 +115,9 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
                         <tr>
                             <th>Date</th>
                             <th>Amount</th>
-                            <th>Completed</th>
                             <th>Cause</th>
                             <th>Auction</th>
+                            <th>Completed</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,7 +125,6 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
                             <tr key={index}>
                                 <td>{payment.createdAt}</td>
                                 <td>{payment.amount}</td>
-                                <td>{payment.isCompleted.toString()}</td>
                                 <td>
                                     {payment.causeId !== null ? (
                                         causeNames[payment.causeId]
@@ -140,6 +139,7 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
                                         '-'
                                     )}
                                 </td>
+                                <td>{payment.isCompleted.toString()}</td>
                             </tr>
                         ))}
                     </tbody>
