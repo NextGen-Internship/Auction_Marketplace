@@ -89,7 +89,7 @@ const HeartPage: React.FC = () => {
     <div>
       <Navbar showAuthButtons={false} />
       <div className='title-container'>
-      <p className='title'>Items you bidded for: </p>
+      <p className='title'>ITEMS YOU BIDDED FOR: </p>
       </div>
       <div className='auctions-container'>
       {currentAuctions.map((auction) => (
