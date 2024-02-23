@@ -1,6 +1,7 @@
 .cause-details-container {
     margin-top: 10%;
-    margin-bottom: 10%;
+    margin-bottom: 6%;
+    width: 723px;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
@@ -66,7 +67,7 @@
 
 .back-causes-button {
     transform: translateX(-50%);
-    background-color: #007bff;
+    background-color: #6c96c3;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -76,12 +77,15 @@
     font-size: 16px;
     margin-bottom: 30px;
 }
+.back-causes-button:hover {
+    background-color: #063f62;
+}
 
 .donate-button {
     display: block;
     margin-top: 20px;
     padding: 10px 15px;
-    background-color: #145930;
+    background-color: #28a745;
     color: #fff;
     text-decoration: none;
     border: none;
@@ -91,10 +95,51 @@
 }
 
 .donate-button:hover {
-    background-color: #23462f;
+    background-color: #063f62;
 }
 
 .donate-button::before {
     content: '\2764\FE0E';
     margin-right: 8px;
+}
+
+.donation-history-container {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.donation-history-container h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.donation-history-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.donation-history-container ul li {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #666;
+}
+
+.payments-button {
+    margin-left: 20px;
+    background-color: #6c96c3;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.payments-button:hover {
+    background-color: #063f62;
 }

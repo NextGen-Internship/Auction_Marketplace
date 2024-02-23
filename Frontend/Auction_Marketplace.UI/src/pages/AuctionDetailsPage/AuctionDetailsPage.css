@@ -126,3 +126,19 @@ input[type="number"] {
   font-size: 18px;
   margin-top: 40px;
 }
+
+.input-bid-invalid {
+  border: 1px solid red;
+}
+
+.input-bid-invalid::placeholder {
+  color: red;
+}
+
+.label-bid {
+  margin-right: 10px;
+}
+
+.time-left {
+  font-size: medium;
+}
