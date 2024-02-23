@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link} from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import CauseService from '../../Services/CauseService';
 import ApiService from '../../Services/ApiService';
@@ -7,29 +7,63 @@ import CauseDTO from '../../Interfaces/DTOs/CauseDTO';
 import './CauseDetailsPage.css';
 import DonationForm from '../../Components/DonationForm/DonationForm.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx';
+import PaymentCauseForm from '../../Components/PaymentCauseForm/PaymentCauseForm.tsx';
+import UserDTO from '../../Interfaces/DTOs/UserDTO.ts';
+import UserService from '../../Services/UserService.ts';
+import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO.ts';
 
 declare const navigate: (to: string) => void;
 
 const CauseDetailsPage: React.FC = () => {
   const { causeId } = useParams<{ causeId: string | undefined }>();
   const [cause, setCause] = useState<CauseDTO | null>(null);
+  const [isCreator, setIsCreator] = useState(false);
   const [showDonationForm, setShowDonationForm] = useState(false);
+  const [showPaymentsForm, setShowPaymentsForm] = useState(false);
   const id = Number(causeId);
-   const token = getToken();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiService = new ApiService();
-        const causeService = new CauseService(apiService);
-        const causeResponse = await causeService.getCauseById(id);
-        const fetchedCause: CauseDTO = causeResponse.data;
-        setCause(fetchedCause);
-      } catch (error) {
-        console.error('Error fetching cause details:', error);
-      }
-    };
+  const apiService = new ApiService();
+  const causeService = new CauseService(apiService);
+  const userService = new UserService(apiService);
+  const token = getToken();
+  const [user, setUser] = useState<UserDTO>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    userId: 0,
+  });
 
+  const fetchUserProfile = async () => {
+    try {
+      if (token) {
+        const response: ApiResponseDTO = await userService.fetchUser();
+        const userData = response.data;
+        if (response.succeed) {
+          setUser(userData);
+          user.userId = userData.userId
+        }
+      }
+    } catch (error) {
+      console.error('Error during user profile fetch:', error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const causeResponse = await causeService.getCauseById(id);
+      const fetchedCause: CauseDTO = causeResponse.data;
+      setCause(fetchedCause);
+
+      if (fetchedCause.userId == user.userId) {
+        setIsCreator(true);
+      }
+    } catch (error) {
+      console.error('Error fetching cause details:', error);
+    }
+  };
+
+  useEffect(() => {
     if (token) {
+      fetchUserProfile();
       fetchData();
     }
     if (isTokenExpired()) {
@@ -68,38 +102,53 @@ const CauseDetailsPage: React.FC = () => {
     setShowDonationForm(true);
   };
 
-  const handleFormClose = () => {
+  const handlePaymentClick = () => {
     setShowDonationForm(false);
+    setShowPaymentsForm(true);
   };
+
+  const handleDonationFormClose = () => {
+    setShowDonationForm(false);
+    setShowPaymentsForm(false);
+  };
+
+  const handlePaymentFormClose = () => {
+    setShowPaymentsForm(false);
+    setShowDonationForm(false);
+  }
 
   return (
     <>
-    <Navbar showAuthButtons={false} />
-    <div className="cause-details-container">
-      {!showDonationForm && (
-        <>
-          <h2 className='head'>{cause.name}</h2>
-          <p className='description-cause'>{cause.description}</p>
-          <img src={cause.photo} alt={cause.name} className="cause-details-image" />
-          <div className="amount-details">
-            <div className="amount-line">
-              <div className="line full-line"></div>
-              <span className="money-amount">BGN {cause.amountNeeded}</span>
+      <Navbar showAuthButtons={false} />
+      {!showDonationForm && !showPaymentsForm && (
+        <div className="cause-details-container">
+          <>
+            <h2 className='head'>{cause.name}</h2>
+            <p className='description-cause'>{cause.description}</p>
+            <img src={cause.photo} alt={cause.name} className="cause-details-image" />
+            <div className="amount-details">
+              <div className="amount-line">
+                <div className="line full-line"></div>
+                <span className="money-amount">BGN {cause.amountNeeded}</span>
+              </div>
+              <div className="amount-line">
+                <div className={`line ${getLineColor(cause.amountCurrent, cause.amountNeeded)}`}></div>
+                <span className="money-amount">BGN {cause.amountCurrent}</span>
+              </div>
             </div>
-            <div className="amount-line">
-              <div className={`line ${getLineColor(cause.amountCurrent, cause.amountNeeded)}`}></div>
-              <span className="money-amount">BGN {cause.amountCurrent}</span>
-            </div>
-          </div>
-          <button className="donate-button" onClick={handleDonateClick}>Donate</button>
+            <div className='buttons-cause-details'>
+              <button className="donate-button" onClick={handleDonateClick}>Donate</button>
 
-          <Link to={`/causes`} className="back-causes-button">
-            Back to Causes
-          </Link>
-        </>
+              <Link to={`/causes`} className="back-causes-button">
+                Back to Causes
+              </Link>
+              {isCreator && <button className="payments-button" onClick={handlePaymentClick}>Payments</button>}
+            </div>
+          </>
+        </div>
       )}
-      {showDonationForm && <DonationForm causeId={id} onClose={handleFormClose} />}
-    </div>
+      {showDonationForm && <DonationForm causeId={id} onClose={handleDonationFormClose} />}
+      {showPaymentsForm && <PaymentCauseForm causeId={id} onClose={handlePaymentFormClose} />}
     </>
   );
 };

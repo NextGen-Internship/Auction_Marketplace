@@ -10,9 +10,9 @@ interface DonationFormProps {
 }
 
 const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
-  
+
   const token = getToken();
-  const [email, setEmail] = useState<string>(''); // State for storing the email
+  const [email, setEmail] = useState<string>(''); 
 
   useEffect(() => {
     if (isTokenExpired()) {
@@ -22,7 +22,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
       setEmail(decoded.email);
     }
   }, [token]);
-  
+
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -47,7 +47,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     try {
       const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
         method: 'POST',
@@ -57,14 +57,14 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         body: JSON.stringify({
           causeId: causeId,
           amount: donationAmount,
-          email: email // Include the email from JWT
+          email: email 
         }),
       });
 
       if (response.ok) {
         const responseData = await response.json();
 
-        const redirectUrl = responseData.returnUrl; 
+        const redirectUrl = responseData.returnUrl;
         console.log('Checkout session created successfully');
         window.location.href = redirectUrl;
       } else {
@@ -98,10 +98,11 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
         </div>
         <div className='buttons'>
           <form onSubmit={handleSubmit}>
-            <button type="submit" className="btn">Checkout</button>
+            <button type="submit" className="checkout-button">Checkout</button>
           </form>
           <button className='close-btn' onClick={onClose}>Close</button>
         </div>
+
       </div>
     </div>
   );

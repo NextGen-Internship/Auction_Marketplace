@@ -103,6 +103,7 @@ const LoginPage: React.FC = () => {
       if (loginResponse.succeed) {
         console.log('Authentication successful');
         sessionStorage.setItem('token', loginResponse.data);
+        localStorage.setItem('token', loginResponse.data)
         navigate('/home');
       }
     } catch (error) {

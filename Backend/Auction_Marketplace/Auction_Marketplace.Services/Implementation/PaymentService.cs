@@ -49,9 +49,9 @@ namespace Auction_Marketplace.Services.Implementation
             }
         }
 
-        public async Task<IList<Payment>> GetPaymentsAsync(UserPaymentsViewModel model)
+        public async Task<IList<Payment>> GetPaymentsAsync(int userId)
         {
-            return await _paymentRepository.GetPaymentsByUserId(model.UserId);
+            return await _paymentRepository.GetPaymentsByUserId(userId);
         }
     }
 }
