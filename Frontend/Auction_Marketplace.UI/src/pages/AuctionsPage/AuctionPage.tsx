@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
 import AuctionService from '../../Services/AuctionService';
 import ApiService from '../../Services/ApiService';
-import UpdateAuctionForm from '../../Components/AuctionsForm/UpdateAuctionForm';
+import UpdateAuctionForm from '../../components/AuctionsForm/UpdateAuctionForm';
 import UserDTO from '../../Interfaces/DTOs/UserDTO';
 import UpdateAuctionDTO from '../../Interfaces/DTOs/UpdateAuctionDTO';
 import UserService from '../../Services/UserService';

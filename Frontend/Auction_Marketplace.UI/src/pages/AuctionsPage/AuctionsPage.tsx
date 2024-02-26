@@ -172,6 +172,7 @@ const AuctionsPage: React.FC = ({ }) => {
 
             if (hasStripeAccount) {
                 setShowNewAuctionForm(true);
+                 
             } else {
                 setShowAddStrypeForm(true);
                 setShowNewAuctionForm(false);
