@@ -134,3 +134,63 @@
 .carousel .control-dots {
   position: relative;
 }
+
+@media (max-width: 1400px) {
+  .product-section {
+    margin-top: 180px; /* Reduce margin-top */
+    padding: 20px; /* Reduce padding */
+  }
+
+  .product {
+    width: calc(55% - 20px); /* Adjust width for smaller screens */
+    margin: 10px; /* Reduce margin */
+  }
+}
+
+
+@media (max-width: 767px) {
+  .product-section {
+    margin-top: 40px; /* Reduce margin-top */
+    padding: 20px; /* Reduce padding */
+  }
+
+  .product {
+    width: calc(70% - 20px); /* Adjust width for smaller screens */
+    margin: 10px; /* Reduce margin */
+  }
+
+  .product h3 {
+    font-size: 20px; /* Reduce font size */
+    margin: 10px 0; /* Reduce margin */
+  }
+
+  .product p {
+    font-size: 16px; /* Reduce font size */
+    margin: 10px; /* Reduce margin */
+    margin-top: 20px; /* Reduce top margin */
+  }
+
+  .view-all-button {
+    width: 150px; /* Reduce button width */
+    margin: 20px auto; /* Reduce margin */
+    padding: 12px 16px; /* Increase padding */
+    font-size: 16px; /* Reduce font size */
+  }
+
+  .carousel {
+    width: 100%; /* Adjust carousel width for smaller screens */
+  }
+
+  .carousel .slide {
+    margin-top: 20px; /* Reduce margin-top */
+  }
+
+  .carousel .slide img {
+    max-width: 50%; /* Ensure images don't overflow */
+    height: auto; /* Ensure images maintain aspect ratio */
+  }
+
+  .carousel-root {
+    margin-top: 40px; /* Adjust margin-top to ensure carousel visibility */
+  }
+}

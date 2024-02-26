@@ -7,11 +7,10 @@
   top: 0;
   left: 0;
   width: 100%;
-  margin-right: 20px;
   background-color: white;
-  padding: 0px 9px;
+  padding: 10px 20px; /* Increased padding for better touch interaction */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .nav-container {
@@ -31,35 +30,34 @@
 }
 
 .nav-item {
-  color: black; 
+  color: black;
   text-decoration: none;
-  margin-right: 10px; 
-  font-size: 19px; 
+  margin-right: 10px;
+  font-size: 19px; /* Reduced font size for smaller screens */
   transition: color 0.3s ease;
-  padding: 5px 10px; 
-  border: 2px solid transparent; 
+  padding: 5px 10px;
+  border: 2px solid transparent;
   white-space: nowrap;
 }
 
-.heart-page-link{
+.heart-page-link {
   color: rgb(241, 104, 150);
-  font-size: 32px;
+  font-size: 30px; /* Reduced font size for smaller screens */
   text-decoration: none;
   margin-right: 5px;
 }
 
-.heart{
+.heart {
   margin-right: 10%;
 }
 
 .nav-item:hover {
-  color: blue; 
+  color: blue;
 }
 
 .nav-item.active {
   font-weight: bold;
-  border-color: green; 
-
+  border-color: green;
 }
 
 .nav-links-user {
@@ -69,39 +67,12 @@
 
 .logo {
   width: 110px;
-} 
-
-
-@media (max-width: 1395px) {
-  .nav-item {
-    margin-right: 10px;
-  }
-
-  .logo {
-    width: 100px; 
-  }
-}
-
-@media (max-width: 710px) {
-  .nav-links-default {
-    justify-content: flex-start;
-  }
-
-  .nav-item {
-    margin-right: 0;
-    margin-bottom: 10px; 
-    justify-content:center;
-  }
-
-  .logo {
-    width: 100px;
-  }
 }
 
 .profile-picture-container {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%; 
+  width: 38px; /* Reduced size for smaller screens */
+  height: 38px; /* Reduced size for smaller screens */
+  border-radius: 50%;
   overflow: hidden;
   border: 1px solid black;
 }
@@ -109,9 +80,53 @@
 .profile-picture {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 .profile-picture:hover {
   cursor: pointer;
+}
+
+/* Media query for screens smaller than 768px (typical phones) */
+@media (max-width: 767px) {
+  .nav-container {
+    flex-direction: row; /* Arrange components in one row */
+    justify-content: space-around; /* Add space between components */
+    align-items: center; /* Align items vertically */
+  }
+  
+  .logo-container {
+    display: none; /* Hide the logo on small screens */
+  }
+
+  .nav-links-default {
+    display: flex; /* Ensure the nav links are displayed */
+    flex-direction: row; /* Arrange nav links in one row */
+    justify-content: flex-end; /* Align nav links to the right */
+    align-items: center; /* Align items vertically */
+  }
+
+  .nav-item {
+    margin-right: 2px; /* Add space between nav items */
+    font-size: 14px; /* Adjust font size */
+    padding: 3px 8px
+  }
+
+  .heart {
+    margin-right: 10px; /* Add space between heart icon and profile picture */
+  }
+
+  .profile-picture-container {
+    width: 30px; /* Reduce size of profile picture */
+    height: 30px; /* Reduce size of profile picture */
+    border: none; /* Remove border */
+  }
+
+  .heart-page-link{
+    font-size: 24px;
+  }
+
+  .nav-links-user{
+    margin-left: 14px;
+  }
 }
