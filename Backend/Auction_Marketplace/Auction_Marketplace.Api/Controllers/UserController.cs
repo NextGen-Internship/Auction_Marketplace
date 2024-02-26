@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Auction_Marketplace.Data.Entities;
 using Auction_Marketplace.Data.Models.User;
 using Auction_Marketplace.Services.Implementation;
 using Auction_Marketplace.Services.Interface;
@@ -17,6 +18,20 @@ namespace Auction_Marketplace.Api.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet("get-by-email/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var response = await _userService.GetByEmailAsync(email);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet]

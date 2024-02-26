@@ -12,7 +12,9 @@ interface DonationFormProps {
 const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
 
   const token = getToken();
-  const [email, setEmail] = useState<string>(''); 
+  
+  const [email, setEmail] = useState<string>(''); // State for storing the email
+  const [submitted, setSubmitted] = useState<boolean>(false); // State to track form submission
 
   useEffect(() => {
     if (isTokenExpired()) {
@@ -22,7 +24,7 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
       setEmail(decoded.email);
     }
   }, [token]);
-
+  
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -33,7 +35,6 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
       </div>
     );
   }
-
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
 
   const handleAmountButtonClick = (amount: number) => {
@@ -47,6 +48,20 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setSubmitted(true); // Set submitted to true when form is submitted
+
+    // Check if donationAmount is less than or equal to zero or NaN
+    if (donationAmount === null || donationAmount <= 0 || isNaN(donationAmount)) {
+      console.error('Invalid donation amount');
+      return; // Stop further execution
+    }
+
+    if (!/^\d+$/.test(donationAmount.toString())) {
+      console.error("Invalid donation amount.");
+      return;
+      
+    }
 
     try {
       const response = await fetch('https://localhost:7141/api/CheckoutApi/create-session', {
@@ -95,6 +110,9 @@ const DonationForm: React.FC<DonationFormProps> = ({ onClose, causeId }) => {
             value={donationAmount !== null ? donationAmount : ''}
             onChange={handleCustomAmountChange}
           />
+          {submitted && (donationAmount === null || donationAmount <= 0 || isNaN(donationAmount) || !/^\d+$/.test(donationAmount.toString())) && (
+            <p className="please-upload-photo-p">Invalid donation amount.</p>
+          )}
         </div>
         <div className='buttons'>
           <form onSubmit={handleSubmit}>

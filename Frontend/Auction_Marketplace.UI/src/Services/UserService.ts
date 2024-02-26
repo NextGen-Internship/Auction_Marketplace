@@ -24,6 +24,7 @@ class UserService {
   private GOOGLE_LOGIN_ENDPOINT = import.meta.env.VITE_GOOGLE_LOGIN_ENDPOINT;
   private LOGOUT_ENDPOINT = import.meta.env.VITE_LOGOUT_ENDPOINT;
   private GET_USER_ENDPOINT = import.meta.env.VITE_GET_USER_ENDPOINT;
+  private GET_USER_BY_EMAIL = import.meta.env.VITE_GET_USER_BY_EMAIL_ENDPOINT;
   private UPDATE_USER_ENDPOINT = import.meta.env.VITE_UPDATE_USER_ENDPOINT;
 
   private apiService: ApiService;
@@ -75,6 +76,10 @@ class UserService {
     }
 
     return this.apiService.put<ApiResponseDTO>(this.UPDATE_USER_ENDPOINT, formData);
+  }
+
+  async getUserByEmail(email: string): Promise<ApiResponseDTO> {
+    return this.apiService.get<ApiResponseDTO>(`${this.GET_USER_BY_EMAIL}${email}`);
   }
 
 }
