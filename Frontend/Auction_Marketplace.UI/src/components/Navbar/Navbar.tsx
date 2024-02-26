@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "./Navbar.css";
-import logo from "../../assets/Marketplace.pdf.png";
+import logo from "../../assets/Marketplace.svg";
 import NavbarProps from '../../Interfaces/ComponentProps';
 import { getToken } from '../../utils/GoogleToken';
 import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
@@ -13,7 +13,7 @@ const userService = new UserService(apiService);
 
 const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const token = getToken();
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 

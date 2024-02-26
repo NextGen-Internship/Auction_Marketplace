@@ -50,7 +50,6 @@ const AddStripeForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     } catch (error) {
       console.error('Error:', error);
       navigate('/home');
-      alert("Invalid stipe data.");
       location.reload();
     }
   };

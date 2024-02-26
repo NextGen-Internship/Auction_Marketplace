@@ -96,3 +96,53 @@
 .input-user-names {
   width: 62%;
 }
+
+.history-button {
+  background-color: rgb(140, 211, 225);
+  border: solid 1px #7fa1c7;
+}
+
+.payment-history-container {
+  border-radius: 6%;
+  padding: 25px;
+  background-color: #ffffff;
+}
+
+.header-payment-history-container {
+  font-size: 1.5rem;
+  text-align: center;
+  padding-bottom: inherit;
+}
+
+.table-history {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-history th,
+.table-history td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table-history th {
+  background-color: #f2f2f2;
+}
+
+.table-history tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-history tr:hover {
+  background-color: #ddd;
+}
+
+.history {
+  display: flex;
+  justify-content: center;
+}
+
+.no-payments-label {
+  text-align: center;
+}

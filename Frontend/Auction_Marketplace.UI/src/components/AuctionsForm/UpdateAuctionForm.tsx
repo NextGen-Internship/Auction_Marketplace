@@ -28,6 +28,8 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
     const auctionService = new AuctionService(apiService);
     const navigate = useNavigate();
     const [photoError, setPhotoError] = useState<string>('');
+    const [nameError, setNameError] = useState<string>('');
+    const [descriptionError, setDescriptionError] = useState<string>('');
     const [submitted, setSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
@@ -62,16 +64,36 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
             setPhotoError('Please upload a photo.');
             return;
         }
-        else {
-            try {
-                const updatedAuction = await auctionService.updateAuction(auctionId, formData);
-                navigate('/auctions');
-                handleClose;
 
-            } catch (error) {
-                console.error('Error updating auction:', error);
-            }
-        };
+        if (!formData.name) {
+            setNameError('Please enter a name.');
+            return;
+        }
+
+        if (!formData.description) {
+            setDescriptionError('Please enter a description.');
+            return;
+        }
+
+        if (formData.description.length < 100) {
+            setDescriptionError("Description should be at least 100 characters.");
+            return;
+        }
+
+        if (formData.description.length > 1000) {
+            setDescriptionError("Description should not be more than 1000 characters.");
+            return;
+        }
+
+        try {
+            const updatedAuction = await auctionService.updateAuction(auctionId, formData);
+            navigate('/auctions');
+            handleClose;
+
+        } catch (error) {
+            console.error('Error updating auction:', error);
+        }
+
     }
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -124,6 +146,11 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     onChange={handleInputChange}
                     required
                 />
+                {submitted && !formData.name &&
+                    <p className='error-message'>
+                        {nameError || 'Name is required.'}
+                    </p>
+                }
 
                 <label>
                     Description:
@@ -136,6 +163,25 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     onChange={handleInputChange}
                     required
                 />
+                {submitted &&
+                    !formData.description &&                    <p className='error-message'>
+                        {descriptionError || 'Description is required'}
+                    </p>
+                }
+
+                {submitted &&
+                    formData.description.length > 0 &&
+                    formData.description.length < 100 && (
+                        <p className="please-upload-photo-p">
+                            Description should be at least 100 characters.
+                        </p>
+                    )}
+
+                {submitted && formData.description.length > 1000 && (
+                    <p className="please-upload-photo-p">
+                        Description should not be more than 1000 characters.
+                    </p>
+                )}
 
                 <input
                     type="file"
@@ -145,9 +191,10 @@ const UpdateAuctionForm: React.FC<UpdateAuctionFormProps> = ({ onClose, auctionI
                     accept="image/*"
                 />
                 {submitted && !formData.photo &&
-                    <p className='please-upload-photo-p'>
-                        Please upload a photo.
-                    </p>}
+                    <p className='error-message'>
+                        {photoError || 'Please upload a photo.'}
+                    </p>
+                }
 
                 <button type="submit" className='submit-button-cause' onClick={handleUpdateAuction}>Submit</button>
             </form>

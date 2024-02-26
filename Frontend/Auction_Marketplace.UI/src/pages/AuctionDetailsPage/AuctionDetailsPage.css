@@ -62,7 +62,7 @@
   font-size: 20px;
   margin-right: 20px;
   margin-bottom: 15px;
-  margin-top: 80px;
+  margin-top: 50px;
 }
 
 .start-price {
@@ -125,4 +125,20 @@ input[type="number"] {
 .user-container {
   font-size: 18px;
   margin-top: 40px;
+}
+
+.input-bid-invalid {
+  border: 1px solid red;
+}
+
+.input-bid-invalid::placeholder {
+  color: red;
+}
+
+.label-bid {
+  margin-right: 10px;
+}
+
+.time-left {
+  font-size: medium;
 }

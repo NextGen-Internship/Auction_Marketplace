@@ -12,9 +12,9 @@ const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [, setFirstNameError] = useState<string | null>(null);
-  const [, setLastNameError] = useState<string | null>(null);
+  const [password, setPassword] = useState(''); 
+  const [firstNameError, setFirstNameError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
@@ -87,20 +87,33 @@ const RegisterPage: React.FC = () => {
   };
 
   const validatePassword = (input: string) => {
-    const passwordRegex = /^.{6,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
     return passwordRegex.test(input);
+  };
+
+  const validateName = (input: string) => {
+    if (!input.trim()) {
+      return 'Name cannot be empty';
+    }
+    if (!/^[A-Za-z]+$/.test(input)) {
+      return 'Name can only contain letters';
+    }
+    if (input.length > 32) {
+      return 'Name can have maximum 64 characters';
+    }
+    return null; 
   };
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setFirstName(inputValue);
-    setFirstNameError(inputValue);
+    setFirstNameError(validateName(inputValue));
   };
 
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setLastName(inputValue);
-    setLastNameError(inputValue);
+    setLastNameError(validateName(inputValue));
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +125,7 @@ const RegisterPage: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setPassword(inputValue);
-    setPasswordError(validatePassword(inputValue) ? null : 'Invalid password format');
+    setPasswordError(validatePassword(inputValue) ? null : 'One uppercase letter, one digit and at least 6 characters long');
   };
 
   const handleRegister = async () => {
@@ -187,7 +200,7 @@ const RegisterPage: React.FC = () => {
           onKeyDown={handleKeyDownEnter}
           required
         />
-
+        {firstNameError && <span className="error-message">{firstNameError}</span>}
         <label htmlFor="lastName"></label>
         <input
           type="text"
@@ -199,7 +212,7 @@ const RegisterPage: React.FC = () => {
           onKeyDown={handleKeyDownEnter}
           required
         />
-
+          {lastNameError && <span className="error-message">{lastNameError}</span>}
         <label htmlFor="email"></label>
         <input
           type="email"
@@ -230,7 +243,7 @@ const RegisterPage: React.FC = () => {
           Create Account
         </button>
 
-        <Link to="/">
+        <Link to="/login">
           <label className='register-login-label'>
             You have a profile? Sign in here.
           </label>

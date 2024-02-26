@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './AddCauseForm.css';
-import ApiService from '../../Services/ApiService';
-import ApiResponseDTO from '../../Interfaces/DTOs/ApiResponseDTO';
-import CauseService from '../../Services/CauseService';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import "./AddCauseForm.css";
+import ApiService from "../../Services/ApiService";
+import ApiResponseDTO from "../../Interfaces/DTOs/ApiResponseDTO";
+import CauseService from "../../Services/CauseService";
+import { useNavigate } from "react-router-dom";
 
 interface AddCauseFormProps {
   onClose: () => void;
@@ -18,18 +18,21 @@ interface FormData {
 
 const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     photo: null,
-    amountNeeded: 0,
+    amountNeeded: 100,
   });
 
-  const [photoError, setPhotoError] = useState<string>('');
+  const [photoError, setPhotoError] = useState<string>("");
+  const [nameError, setNameError] = useState<string>("");
+  const [descriptionError, setdescriptionError] = useState<string>("");
+  const [amountNeeded, setAmountNeeded] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [hideButtonAddCause, setHideButtonAddCause] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  const allowedFileTypes = ['image/jpeg', 'image/png'];
+  const allowedFileTypes = ["image/jpeg", "image/png"];
   const apiService = new ApiService();
   const causeService = new CauseService(apiService);
 
@@ -37,9 +40,11 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
     onClose();
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    if (name === 'amountNeeded' && !/^\d*$/.test(value)) {
+    if (name === "amountNeeded" && !/^\d*$/.test(value)) {
       return;
     }
     setFormData((prevData) => ({
@@ -60,8 +65,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
 
         const reader = new FileReader();
 
-        reader.onloadend = () => {
-        };
+        reader.onloadend = () => {};
 
         reader.readAsDataURL(file);
       } else {
@@ -69,7 +73,7 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           ...prevData,
           photo: null,
         }));
-        alert('Invalid file type. Please upload a JPEG or PNG image.');
+        alert("Invalid file type. Please upload a JPEG or PNG image.");
       }
     } else {
       setFormData((prevData) => ({
@@ -85,20 +89,52 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
     setSubmitted(true);
 
     if (!formData.photo) {
-      setPhotoError('Please upload a photo.');
+      setPhotoError("Please upload a photo.");
       return;
     }
+    if (!formData.name) {
+      setNameError("Name is required.");
+      return;
+    }
+
+    if (!formData.description) {
+      setdescriptionError("Description is required.");
+      return;
+    }
+
+    if (formData.description.length < 100) {
+      setdescriptionError("Description should be at least 100 characters.");
+      return;
+    }
+
+    if (formData.description.length > 1000) {
+      setdescriptionError(
+        "Description should not be more than 1000 characters."
+      );
+      return;
+    }
+
+    if (isNaN(formData.amountNeeded)) {
+      setAmountNeeded("Invalid amount.");
+      return;
+    }
+
+    if (formData.amountNeeded < 1) {
+      setAmountNeeded("Amount can not be negative price.");
+      return;
+    }
+
     try {
       const response: ApiResponseDTO = await causeService.createCause(formData);
 
       if (response.succeed) {
-        console.log('Cause created successfully:', response.data);
+        console.log("Cause created successfully:", response.data);
         onClose();
       } else {
-        console.error('Failed to create cause:', response.message);
+        console.error("Failed to create cause:", response.message);
       }
     } catch (error) {
-      console.error('Error creating cause:', error);
+      console.error("Error creating cause:", error);
       alert(`Error creating cause: `);
     }
   };
@@ -108,17 +144,47 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
     setSubmitted(true);
 
     if (!formData.photo) {
-      setPhotoError('Please upload a photo.');
+      setPhotoError("Please upload a photo.");
+      return;
+    }
+    if (!formData.name) {
+      setNameError("Name is required.");
       return;
     }
 
+    if (!formData.description) {
+      setdescriptionError("Description is required.");
+      return;
+    }
+
+    if (formData.description.length < 100) {
+      setdescriptionError("Description should be at least 100 characters.");
+      return;
+    }
+
+    if (formData.description.length > 1000) {
+      setdescriptionError(
+        "Description should not be more than 1000 characters."
+      );
+      return;
+    }
+
+    if (isNaN(formData.amountNeeded)) {
+      setAmountNeeded("Invalid amount.");
+      return;
+    }
+
+    if (formData.amountNeeded < 1) {
+      setAmountNeeded("Amount can not be negative price.");
+      return;
+    }
     try {
       const createCause = await causeService.createCause(formData);
-      onClose()
-      navigate('/causes');
+      onClose();
+      navigate("/causes");
       location.reload();
     } catch (error) {
-      console.error('Error updating cause:', error);
+      console.error("Error updating cause:", error);
     }
   };
 
@@ -128,9 +194,12 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         <span className="close-cross">&#10005;</span>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='lable-update-auction'>
-          <h2 className='create-cause-header'>Create cause</h2>
+        <div className="lable-update-auction">
+          <h2 className="create-cause-header">Create cause</h2>
         </div>
+        <label className='label-create-auction'>
+          Name
+        </label>
         <input
           type="text"
           id="name"
@@ -141,6 +210,14 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           required
         />
 
+        <label className='label-create-auction'>
+          Description
+        </label>
+        {submitted &&
+          !formData.description &&
+          formData.description.length == 0 && (
+            <p className="please-upload-photo-p">Name is required.</p>
+          )}
         <textarea
           id="description"
           name="description"
@@ -150,6 +227,29 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           required
         />
 
+        <label className='label-create-auction'>
+          Photo
+        </label>
+        {submitted &&
+          !formData.description &&
+          formData.description.length == 0 && (
+            <p className="please-upload-photo-p">Description is required.</p>
+          )}
+
+        {submitted &&
+          formData.description.length > 0 &&
+          formData.description.length < 100 && (
+            <p className="please-upload-photo-p">
+              Description should be at least 100 characters.
+            </p>
+          )}
+
+        {submitted && formData.description.length > 1000 && (
+          <p className="please-upload-photo-p">
+            Description should not be more than 1000 characters.
+          </p>
+        )}
+
         <input
           type="file"
           id="photo"
@@ -157,13 +257,15 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleFileChange}
           accept="image/*"
         />
-        {submitted && !formData.photo &&
-          <p className='please-upload-photo-p'>
-            Please upload a photo.
-          </p>}
+        {submitted && !formData.photo && (
+          <p className="please-upload-photo-p">Please upload a photo.</p>
+        )}
 
+        <label className='label-create-auction'>
+          Money Needed
+        </label>
         <input
-          className='input-amount-needed'
+          className="input-amount-needed"
           id="amountNeeded"
           name="amountNeeded"
           placeholder="Money Needed"
@@ -171,7 +273,22 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           onChange={handleInputChange}
           required
         />
-        <button type="submit" className='submit-button-cause' onClick={handleAddCause}>Submit</button>
+
+        {submitted && formData.amountNeeded < 100 && (
+          <p className="please-upload-photo-p">Needed amount can not be under 100 BGN.</p>
+        )}
+
+        {submitted && isNaN(formData.amountNeeded) && (
+          <p className="please-upload-photo-p">Invalid amount</p>
+        )}
+
+        <button
+          type="submit"
+          className="submit-button-cause"
+          onClick={handleAddCause}
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
