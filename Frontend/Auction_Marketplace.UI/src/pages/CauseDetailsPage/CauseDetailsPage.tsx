@@ -20,6 +20,7 @@ const CauseDetailsPage: React.FC = () => {
   const [isCreator, setIsCreator] = useState(false);
   const [showDonationForm, setShowDonationForm] = useState(false);
   const [showPaymentsForm, setShowPaymentsForm] = useState(false);
+  const [fetchedCause, setFetchedCause] = useState<CauseDTO | null>(null);
   const id = Number(causeId);
   const apiService = new ApiService();
   const causeService = new CauseService(apiService);
@@ -52,7 +53,7 @@ const CauseDetailsPage: React.FC = () => {
       const causeResponse = await causeService.getCauseById(id);
       const fetchedCause: CauseDTO = causeResponse.data;
       setCause(fetchedCause);
-
+      setFetchedCause(fetchedCause);
       if (fetchedCause.userId == user.userId) {
         setIsCreator(true);
       }
@@ -89,9 +90,9 @@ const CauseDetailsPage: React.FC = () => {
   function getLineColor(amountCurrent: number, amountNeeded: number): string {
     const progressRatio = amountCurrent / amountNeeded;
 
-    if (progressRatio <= 0.25) {
+    if (progressRatio <= 0.5) {
       return 'short-line red-line';
-    } else if (progressRatio <= 0.5) {
+    } else if (progressRatio <= 0.8) {
       return 'half-line yellow-line';
     } else {
       return 'full-line green-line';
@@ -99,6 +100,10 @@ const CauseDetailsPage: React.FC = () => {
   }
 
   const handleDonateClick = () => {
+     if (fetchedCause && fetchedCause.isCompleted) {
+        setShowDonationForm(false); 
+        return; 
+      }
     setShowDonationForm(true);
   };
 
@@ -137,7 +142,9 @@ const CauseDetailsPage: React.FC = () => {
               </div>
             </div>
             <div className='buttons-cause-details'>
-              <button className="donate-button" onClick={handleDonateClick}>Donate</button>
+              {!fetchedCause?.isCompleted && (
+                <button className="donate-button" onClick={handleDonateClick}>Donate</button>
+              )}
 
               <Link to={`/causes`} className="back-causes-button">
                 Back to Causes

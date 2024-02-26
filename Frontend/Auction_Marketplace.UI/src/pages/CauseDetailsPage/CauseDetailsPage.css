@@ -51,7 +51,7 @@
 
 .half-line {
     width: 50%;
-    background-color: yellow;
+    background-color: rgb(227, 214, 39);
 }
 
 .full-line {
@@ -143,3 +143,5 @@
 .payments-button:hover {
     background-color: #063f62;
 }
+
+.buttons-c
