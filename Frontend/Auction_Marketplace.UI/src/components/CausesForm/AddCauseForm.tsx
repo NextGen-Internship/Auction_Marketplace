@@ -197,6 +197,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
         <div className="lable-update-auction">
           <h2 className="create-cause-header">Create cause</h2>
         </div>
+        <label className='label-create-auction'>
+          Name
+        </label>
         <input
           type="text"
           id="name"
@@ -207,12 +210,14 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           required
         />
 
+        <label className='label-create-auction'>
+          Description
+        </label>
         {submitted &&
           !formData.description &&
           formData.description.length == 0 && (
             <p className="please-upload-photo-p">Name is required.</p>
           )}
-
         <textarea
           id="description"
           name="description"
@@ -222,6 +227,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           required
         />
 
+        <label className='label-create-auction'>
+          Photo
+        </label>
         {submitted &&
           !formData.description &&
           formData.description.length == 0 && (
@@ -253,6 +261,9 @@ const AddCauseForm: React.FC<AddCauseFormProps> = ({ onClose }) => {
           <p className="please-upload-photo-p">Please upload a photo.</p>
         )}
 
+        <label className='label-create-auction'>
+          Money Needed
+        </label>
         <input
           className="input-amount-needed"
           id="amountNeeded"

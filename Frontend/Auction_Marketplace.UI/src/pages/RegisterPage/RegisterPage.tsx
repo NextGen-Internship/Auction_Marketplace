@@ -243,7 +243,7 @@ const RegisterPage: React.FC = () => {
           Create Account
         </button>
 
-        <Link to="/">
+        <Link to="/login">
           <label className='register-login-label'>
             You have a profile? Sign in here.
           </label>

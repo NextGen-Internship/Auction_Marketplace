@@ -132,13 +132,9 @@ const HomePage: React.FC = () => {
       <Navbar showAuthButtons={!token} />
       <div className="header-menu">
         <div className="top-bar">
-          <div className="logo">Blankfactor Marketplace</div>
-          <div className="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button>Search</button>
-          </div>
+          <div className="logo"></div>
           <div className="user-menu">
-            <div className="profile-icon">Profile</div>
+            <div className="profile-icon"></div>
           </div>
         </div>
         <Carousel {...carouselSettings}>
