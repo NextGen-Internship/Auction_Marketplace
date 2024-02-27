@@ -61,3 +61,48 @@
 .loading{
     font-size: 25px;
 }
+
+.no-auctions-message {
+    width: 900px;
+    height: 500px;
+    margin: 50px auto;
+    text-align: center;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.no-auctions-message h2 {
+    font-size: 50px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.no-auctions-message p {
+    font-size: 23px;
+    margin-bottom: 20px;
+}
+
+.button {
+    background-color: #9d073b;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 30px;
+    width: 160px;
+    height: 40px
+}
+
+.button:hover {
+    background-color: #dbb3c0;
+}
+
+.click-image {
+    width: 180px;
+    height: auto;
+    margin-top: 20px;
+}

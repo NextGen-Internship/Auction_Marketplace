@@ -4,6 +4,8 @@ import Navbar from '../../components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HeartPage.css';
+import clickImage from '../../assets/3click.jpeg';
+
 
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
@@ -71,11 +73,20 @@ const HeartPage: React.FC = () => {
     );
   }
 
+  const navigateToAuctions = () => {
+        window.location.href = 'http://localhost:5173/auctions';
+    };
+
   if (biddedAuctions.length === 0) {
     return (
       <div>
         <Navbar showAuthButtons={false} />
-        <p className='loading'>You don't have any bids.</p>
+        <div className='no-auctions-message'>
+           <img src={clickImage} alt="Hand clicking heart" className="click-image"/>
+          <h2>No auctions found</h2>
+          <p>You haven't bid on any auctions yet.</p>
+           <button className="button" onClick={navigateToAuctions}>Browse Auctions</button>
+        </div>
       </div>
     );
   }
@@ -109,15 +120,15 @@ const HeartPage: React.FC = () => {
     <div>
       <Navbar showAuthButtons={false} />
       <div className='title-container'>
-      <p className='title'>ITEMS YOU BIDDED FOR: </p>
+        <p className='title'>ITEMS YOU BIDDED FOR: </p>
       </div>
       <div className='auctions-container'>
-      {currentAuctions.map((auction) => (
-      <Link key={auction.id} to={`/auctions/details/${auction.auctionId}`} className='auction-info'>
-          <img src={auction.photo} alt={auction.name} className='auction-image' />
-      </Link>
-    ))}
-  </div>
+        {currentAuctions.map((auction) => (
+          <Link key={auction.id} to={`/auctions/details/${auction.auctionId}`} className='auction-info'>
+            <img src={auction.photo} alt={auction.name} className='auction-image' />
+          </Link>
+        ))}
+      </div>
       {renderMiniPages()}
     </div>
   );

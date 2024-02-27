@@ -104,11 +104,9 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var domain = _configuration["Domain"];
 
-            var sender = _userRepository.GetByEmailAsync(winningUserEmail);
+            var sender = await _userRepository.GetByEmailAsync(winningUserEmail);
 
-            var receiver = GetUserByAuctionId(auctionId);
-
-            var user = GetUserByAuctionId(auctionId);
+            var receiver = await GetUserByAuctionId(auctionId);
 
             var options = new SessionCreateOptions
             {
@@ -125,7 +123,7 @@ namespace Auction_Marketplace.Services.Implementation
                             Currency = "bgn",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = "Donation for charity cause"
+                                Name = "Payment for an auction"
                             },
                             UnitAmount = amount * 100,
                         },
@@ -135,11 +133,16 @@ namespace Auction_Marketplace.Services.Implementation
                 Mode = "payment",
                 SuccessUrl = $"{domain}/completion",
                 CancelUrl = $"{domain}/cancel",
+                Metadata = new Dictionary<string, string>
+                    {
+                        { "sender_id", sender.Id.ToString() },
+                        { "receiver_id", receiver.CustomerId.ToString()}
+                    },
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     TransferData = new SessionPaymentIntentDataTransferDataOptions
                     {
-                        Destination = receiver.Result?.CustomerId
+                        Destination = receiver.CustomerId
                     }
                 }
 
@@ -150,7 +153,6 @@ namespace Auction_Marketplace.Services.Implementation
             var session = await service.CreateAsync(options);
 
             return session;
-
         }
 
 
@@ -376,7 +378,12 @@ namespace Auction_Marketplace.Services.Implementation
         {
             var cause = await _causeRepository.FindCauseById(causeId);
             cause.AmountCurrent += (long)model.Amount / 100;
+            if (cause.AmountCurrent >= cause.AmountNeeded)
+            {
+                cause.IsCompleted = true;
+            }
             await _causeRepository.UpdateCause(cause);
+            
         }
 
 
