@@ -17,6 +17,18 @@ const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => 
     const [users, setUsers] = useState<any[]>([]); 
     const userService = new UserService(apiService);
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        });
+    };
+    
     const fetchPayments = async () => {
         try {
             setLoading(true); 
@@ -63,7 +75,7 @@ const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => 
                                     <td className='td-rows-payment-history'>{users[index]?.firstName} {users[index]?.lastName}</td> 
                                     <td className='td-rows-payment-history'>{users[index]?.email}</td>
                                     <td className='td-rows-payment-history'>{payment.amount}</td>
-                                    <td className='td-rows-payment-history'>{payment.createdAt}</td>
+                                    <td className='td-rows-payment-history'>{formatDate(payment.createdAt)}</td>
                                 </tr>
                             ))}
                         </tbody>

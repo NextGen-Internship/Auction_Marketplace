@@ -129,7 +129,9 @@
   background-color: #ebe8e8;
 }
 
-@media (max-width: 1650px) {
+
+
+@media (max-width: 1350px) {
   /* Add-cause button */
   .cause-info {
     width: 90%; /* Adjust width for smaller screens */
@@ -138,42 +140,37 @@
   }
 }
 
-@media (max-width: 950px) {
-  /* Add-cause button */
+@media (max-width: 1300px) {
   .add-cause-button {
     left: 50%;
     transform: translateX(-50%);
     position: fixed;
   }
 
-  /* Cause info container */
   .cause-info-container {
     grid-template-columns: auto;
     justify-content: center;
-    margin-top: 1400px;
+    margin-top: 200px;
+    
   }
 
-  /* Cause info */
   .cause-info {
-    width: 80%; /* Adjust width for smaller screens */
+    width: 80%; 
     height: 400px;
-    margin: 10px auto; /* Center the cause info and reduce margin */
+    margin: 10px auto; 
   }
 
 
-  /* Pagination */
   .pagination {
-    margin: 20px auto; /* Center the pagination */
+    margin: 20px auto; 
     text-align: center;
   }
 
-  /* Pagination button hover */
   .pagination button:hover {
     background-color: #96acc4;
   }
 
-  /* Header cause */
   .header-cause {
-    font-size: 24px; /* Reduce font size for smaller screens */
+    font-size: 24px;
   }
 }

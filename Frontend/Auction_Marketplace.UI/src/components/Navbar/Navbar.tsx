@@ -17,6 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({ showAuthButtons = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',

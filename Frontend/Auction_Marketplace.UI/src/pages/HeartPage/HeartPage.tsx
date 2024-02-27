@@ -1,35 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar.tsx';
+import { Link } from 'react-router-dom';
+import Navbar from '../../Components/Navbar/Navbar.tsx';
 import { clearToken, getToken, isTokenExpired } from '../../utils/GoogleToken.ts';
 import '../../Components/TokenExp/TokenExpContainer.css';
 import './HeartPage.css';
-
 import ApiService from '../../Services/ApiService';
 import AuctionService from '../../Services/AuctionService';
-
 const apiService = new ApiService();
 const auctionService = new AuctionService(apiService);
-
 const HeartPage: React.FC = () => {
   const [biddedAuctions, setBiddedAuctions] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const auctionsPerPage = 6;
   const token = getToken();
-  const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchBiddedAuctions = async () => {
+      setLoading(true);
       try {
         const response = await auctionService.getAuctionsBidded();
         setBiddedAuctions(response.data);
       } catch (error) {
         console.error('Error fetching bidded auctions:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBiddedAuctions();
   }, [currentPage]);
-
   useEffect(() => {
     const saveTokenOnUnload = () => {
       if (token) {
@@ -41,13 +39,11 @@ const HeartPage: React.FC = () => {
       window.removeEventListener('beforeunload', saveTokenOnUnload);
     };
   }, [token]);
-
   useEffect(() => {
     if (isTokenExpired()) {
       clearToken();
     }
   }, []);
-
   if (!token) {
     return (
       <div className='token-exp-container'>
@@ -58,29 +54,30 @@ const HeartPage: React.FC = () => {
       </div>
     );
   }
-
+  if (loading) {
+    return (
+      <div>
+        <Navbar showAuthButtons={false} />
+        <p className='loading'>Loading...</p>
+      </div>
+    );
+  }
   if (biddedAuctions.length === 0) {
     return (
       <div>
         <Navbar showAuthButtons={false} />
-        <div className='title-container'>
-          <p className='title'><span role="img" aria-label="heart">❤️</span> Favourite items </p>
-        </div>
-        <p>You don't have any bids.</p>
+        <p className='loading'>You don't have any bids.</p>
       </div>
     );
   }
-  
   const indexOfLastAuction = currentPage * auctionsPerPage;
   const indexOfFirstAuction = indexOfLastAuction - auctionsPerPage;
   const currentAuctions = biddedAuctions.slice(indexOfFirstAuction, indexOfLastAuction);
-
   const renderMiniPages = () => {
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(biddedAuctions.length / auctionsPerPage); i++) {
       pageNumbers.push(i);
     }
-
     return (
       <div className='pagination'>
         {pageNumbers.map((number) => (
@@ -95,7 +92,6 @@ const HeartPage: React.FC = () => {
       </div>
     );
   };
-
   return (
     <div>
       <Navbar showAuthButtons={false} />
@@ -113,5 +109,4 @@ const HeartPage: React.FC = () => {
     </div>
   );
 };
-
 export default HeartPage;

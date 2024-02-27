@@ -8,7 +8,7 @@
   left: 0;
   width: 100%;
   background-color: white;
-  padding: 10px 20px; /* Increased padding for better touch interaction */
+  padding: 10px 20px; 
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
@@ -33,7 +33,7 @@
   color: black;
   text-decoration: none;
   margin-right: 10px;
-  font-size: 19px; /* Reduced font size for smaller screens */
+  font-size: 19px; 
   transition: color 0.3s ease;
   padding: 5px 10px;
   border: 2px solid transparent;
@@ -42,7 +42,7 @@
 
 .heart-page-link {
   color: rgb(241, 104, 150);
-  font-size: 30px; /* Reduced font size for smaller screens */
+  font-size: 30px; 
   text-decoration: none;
   margin-right: 5px;
 }
@@ -87,39 +87,38 @@
   cursor: pointer;
 }
 
-/* Media query for screens smaller than 768px (typical phones) */
 @media (max-width: 767px) {
   .nav-container {
-    flex-direction: row; /* Arrange components in one row */
-    justify-content: space-around; /* Add space between components */
-    align-items: center; /* Align items vertically */
+    flex-direction: row; 
+    justify-content: space-around; 
+    align-items: center; 
   }
   
   .logo-container {
-    display: none; /* Hide the logo on small screens */
+    display: none; 
   }
 
   .nav-links-default {
-    display: flex; /* Ensure the nav links are displayed */
-    flex-direction: row; /* Arrange nav links in one row */
-    justify-content: flex-end; /* Align nav links to the right */
-    align-items: center; /* Align items vertically */
+    display: flex;
+    flex-direction: row; 
+    justify-content: flex-end; 
+    align-items: center;
   }
 
   .nav-item {
-    margin-right: 2px; /* Add space between nav items */
-    font-size: 14px; /* Adjust font size */
+    margin-right: 2px; 
+    font-size: 14px; 
     padding: 3px 8px
   }
 
   .heart {
-    margin-right: 10px; /* Add space between heart icon and profile picture */
+    margin-right: 10px;
   }
 
   .profile-picture-container {
-    width: 30px; /* Reduce size of profile picture */
-    height: 30px; /* Reduce size of profile picture */
-    border: none; /* Remove border */
+    width: 30px; 
+    height: 30px; 
+    border: none;
   }
 
   .heart-page-link{
