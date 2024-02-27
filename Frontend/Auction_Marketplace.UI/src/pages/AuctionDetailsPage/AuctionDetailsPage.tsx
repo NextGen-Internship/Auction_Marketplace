@@ -20,6 +20,7 @@ const AuctionDetailsPage: React.FC = () => {
   const [bidSuccess, setBidSuccess] = useState<boolean>(false);
   const [finalBid, setFinalBid] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null); // State for error message
+  const [isLoading, setIsLoading] = useState<boolean>(true); // State for loading
   const token = getToken();
   const startPrice = auctionDetails?.startPrice;
 
@@ -39,6 +40,8 @@ const AuctionDetailsPage: React.FC = () => {
         }
       } catch (error) {
         throw error;
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -72,6 +75,10 @@ const AuctionDetailsPage: React.FC = () => {
   
   const isBidAmountValid =
     typeof bidAmount === "number" && bidAmount >= startPrice;
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Return loading indicator
+  }
 
   return (
     <>
