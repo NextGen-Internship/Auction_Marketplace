@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { clearToken, getToken, isTokenExpired } from "../../utils/GoogleToken";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
+import "./Completion.css";
 
 function Completion(){
     const token = getToken();
@@ -22,11 +23,20 @@ function Completion(){
       </div>
     );
   }
+
+   const navigateToCauses = () => {
+        window.location.href = 'http://localhost:5173/causes';
+    };
   
     return (
         <div>
-             <Navbar showAuthButtons={false} />
-             <h1>Your payment has been succssesful!</h1>
+          <Navbar showAuthButtons={false} />
+          <div className="completion-container">
+            <div className="tick-mark">&#10003;</div>
+            <h1 className="completion-heading">Payment Successful!</h1>
+            <p className="completion-textline">Your payment has been completed.</p> 
+            <button className="back-button" onClick={navigateToCauses}>Back</button>
+          </div>
         </div>
     
     )
