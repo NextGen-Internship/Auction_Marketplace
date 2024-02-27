@@ -26,6 +26,18 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
     const [causeNames, setCauseNames] = useState<{ [key: number]: string }>({});
     const [auctionsNames, setAuctionsNames] = useState<{ [key: number]: string }>({});
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        });
+    };
+
     const fetchUserData = async () => {
         try {
             if (token) {
@@ -111,26 +123,18 @@ const PaymentHistoryForm: React.FC<PaymentHistoryFormProps> = ({ onClose }) => {
                         <tr>
                             <th>Date</th>
                             <th>Amount</th>
-                            <th>Cause</th>
-                            <th>Auction</th>
+                            <th>Cause Name</th>
                             <th>Completed</th>
                         </tr>
                     </thead>
                     <tbody>
                         {paymentHistory.map((payment, index) => (
                             <tr key={index}>
-                                <td>{payment.createdAt}</td>
+                                <td>{formatDate(payment.createdAt)}</td>
                                 <td>{payment.amount}</td>
                                 <td>
                                     {payment.causeId !== null ? (
                                         causeNames[payment.causeId]
-                                    ) : (
-                                        '-'
-                                    )}
-                                </td>
-                                <td>
-                                    {payment.auctionId !== null ? (
-                                        auctionsNames[payment.auctionId]
                                     ) : (
                                         '-'
                                     )}

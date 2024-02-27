@@ -134,3 +134,70 @@
 .carousel .control-dots {
   position: relative;
 }
+
+@media (max-width: 1400px) {
+
+  .product {
+    width: calc(45% - 20px); 
+    margin: 10px; 
+  }
+
+  .carousel-root {
+    width: 100%;
+    margin-top: 1000px;
+  }
+  
+}
+
+
+@media (max-width: 767px) {
+  .product-section {
+    margin-top: 40px; 
+    padding: 20px; 
+  }
+
+  .product {
+    width: calc(60% - 20px); 
+    margin: 10px; 
+  }
+
+  .product h3 {
+    font-size: 20px; 
+    margin: 10px 0; 
+  }
+
+  .product p {
+    font-size: 16px; 
+    margin: 10px; 
+    margin-top: 20px; 
+  }
+
+  .view-all-button {
+    width: 150px; 
+    margin: 20px auto; 
+    padding: 12px 16px; 
+    font-size: 16px; 
+  }
+
+  .carousel {
+    width: 100%; 
+  }
+
+  .carousel .slide {
+    margin-top: 20px; 
+  }
+
+  .carousel .slide img {
+    max-width: 50%; 
+    height: auto;
+  }
+
+  .carousel-root {
+    margin-top: 40px; 
+  }
+
+  .carousel-root {
+    width: 100%;
+    margin-top: 100%;
+  }
+}

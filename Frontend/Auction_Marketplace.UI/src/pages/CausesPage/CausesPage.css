@@ -122,9 +122,55 @@
   margin-bottom: 20px;
   padding-top: 10px;
   padding-left: 2px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif
 }
 
 .buttons-body-container{
   background-color: #ebe8e8;
+}
+
+
+
+@media (max-width: 1350px) {
+  /* Add-cause button */
+  .cause-info {
+    width: 90%; /* Adjust width for smaller screens */
+    height: 400px;
+    margin: 10px auto; /* Center the cause info and reduce margin */
+  }
+}
+
+@media (max-width: 1300px) {
+  .add-cause-button {
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+  }
+
+  .cause-info-container {
+    grid-template-columns: auto;
+    justify-content: center;
+    margin-top: 200px;
+    
+  }
+
+  .cause-info {
+    width: 80%; 
+    height: 400px;
+    margin: 10px auto; 
+  }
+
+
+  .pagination {
+    margin: 20px auto; 
+    text-align: center;
+  }
+
+  .pagination button:hover {
+    background-color: #96acc4;
+  }
+
+  .header-cause {
+    font-size: 24px;
+  }
 }
