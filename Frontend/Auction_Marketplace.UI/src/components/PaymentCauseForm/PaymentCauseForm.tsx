@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './PaymentCauseForm.css'
 import ApiService from '../../Services/ApiService';
 import PaymentService from '../../Services/PaymentService';
-import UserService from '../../Services/UserService'; 
+import UserService from '../../Services/UserService';
 
 interface PaymentsFormProps {
     causeId: number;
@@ -12,28 +12,34 @@ interface PaymentsFormProps {
 const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => {
     const [payments, setPayments] = useState<any[]>([]);
     const apiService = new ApiService();
-    const [loading, setLoading] = useState<boolean>(true); 
+    const [loading, setLoading] = useState<boolean>(true);
     const paymentService = new PaymentService(apiService);
-    const [users, setUsers] = useState<any[]>([]); 
+    const [users, setUsers] = useState<any[]>([]);
     const userService = new UserService(apiService);
 
     const fetchPayments = async () => {
-        try {
-            setLoading(true); 
-            const paymentData = await paymentService.getPaymentByUserId();
-            setPayments(paymentData);
+        setLoading(true);
 
-            const userPromises = paymentData.map(async () => {
+        try {
+            const paymentData = await paymentService.getPaymentByUserId();
+
+            const causePayments = paymentData.filter(payment => payment.causeId === causeId);
+
+            const userIds = causePayments.map(payment => payment.userId);
+
+            const usersDataPromises = userIds.map(async (userId) => {
                 const userData = await userService.fetchUser();
                 return userData.data;
             });
 
-            const usersData = await Promise.all(userPromises);
+            const usersData = await Promise.all(usersDataPromises);
+            setPayments(causePayments);
             setUsers(usersData);
+
         } catch (error) {
             console.error('Error fetching payments:', error);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -45,7 +51,7 @@ const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => 
         <div className="payments-form-container">
             <h3 className='header-payment-history'>Payments History</h3>
             {loading ? (
-                <div>Loading...</div> 
+                <div>Loading...</div>
             ) : (
                 payments.length > 0 ? (
                     <table className='history-table'>
@@ -60,7 +66,7 @@ const PaymentCauseForm: React.FC<PaymentsFormProps> = ({ causeId, onClose }) => 
                         <tbody>
                             {payments.map((payment, index) => (
                                 <tr key={index}>
-                                    <td className='td-rows-payment-history'>{users[index]?.firstName} {users[index]?.lastName}</td> 
+                                    <td className='td-rows-payment-history'>{users[index]?.firstName} {users[index]?.lastName}</td>
                                     <td className='td-rows-payment-history'>{users[index]?.email}</td>
                                     <td className='td-rows-payment-history'>{payment.amount}</td>
                                     <td className='td-rows-payment-history'>{payment.createdAt}</td>
