@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { clearToken, getToken, isTokenExpired } from "../../utils/GoogleToken";
 import { Link} from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
@@ -7,7 +6,6 @@ import "./Completion.css";
 
 function Completion(){
     const token = getToken();
-    const navigate = useNavigate();
 
   useEffect(() => {
     if (isTokenExpired()) {
